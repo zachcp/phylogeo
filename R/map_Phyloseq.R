@@ -72,12 +72,13 @@ map_phyloseq <- function(physeq, region=NULL, color=NULL, pointsize=NULL, pointa
 #'   label="value", hjust = 1.35, 
 #' 	line_weight=0.5, line_color=color, line_alpha=0.4,
 #' 	layout.method=layout.fruchterman.reingold, title=NULL)
-map_network <- function(physeq, maxdist=0.9, distance="jaccard", color=NULL, region=NULL, pointsize=4, pointalpha = 0.8){
+map_network <- function(physeq, maxdist=0.9, distance="jaccard", color=NULL, region=NULL, pointsize=NULL, pointalpha = 0.8, lines=FALSE){
   #check basic physeq and lat/lon
   latlon <- .check_physeq(physeq)
   latcol <- as.character( latlon[1] )
   loncol <- as.character( latlon[2] )
   data <- sample_data(physeq)
+  names <- names(data)
   
   #check that color and pointsize are present and that pointsize is numeric 
   if( !is.null(color)){
@@ -100,6 +101,23 @@ map_network <- function(physeq, maxdist=0.9, distance="jaccard", color=NULL, reg
    #return a df with name/cluster columns
     df
   }
+  
+  get_lines <- function(graph=ig, df=data){
+    #helper function that will use the links data to pull out
+    #the sample-pair data from the master df for drawing lines
+    getline_df <- function(i, l=links, df1 =df){
+      temprow   <- l[i,]
+      tempnames <-c(temprow$from,temprow$to)
+      smalldf <- df1[rownames(df1) %in% tempnames, ]
+      smalldf
+    }
+    
+    links <- get.data.frame(ig)
+    links_range <- seq( 1:dim(links)[1])
+    lines_dfs <- Map(getline_df, links_range)
+    lines_dfs
+  }
+  
   
   #create df from cluster membership
   ig <- make_network(physeq, max.dist = maxdist, distance=distance)
@@ -137,6 +155,7 @@ worldmap <- ggplot(world, aes(x=long, y=lat, group=group)) +
     theme( axis.text = element_blank(), 
            axis.ticks = element_blank(), 
            axis.line = element_blank(), 
+           axis.title=element_blank())
   
   #how to hande when pointsize information can be either global (outside of aes), orper-sample (inseide of aes)
   if (!is.null(pointsize) ) {
@@ -145,6 +164,17 @@ worldmap <- ggplot(world, aes(x=long, y=lat, group=group)) +
   } else {
     worldmap <- worldmap + geom_point(data=mdf, aes_string( x=loncol, y=latcol, group=names(mdf)[1], color=color), size=4 ,alpha=pointalpha)    
   }
+
+  #add lines if lines
+  draw_lines <- function(df2, plt =worldmap){
+    plt <- plt + geom_line(data=df2,  aes_string( x=loncol, y=latcol))
+    plt
+  }
+  
+  if(lines){
+    worldmap <- Reduce(draw_lines, get_lines())
+  }
+  
   worldmap
 }
 #' Plot a network using ggplot2 (represent microbiome)
@@ -173,7 +203,7 @@ worldmap <- ggplot(world, aes(x=long, y=lat, group=group)) +
 #' 	layout.method=layout.fruchterman.reingold, title=NULL)
 #'
 map_richness <- function() {
-  
+}
 #
 #plot a tree and the location of the samples
 plot_tree    <- function() {
@@ -183,12 +213,7 @@ plot_tree    <- function() {
 plot_heatmap <- function() {
   
 }
-##
-points_from_network <- function(network, sampledata) {
-  samples <- as.character(network$data$value) 
-  data <- sampledata[ row.names(sampledata) %in% samples ]
-  points <- points(data$Longitude, data$Latitude, pch=20, col="gray50", cex=1) 
-}
+
 #
 .check_physeq <- function(physeq){
   #check phyloseq objects for Lat/Lon
