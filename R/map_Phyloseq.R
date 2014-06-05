@@ -9,6 +9,14 @@
 #'   label="value", hjust = 1.35, 
 #'   line_weight=0.5, line_color=color, line_alpha=0.4,
 #' 	layout.method=layout.fruchterman.reingold, title=NULL)
+#'
+#' @import ggplot2  
+#' @export
+#' @examples 
+#' data(AD)
+#' map_phylo(AD)
+#' map_phylo(AD, region="bra") 
+#' map_phylo(AD, color="Geotype", pointsize="richness") 
 map_phyloseq <- function(physeq, region=NULL, color=NULL, pointsize=NULL, pointalpha = 0.8){
   #check basic physeq and lat/lon
   latlon <- .check_physeq(physeq)
@@ -17,26 +25,21 @@ map_phyloseq <- function(physeq, region=NULL, color=NULL, pointsize=NULL, pointa
   data <- sample_data(physeq)
   names <- names(data)
   
-  #setupbasemap
+  #check plot options
+  .check_names(color,mdf)
+  .check_names(pointsize,mdf, allownumeric=T)
+  
+  #create map
+  ############################################################################################################
   worldmap <- .create_basemap(region=region, df=data, latcol=latcol,loncol=loncol)
   
-  #check plot options
-  if( !is.null(color)){
-    if( !color %in% names) { stop("color variable must be a sampledata column") }
-  }
-  if( !is.null(pointsize)){
-    #pointsize can be numeric - in which case it should set the global pointsize. Or it can be a member of the sampledatanames
-    if(!is.numeric(pointsize)){
-      if( sample_data[pointsize][1] %in% names) { stop("color variable must be a sampledata column") }
-    }
-  }
-  
   #how to hande when pointsize information can be either global (outside of aes), orper-sample (inseide of aes)
-  if (!is.null(pointsize) ) {
-    worldmap <- worldmap + geom_point(data=data, aes_string( x=loncol, y=latcol, group=names(data)[1], color=color, size = pointsize), alpha= pointalpha)    
-  } else {
-    worldmap <- worldmap + geom_point(data=data, aes_string( x=loncol, y=latcol, group=names(data)[1], color=color), size=4 ,alpha=pointalpha)    
-  }
+  if(is.numeric(pointsize)){
+    worldmap <- worldmap + geom_point(data=mdf, aes_string( x=loncol, y=latcol, group=NULL, color=color),size = pointsize, alpha= pointalpha) 
+  }else{
+    worldmap <- worldmap + geom_point(data=mdf, aes_string( x=loncol, y=latcol, group=NULL, color=color, size = pointsize), alpha= pointalpha) 
+  } 
+  
   worldmap
 }
 #' Create a Network from the Phyloseq Objects and Draw A Map of the Clusters
@@ -50,16 +53,21 @@ map_phyloseq <- function(physeq, region=NULL, color=NULL, pointsize=NULL, pointa
 #'   label="value", hjust = 1.35, 
 #' 	line_weight=0.5, line_color=color, line_alpha=0.4,
 #' 	layout.method=layout.fruchterman.reingold, title=NULL)
+#'   
+#' @import ggplot2
+#' @import igraph
+#' @importFrom igraph get.data.frame
+#' @importFrom igraph get.vertex.attribute
+#' @importFrom igraph clusters  
+#' @export
+#' @examples 
+#' data(AD)
+#' map_phylo(AD)
+#' map_phylo(AD, region="bra") 
+#' map_phylo(AD, color="Geotype", pointsize="richness") 
 map_network <- function(physeq, maxdist=0.9, distance="jaccard", color=NULL, region=NULL, pointsize=4, pointalpha = 0.8, lines=FALSE){
-  #check basic physeq and lat/lon
-  latlon <- .check_physeq(physeq)
-  latcol <- as.character( latlon[1] )
-  loncol <- as.character( latlon[2] )
-  data <- sample_data(physeq)
-  names <- names(data)
-  
-   
-  #helper funcitons
+
+  #helper functions to calculate membership in clusters or lines
   ######################################################################################################
   get_clusters <- function(num, graph=ig){
     #get cluster membership info from igraph object from cluster with clusterid of "num
@@ -88,8 +96,20 @@ map_network <- function(physeq, maxdist=0.9, distance="jaccard", color=NULL, reg
     lines_dfs <- Map(getline_df, links_range)
     lines_dfs
   }
+  
+  #add lines to ggplot object
+  draw_lines <- function(plt, df2){
+    df2 <- data.frame(df2) #to ensure list returns a df object
+    plt <- plt + geom_line(data=df2,  aes_string( x=loncol, y=latcol, group=names(df2)[1]))
+  }
   ######################################################################################################
   
+  #check basic physeq and lat/lon
+  latlon <- .check_physeq(physeq)
+  latcol <- as.character( latlon[1] )
+  loncol <- as.character( latlon[2] )
+  data <- sample_data(physeq)
+  names <- names(data)
   
   #make network, get cluster information, and add that to the  original dataframe. 
   ig <- make_network(physeq, max.dist = maxdist, distance=distance)
@@ -98,43 +118,27 @@ map_network <- function(physeq, maxdist=0.9, distance="jaccard", color=NULL, reg
   mdf <- merge(clustdf, data.frame(data), by="row.names", all.x=T)
   
   #check plot options
-  if( !is.null(color)){
-    if( !color %in% names) { stop("color variable must be a sampledata column") }
-  }
-  if( !is.null(pointsize)){
-    #pointsize can be numeric - in which case it should set the global pointsize. Or it can be a member of the sampledatanames
-    if(!is.numeric(pointsize)){
-      if( !pointsize %in% names) { stop("color variable must be a sampledata column") }
-    }
-  }
+  .check_names(color,mdf)
+  .check_names(pointsize,mdf, allownumeric=T)
   
-  
-  
-  #setup basemap
-  ###################################################################################################
+  #create map
+  ############################################################################################################
   worldmap <- .create_basemap(region=region, df=mdf, latcol=latcol, loncol=loncol)
-
+ 
   #how to hande when pointsize information can be either global (outside of aes), orper-sample (inseide of aes)
-  if (!is.null(pointsize) ) {
-    #note that worldmap aes() has a group which is required for use with the coor_map
-    if(is.numeric(pointsize)){
-       worldmap <- worldmap + geom_point(data=mdf, aes_string( x=loncol, y=latcol, group=NULL, color=color),size = pointsize, alpha= pointalpha) 
-    }else{
-       worldmap <- worldmap + geom_point(data=mdf, aes_string( x=loncol, y=latcol, group=NULL, color=color, size = pointsize), alpha= pointalpha) 
-    } 
-      
-   } 
+  if(is.numeric(pointsize)){
+    worldmap <- worldmap + geom_point(data=mdf, aes_string( x=loncol, y=latcol, group=NULL, color=color),size = pointsize, alpha= pointalpha) 
+  }else{
+    worldmap <- worldmap + geom_point(data=mdf, aes_string( x=loncol, y=latcol, group=NULL, color=color, size = pointsize), alpha= pointalpha) 
+  } 
 
-  #add lines if lines
-  draw_lines <- function(plt, df2){
-    df2 <- data.frame(df2) #to ensure list returns a df object
-    plt <- plt + geom_line(data=df2,  aes_string( x=loncol, y=latcol, group=names(df2)[1]))
-  }
-  
+  #addlines
   if(lines){
     linelist <- get_lines()
     worldmap <- worldmap  + lapply(linelist, geom_line, mapping = aes_string(x=loncol,y=latcol, group=NULL))
   }
+  ###########################################################################################################
+  
   worldmap
 }
 #' Plot a network using ggplot2 (represent microbiome)
@@ -237,17 +241,19 @@ plot_heatmap <- function() {
 }
 #' utility function to check the validity of arguments
 .check_names <- function(member, df, allownumeric=FALSE){
-  message <- paste(member, " variable must be a valid column name of a Phyloseq table")
+  message <- paste(member, " variable must be a valid column name of a Phyloseq table",sep="")
+  names   <- names(df)
   if(!is.null(member)){
     if(!allownumeric){
-      if(!member %in% names(df) ){
+      if(!member %in% names){
         stop(message)
       }
-    }else{
-      if(!is.numeric(memember)){
-        if(!member %in% names(df) ){
+    } else {
+      if(!is.numeric(member)){
+        if(!member %in% names){
           stop(message)
         }
       }
-  } 
+    }
+  }
 }
