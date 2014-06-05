@@ -18,40 +18,19 @@ map_phyloseq <- function(physeq, region=NULL, color=NULL, pointsize=NULL, pointa
   data <- sample_data(physeq)
   names <- names(data)
   
-  #check that color and pointsize are present and that pointsize is numeric 
+  #setupbasemap
+  worldmap <- .create_basemap(region=region, df=data, latcol=latcol,loncol=loncol)
+  
+  #check plot options
   if( !is.null(color)){
     if( !color %in% names) { stop("color variable must be a sampledata column") }
   }
   if( !is.null(pointsize)){
-    if( sample_data[pointsize][1] %in% names) { stop("color variable must be a sampledata column") }
+    #pointsize can be numeric - in which case it should set the global pointsize. Or it can be a member of the sampledatanames
+    if(!is.numeric(pointsize)){
+      if( sample_data[pointsize][1] %in% names) { stop("color variable must be a sampledata column") }
+    }
   }
-  #basemap
-  if (!is.null(region)){
-    world <- map_data("world", region = region)
-    
-    #ToDO: allow subsetting of samples by region. Is there a point-in-polygon library?
-    #this is a quick filter based on latitude and longitude not point-in-polygon
-    maxlat  = max(world$lat)
-    minlat  = min(world$lat)
-    maxlong = max(world$long)
-    minlong = min(world$long)
-    data <- data[ data[, loncol] < maxlong, ]
-    data <- data[ data[, loncol] > minlong, ]
-    data <- data[ data[, latcol] < maxlat, ]
-    data <- data[ data[, latcol] > minlat, ]
-  } else {
-    world <- map_data("world")
-  }
-  
-  worldmap <- ggplot(world, aes(x=long, y=lat, group=group)) +
-    geom_polygon( fill="grey",alpha=0.6) +
-    scale_y_continuous(breaks=(-2:2) * 30) +
-    scale_x_continuous(breaks=(-4:4) * 45) +
-    theme_classic() +
-    theme( axis.text = element_blank(), 
-           axis.ticks = element_blank(), 
-           axis.line = element_blank(), 
-           axis.title=element_blank())
   
   #how to hande when pointsize information can be either global (outside of aes), orper-sample (inseide of aes)
   if (!is.null(pointsize) ) {
@@ -72,7 +51,7 @@ map_phyloseq <- function(physeq, region=NULL, color=NULL, pointsize=NULL, pointa
 #'   label="value", hjust = 1.35, 
 #' 	line_weight=0.5, line_color=color, line_alpha=0.4,
 #' 	layout.method=layout.fruchterman.reingold, title=NULL)
-map_network <- function(physeq, maxdist=0.9, distance="jaccard", color=NULL, region=NULL, pointsize=NULL, pointalpha = 0.8, lines=FALSE){
+map_network <- function(physeq, maxdist=0.9, distance="jaccard", color=NULL, region=NULL, pointsize=4, pointalpha = 0.8, lines=FALSE){
   #check basic physeq and lat/lon
   latlon <- .check_physeq(physeq)
   latcol <- as.character( latlon[1] )
@@ -80,14 +59,7 @@ map_network <- function(physeq, maxdist=0.9, distance="jaccard", color=NULL, reg
   data <- sample_data(physeq)
   names <- names(data)
   
-  #check that color and pointsize are present and that pointsize is numeric 
-  if( !is.null(color)){
-    if( !color %in% names) { stop("color variable must be a sampledata column") }
-  }
-  if( !is.null(pointsize)){
-    if( sample_data[pointsize][1] %in% names) { stop("color variable must be a sampledata column") }
-  }
-  
+   
   #helper funcitons
   ######################################################################################################
   get_clusters <- function(num, graph=ig){
@@ -119,47 +91,40 @@ map_network <- function(physeq, maxdist=0.9, distance="jaccard", color=NULL, reg
   }
   ######################################################################################################
   
+  
   #make network, get cluster information, and add that to the  original dataframe. 
   ig <- make_network(physeq, max.dist = maxdist, distance=distance)
   clusts <- seq(clusters(ig)$no)
   clustdf <- Reduce( rbind, Map(get_clusters, clusts))
   mdf <- merge(clustdf, data.frame(data), by="row.names", all.x=T)
   
-  #basemap
-  if (!is.null(region)){
-    world <- map_data("world", region = region)
-    
-    #ToDO: allow subsetting of samples by region. Is there a point-in-polygon library?
-    #this is a quick filter based on latitude and longitude not point-in-polygon
-    maxlat  = max(world$lat)
-    minlat  = min(world$lat)
-    maxlong = max(world$long)
-    minlong = min(world$long)
-    mdf <- mdf[ mdf[, loncol] < maxlong, ]
-    mdf <- mdf[ mdf[, loncol] > minlong, ]
-    mdf <- mdf[ mdf[, latcol] < maxlat, ]
-    mdf <- mdf[ mdf[, latcol] > minlat, ]
-  } else {
-    world <- map_data("world")
+  #check plot options
+  if( !is.null(color)){
+    if( !color %in% names) { stop("color variable must be a sampledata column") }
+  }
+  if( !is.null(pointsize)){
+    #pointsize can be numeric - in which case it should set the global pointsize. Or it can be a member of the sampledatanames
+    if(!is.numeric(pointsize)){
+      if( !pointsize %in% names) { stop("color variable must be a sampledata column") }
+    }
   }
   
-  worldmap <- ggplot(world, aes(x=long, y=lat, group=group)) +
-  geom_polygon( fill="grey",alpha=0.6) +
-  scale_y_continuous(breaks=(-2:2) * 30) +
-  scale_x_continuous(breaks=(-4:4) * 45) +
-  theme_classic() +
-  theme( axis.text = element_blank(), 
-         axis.ticks = element_blank(), 
-         axis.line = element_blank(), 
-         axis.title=element_blank())
   
+  
+  #setup basemap
+  ###################################################################################################
+  worldmap <- .create_basemap(region=region, df=mdf, latcol=latcol, loncol=loncol)
+
   #how to hande when pointsize information can be either global (outside of aes), orper-sample (inseide of aes)
   if (!is.null(pointsize) ) {
     #note that worldmap aes() has a group which is required for use with the coor_map
-    worldmap <- worldmap + geom_point(data=mdf, aes_string( x=loncol, y=latcol, group=names(mdf)[1], color=color, size = pointsize), alpha= pointalpha)    
-   } else {
-    worldmap <- worldmap + geom_point(data=mdf, aes_string( x=loncol, y=latcol, group=names(mdf)[1], color=color), size=4 ,alpha=pointalpha)    
-   }
+    if(is.numeric(pointsize)){
+       worldmap <- worldmap + geom_point(data=mdf, aes_string( x=loncol, y=latcol, group=NULL, color=color),size = pointsize, alpha= pointalpha) 
+    }else{
+       worldmap <- worldmap + geom_point(data=mdf, aes_string( x=loncol, y=latcol, group=NULL, color=color, size = pointsize), alpha= pointalpha) 
+    } 
+      
+   } 
 
   #add lines if lines
   draw_lines <- function(plt, df2){
@@ -171,7 +136,7 @@ map_network <- function(physeq, maxdist=0.9, distance="jaccard", color=NULL, reg
     linelist <- get_lines()
     worldmap <- worldmap  + lapply(linelist, geom_line, mapping = aes_string(x=loncol,y=latcol, group=NULL))
   }
-  return worldmap
+  worldmap
 }
 #' Plot a network using ggplot2 (represent microbiome)
 #'
@@ -239,4 +204,34 @@ plot_heatmap <- function() {
   if (lat_present == FALSE) { stop("sampledata must have a valid latitude column") }
   if (lon_present == FALSE) { stop("sampledata must have a valid longitude column")  }
   list(latcol, loncol)
+}
+.create_basemap <-function(region, df, latcol, loncol){
+  if (!is.null(region)){
+    world <- map_data("world", region = region)
+    
+    #ToDO: allow subsetting of samples by region. Is there a point-in-polygon library?
+    #this is a quick filter based on latitude and longitude not point-in-polygon
+    maxlat  = max(world$lat)
+    minlat  = min(world$lat)
+    maxlong = max(world$long)
+    minlong = min(world$long)
+    df <- df[ df[, loncol] < maxlong, ]
+    df <- df[ df[, loncol] > minlong, ]
+    df <- df[ df[, latcol] < maxlat, ]
+    df <- df[ df[, latcol] > minlat, ]
+  } else {
+    world <- map_data("world")
+  }
+  
+  worldmap <- ggplot(world, aes(x=long, y=lat, group=group)) +
+    geom_polygon( fill="grey",alpha=0.6) +
+    scale_y_continuous(breaks=(-2:2) * 30) +
+    scale_x_continuous(breaks=(-4:4) * 45) +
+    theme_classic() +
+    theme( axis.text = element_blank(), 
+           axis.ticks = element_blank(), 
+           axis.line = element_blank(), 
+           axis.title=element_blank())
+  
+  worldmap
 }
