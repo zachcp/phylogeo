@@ -88,24 +88,24 @@ map_network <- function(physeq, maxdist=0.9, distance="jaccard", color=NULL, reg
     if( sample_data[pointsize][1] %in% names) { stop("color variable must be a sampledata column") }
   }
   
-  
-  #helper function to assign names in the df to clusters
+  #helper funcitons
+  ######################################################################################################
   get_clusters <- function(num, graph=ig){
-    #num is the index of the cluster
+    #get cluster membership info from igraph object from cluster with clusterid of "num
     clusts  <- clusters(graph)
     members <- which(clusts$membership == num) #get membership
     names   <- get.vertex.attribute(graph, 'name', members)
     df = data.frame(names)
     df['cluster'] <- num
     rownames(df) <- df$names
-   #return a df with name/cluster columns
-    df
+    df    #return a df with name/cluster columns
   }
   
   get_lines <- function(graph=ig, df=data){
-    #helper function that will use the links data to pull out
-    #the sample-pair data from the master df for drawing lines
-    getline_df <- function(i, l=links, df1 =df){
+    #get each edge of the network and return a list of dataframes with the node info
+ 
+    getline_df <- function(i, l=links, df1=df){
+      #subset data frmae using node info
       temprow   <- l[i,]
       tempnames <-c(temprow$from,temprow$to)
       smalldf <- df1[rownames(df1) %in% tempnames, ]
@@ -113,35 +113,17 @@ map_network <- function(physeq, maxdist=0.9, distance="jaccard", color=NULL, reg
     }
     
     links <- get.data.frame(ig)
-#     links['index'] <- row.names(links) #add numbers to df
-#     a <- links[,c(1,3)]
-#     names(a) <- c('sample','line_id')
-#     b <- links[,c(2,3)]
-#     names(b) <- c('sample','line_id')
-#     linkdf <- rbind(a,b)
-#     row.names(linkdf) <- linkdf$sample
-#     linkdf
     links_range <- seq( 1:dim(links)[1])
     lines_dfs <- Map(getline_df, links_range)
     lines_dfs
-    
   }
+  ######################################################################################################
   
-  
-  #create df from cluster membership
+  #make network, get cluster information, and add that to the  original dataframe. 
   ig <- make_network(physeq, max.dist = maxdist, distance=distance)
   clusts <- seq(clusters(ig)$no)
   clustdf <- Reduce( rbind, Map(get_clusters, clusts))
-    
-  #merge the original dataframe with the cluster info
   mdf <- merge(clustdf, data.frame(data), by="row.names", all.x=T)
-  
-#   # if lines should be added calculate the line membership and add that as a column to the df
-#   if(lines){
-#     linesdf <- get_lines(graph=ig, df=data)
-#     mdf <- merge(clustdf, mdf, by.y="")
-#   }
-  
   
   #basemap
   if (!is.null(region)){
@@ -161,37 +143,35 @@ map_network <- function(physeq, maxdist=0.9, distance="jaccard", color=NULL, reg
     world <- map_data("world")
   }
   
-  
-worldmap <- ggplot(world, aes(x=long, y=lat, group=group)) +
-    geom_polygon( fill="grey",alpha=0.6) +
-    scale_y_continuous(breaks=(-2:2) * 30) +
-    scale_x_continuous(breaks=(-4:4) * 45) +
-    theme_classic() +
-    theme( axis.text = element_blank(), 
-           axis.ticks = element_blank(), 
-           axis.line = element_blank(), 
-           axis.title=element_blank())
+  worldmap <- ggplot(world, aes(x=long, y=lat, group=group)) +
+  geom_polygon( fill="grey",alpha=0.6) +
+  scale_y_continuous(breaks=(-2:2) * 30) +
+  scale_x_continuous(breaks=(-4:4) * 45) +
+  theme_classic() +
+  theme( axis.text = element_blank(), 
+         axis.ticks = element_blank(), 
+         axis.line = element_blank(), 
+         axis.title=element_blank())
   
   #how to hande when pointsize information can be either global (outside of aes), orper-sample (inseide of aes)
   if (!is.null(pointsize) ) {
     #note that worldmap aes() has a group which is required for use with the coor_map
     worldmap <- worldmap + geom_point(data=mdf, aes_string( x=loncol, y=latcol, group=names(mdf)[1], color=color, size = pointsize), alpha= pointalpha)    
-  } else {
+   } else {
     worldmap <- worldmap + geom_point(data=mdf, aes_string( x=loncol, y=latcol, group=names(mdf)[1], color=color), size=4 ,alpha=pointalpha)    
-  }
+   }
 
-#   #add lines if lines
+  #add lines if lines
   draw_lines <- function(plt, df2){
     df2 <- data.frame(df2) #to ensure list returns a df object
     plt <- plt + geom_line(data=df2,  aes_string( x=loncol, y=latcol, group=names(df2)[1]))
   }
   
   if(lines){
-    #worldmap <- Reduce(draw_lines, get_lines(),init=worldmap)
-    worldmap <- worldmap  + lapply(get_lines(), geom_line, mapping = aes_string(x=loncol,y=latcol, group=NULL))
+    linelist <- get_lines()
+    worldmap <- worldmap  + lapply(linelist, geom_line, mapping = aes_string(x=loncol,y=latcol, group=NULL))
   }
-  
-  worldmap
+  return worldmap
 }
 #' Plot a network using ggplot2 (represent microbiome)
 #'
