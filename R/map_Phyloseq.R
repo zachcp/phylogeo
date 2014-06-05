@@ -137,7 +137,8 @@ map_phyloseq <- function(physeq, region=NULL, color=NULL, shape=NULL, point_size
 #' map_phylo(AD)
 #' map_phylo(AD, region="bra") 
 #' map_phylo(AD, color="Geotype", point_size="richness") 
-map_network <- function(physeq, maxdist=0.9, distance="jaccard", color=NULL, region=NULL, point_size=4, alpha = 0.8, lines=FALSE, jitter=FALSE){
+map_network <- function(physeq, maxdist=0.9, distance="jaccard", color=NULL, region=NULL, point_size=4, 
+                        alpha = 0.8, lines=FALSE, jitter=FALSE, jitter.x=3, jitter.y=3){
 
   #helper functions to calculate membership in clusters or lines
   ######################################################################################################
@@ -198,7 +199,7 @@ map_network <- function(physeq, maxdist=0.9, distance="jaccard", color=NULL, reg
   worldmap <- .create_basemap(region=region, df=mdf, latcol=latcol, loncol=loncol)
  
   if(jitter){
-    pos = position = position_jitter(w = 0.1, h = 0.1)
+    pos = position_jitter(width=jitter.x, h = jitter.y)
   }else{
     pos=NULL
   }
