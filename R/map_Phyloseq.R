@@ -17,7 +17,7 @@
 #' map_phylo(AD)
 #' map_phylo(AD, region="bra") 
 #' map_phylo(AD, color="Geotype", pointsize="richness") 
-map_phyloseq <- function(physeq, region=NULL, color=NULL, pointsize=NULL, pointalpha = 0.8){
+map_phyloseq <- function(physeq, region=NULL, color=NULL, pointsize=4, pointalpha = 0.8, jitter=FALSE, jitter.x=0.1, jitter.y=0.1){
   #check basic physeq and lat/lon
   latlon <- .check_physeq(physeq)
   latcol <- as.character( latlon[1] )
@@ -26,18 +26,25 @@ map_phyloseq <- function(physeq, region=NULL, color=NULL, pointsize=NULL, pointa
   names <- names(data)
   
   #check plot options
-  .check_names(color,mdf)
-  .check_names(pointsize,mdf, allownumeric=T)
+  .check_names(color,data)
+  .check_names(pointsize,data, allownumeric=T)
   
   #create map
   ############################################################################################################
   worldmap <- .create_basemap(region=region, df=data, latcol=latcol,loncol=loncol)
   
+  if(jitter){
+    pos =  position_jitter(width = jitter.x, height = jitter.y)
+  }else{
+    pos=NULL
+  }
   #how to hande when pointsize information can be either global (outside of aes), orper-sample (inseide of aes)
   if(is.numeric(pointsize)){
-    worldmap <- worldmap + geom_point(data=mdf, aes_string( x=loncol, y=latcol, group=NULL, color=color),size = pointsize, alpha= pointalpha) 
+    worldmap <- worldmap + geom_point(data=data, aes_string( x=loncol, y=latcol, group=NULL, color=color), 
+                                      size = pointsize, alpha= pointalpha, position = pos) 
   }else{
-    worldmap <- worldmap + geom_point(data=mdf, aes_string( x=loncol, y=latcol, group=NULL, color=color, size = pointsize), alpha= pointalpha) 
+    worldmap <- worldmap + geom_point(data=data, aes_string( x=loncol, y=latcol, group=NULL, color=color, size = pointsize),
+                                      alpha= pointalpha, position=pos) 
   } 
   
   worldmap
@@ -65,7 +72,7 @@ map_phyloseq <- function(physeq, region=NULL, color=NULL, pointsize=NULL, pointa
 #' map_phylo(AD)
 #' map_phylo(AD, region="bra") 
 #' map_phylo(AD, color="Geotype", pointsize="richness") 
-map_network <- function(physeq, maxdist=0.9, distance="jaccard", color=NULL, region=NULL, pointsize=4, pointalpha = 0.8, lines=FALSE){
+map_network <- function(physeq, maxdist=0.9, distance="jaccard", color=NULL, region=NULL, pointsize=4, pointalpha = 0.8, lines=FALSE, jitter=FALSE){
 
   #helper functions to calculate membership in clusters or lines
   ######################################################################################################
@@ -75,7 +82,7 @@ map_network <- function(physeq, maxdist=0.9, distance="jaccard", color=NULL, reg
     members <- which(clusts$membership == num) #get membership
     names   <- get.vertex.attribute(graph, 'name', members)
     df = data.frame(names)
-    df['cluster'] <- num
+    df['cluster'] <- as.character(num)
     rownames(df) <- df$names
     df    #return a df with name/cluster columns
   }
@@ -125,11 +132,18 @@ map_network <- function(physeq, maxdist=0.9, distance="jaccard", color=NULL, reg
   ############################################################################################################
   worldmap <- .create_basemap(region=region, df=mdf, latcol=latcol, loncol=loncol)
  
+  if(jitter){
+    pos = position = position_jitter(w = 0.1, h = 0.1)
+  }else{
+    pos=NULL
+  }
   #how to hande when pointsize information can be either global (outside of aes), orper-sample (inseide of aes)
   if(is.numeric(pointsize)){
-    worldmap <- worldmap + geom_point(data=mdf, aes_string( x=loncol, y=latcol, group=NULL, color=color),size = pointsize, alpha= pointalpha) 
+    worldmap <- worldmap + geom_point(data=mdf, aes_string( x=loncol, y=latcol, group=NULL, color=color), 
+                                      size = pointsize, alpha= pointalpha, position = pos) 
   }else{
-    worldmap <- worldmap + geom_point(data=mdf, aes_string( x=loncol, y=latcol, group=NULL, color=color, size = pointsize), alpha= pointalpha) 
+    worldmap <- worldmap + geom_point(data=mdf, aes_string( x=loncol, y=latcol, group=NULL, color=color, size = pointsize), 
+                                      alpha= pointalpha, position = pos) 
   } 
 
   #addlines
