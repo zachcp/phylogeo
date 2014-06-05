@@ -113,9 +113,18 @@ map_network <- function(physeq, maxdist=0.9, distance="jaccard", color=NULL, reg
     }
     
     links <- get.data.frame(ig)
+#     links['index'] <- row.names(links) #add numbers to df
+#     a <- links[,c(1,3)]
+#     names(a) <- c('sample','line_id')
+#     b <- links[,c(2,3)]
+#     names(b) <- c('sample','line_id')
+#     linkdf <- rbind(a,b)
+#     row.names(linkdf) <- linkdf$sample
+#     linkdf
     links_range <- seq( 1:dim(links)[1])
     lines_dfs <- Map(getline_df, links_range)
     lines_dfs
+    
   }
   
   
@@ -126,6 +135,12 @@ map_network <- function(physeq, maxdist=0.9, distance="jaccard", color=NULL, reg
     
   #merge the original dataframe with the cluster info
   mdf <- merge(clustdf, data.frame(data), by="row.names", all.x=T)
+  
+#   # if lines should be added calculate the line membership and add that as a column to the df
+#   if(lines){
+#     linesdf <- get_lines(graph=ig, df=data)
+#     mdf <- merge(clustdf, mdf, by.y="")
+#   }
   
   
   #basemap
@@ -165,14 +180,15 @@ worldmap <- ggplot(world, aes(x=long, y=lat, group=group)) +
     worldmap <- worldmap + geom_point(data=mdf, aes_string( x=loncol, y=latcol, group=names(mdf)[1], color=color), size=4 ,alpha=pointalpha)    
   }
 
-  #add lines if lines
-  draw_lines <- function(df2, plt =worldmap){
-    plt <- plt + geom_line(data=df2,  aes_string( x=loncol, y=latcol))
-    plt
+#   #add lines if lines
+  draw_lines <- function(plt, df2){
+    df2 <- data.frame(df2) #to ensure list returns a df object
+    plt <- plt + geom_line(data=df2,  aes_string( x=loncol, y=latcol, group=names(df2)[1]))
   }
   
   if(lines){
-    worldmap <- Reduce(draw_lines, get_lines())
+    #worldmap <- Reduce(draw_lines, get_lines(),init=worldmap)
+    worldmap <- worldmap  + lapply(get_lines(), geom_line, mapping = aes_string(x=loncol,y=latcol, group=NULL))
   }
   
   worldmap
