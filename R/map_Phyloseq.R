@@ -14,7 +14,6 @@ map_phyloseq <- function(physeq, region=NULL, color=NULL, pointsize=NULL, pointa
   latlon <- .check_physeq(physeq)
   latcol <- as.character( latlon[1] )
   loncol <- as.character( latlon[2] )
-  
   data <- sample_data(physeq)
   names <- names(data)
   
@@ -174,8 +173,8 @@ plot_tree    <- function() {
 plot_heatmap <- function() {
   
 }
-
 #
+#' Check for Latitude and Longitude Columns in a Dataframe and return the column values
 .check_physeq <- function(physeq){
   #check phyloseq objects for Lat/Lon
   if (!"sam_data" %in% getslots.phyloseq(physeq)){
@@ -205,6 +204,7 @@ plot_heatmap <- function() {
   if (lon_present == FALSE) { stop("sampledata must have a valid longitude column")  }
   list(latcol, loncol)
 }
+#' Create a basemap from the maps() worldmap focusing on a region
 .create_basemap <-function(region, df, latcol, loncol){
   if (!is.null(region)){
     world <- map_data("world", region = region)
@@ -234,4 +234,20 @@ plot_heatmap <- function() {
            axis.title=element_blank())
   
   worldmap
+}
+#' utility function to check the validity of arguments
+.check_names <- function(member, df, allownumeric=FALSE){
+  message <- paste(member, " variable must be a valid column name of a Phyloseq table")
+  if(!is.null(member)){
+    if(!allownumeric){
+      if(!member %in% names(df) ){
+        stop(message)
+      }
+    }else{
+      if(!is.numeric(memember)){
+        if(!member %in% names(df) ){
+          stop(message)
+        }
+      }
+  } 
 }
