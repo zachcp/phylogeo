@@ -59,17 +59,16 @@ map_phyloseq <- function(physeq, region=NULL, color=NULL, shape=NULL, point_size
   worldmap <- .create_basemap(region=region, df=data, latcol=latcol,loncol=loncol)
   
   if(jitter){
-    pos =  position_jitter(width = jitter.x, height = jitter.y)
-  }else{
-    pos=NULL
+    data <- .jitter_df(df=data,xcol=loncol,ycol=latcol,jitter.x=jitter.x,jitter.y=jitter.y)
   }
+  
   #how to hande when point_size information can be either global (outside of aes), orper-sample (inseide of aes)
   if(is.numeric(point_size)){
     worldmap <- worldmap + geom_point(data=data, aes_string( x=loncol, y=latcol, group=NULL, color=color), 
-                                      size = point_size, alpha= alpha, position = pos) 
+                                      size = point_size, alpha= alpha) 
   }else{
     worldmap <- worldmap + geom_point(data=data, aes_string( x=loncol, y=latcol, group=NULL, color=color, size = point_size),
-                                      alpha= alpha, position=pos) 
+                                      alpha= alpha) 
   } 
   
   worldmap
@@ -94,11 +93,11 @@ map_phyloseq <- function(physeq, region=NULL, color=NULL, shape=NULL, point_size
 #' 
 #' @param color (Optional). Default \code{NULL}.
 #'  The name of the sample variable in \code{physeq} to use for color mapping
-#'  of points (graph vertices).
+#'  of points (graph vertices). Note: "cluster" can be used to show igraph clusters
 #'  
 #' @param shape (Optional). Default \code{NULL}.
 #'  The name of the sample variable in \code{physeq} to use for shape mapping.
-#'  of points (graph vertices).
+#'  of points (graph vertices).  Note: "cluster" can be used to show igraph clusters
 #'  
 #' @param point_size (Optional). Default \code{4}. 
 #'  The size of the vertex points.
@@ -134,11 +133,13 @@ map_phyloseq <- function(physeq, region=NULL, color=NULL, shape=NULL, point_size
 #' @export
 #' @examples 
 #' data(AD)
-#' map_phylo(AD)
-#' map_phylo(AD, region="bra") 
-#' map_phylo(AD, color="Geotype", point_size="richness") 
+#' map_network(AD)
+#' map_network(AD, region="bra") 
+#' map_network(AD, color="Geotype", point_size="richness") 
+#' map_network(AD, point_size=2, lines=T)
+#' map_network(AD, point_size=2, lines=T, jitter=T)
 map_network <- function(physeq, maxdist=0.9, distance="jaccard", color=NULL, region=NULL, point_size=4, 
-                        alpha = 0.8, lines=FALSE, jitter=FALSE, jitter.x=3, jitter.y=3){
+                        alpha = 0.8, lines=FALSE, jitter=FALSE, jitter.x=3, jitter.y=3, shape=NULL){
 
   #helper functions to calculate membership in clusters or lines
   ######################################################################################################
@@ -157,7 +158,7 @@ map_network <- function(physeq, maxdist=0.9, distance="jaccard", color=NULL, reg
     #get each edge of the network and return a list of dataframes with the node info
  
     getline_df <- function(i, l=links, df1=df){
-      #subset data frmae using node info
+      #subset data frame using node info
       temprow   <- l[i,]
       tempnames <-c(temprow$from,temprow$to)
       smalldf <- df1[rownames(df1) %in% tempnames, ]
@@ -189,6 +190,7 @@ map_network <- function(physeq, maxdist=0.9, distance="jaccard", color=NULL, reg
   clusts <- seq(clusters(ig)$no)
   clustdf <- Reduce( rbind, Map(get_clusters, clusts))
   mdf <- merge(clustdf, data.frame(data), by="row.names", all.x=T)
+  rownames(mdf) <- mdf$Row.names
   
   #check plot options
   .check_names(color,mdf)
@@ -196,30 +198,32 @@ map_network <- function(physeq, maxdist=0.9, distance="jaccard", color=NULL, reg
   
   #create map
   ############################################################################################################
-  worldmap <- .create_basemap(region=region, df=mdf, latcol=latcol, loncol=loncol)
- 
+  
+ #modify points if using jitter
   if(jitter){
-    pos = position_jitter(width=jitter.x, h = jitter.y)
-  }else{
-    pos=NULL
+    mdf <- .jitter_df( df=mdf, xcol=loncol, ycol=latcol, jitter.x=jitter.x, jitter.y=jitter.y)
   }
+  
+  worldmap <- .create_basemap(region=region, df=mdf, latcol=latcol, loncol=loncol)
+  
   #how to hande when point_size information can be either global (outside of aes), orper-sample (inseide of aes)
   if(is.numeric(point_size)){
-    worldmap <- worldmap + geom_point(data=mdf, aes_string( x=loncol, y=latcol, group=NULL, color=color), 
-                                      size = point_size, alpha= alpha, position = pos) 
+   points <- geom_point(data=mdf, aes_string( x=loncol, y=latcol, group=NULL, color=color, shape=shape), 
+                                      size = point_size, alpha= alpha) 
   }else{
-    worldmap <- worldmap + geom_point(data=mdf, aes_string( x=loncol, y=latcol, group=NULL, color=color, size = point_size), 
-                                      alpha= alpha, position = pos) 
+    points <- geom_point(data=mdf, aes_string( x=loncol, y=latcol, group=NULL, color=color, size = point_size, shape=shape), 
+                                      alpha= alpha) 
   } 
-
+  worldmap <- worldmap + points
+  
   #addlines
   if(lines){
-    linelist <- get_lines()
+    linelist <- get_lines(df=mdf) 
     worldmap <- worldmap  + lapply(linelist, geom_line, mapping = aes_string(x=loncol,y=latcol, group=NULL))
   }
   ###########################################################################################################
   
-  worldmap
+  return(worldmap)
 }
 #' Plot a network using ggplot2 (represent microbiome)
 #'
@@ -336,4 +340,14 @@ plot_heatmap <- function() {
       }
     }
   }
+}
+#' utility function to move the x and y positions of the dataset
+.jitter_df <- function(df, xcol, ycol, jitter.x, jitter.y){
+  df <- data.frame(df)
+  dflength <- length(df[,1])
+  distx    <- runif(dflength, min= -jitter.x, max=jitter.x)
+  disty    <- runif(dflength, min= -jitter.y, max=jitter.y)
+  df[xcol] <- df[,xcol] + distx
+  df[ycol] <- df[,ycol] + disty
+  df
 }
