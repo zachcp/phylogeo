@@ -5,19 +5,44 @@
 #' and special care should be given to considering the choice of this threshold.
 #'
 #' @usage map_phylseq(physeq, type="samples",  region=NULL,
-#'   color=NULL, shape=NULL, pointsize=4, pointalpha=1,
+#'   color=NULL, shape=NULL, point_size=4, alpha=1,
 #'   label="value", hjust = 1.35, 
 #'   line_weight=0.5, line_color=color, line_alpha=0.4,
 #' 	layout.method=layout.fruchterman.reingold, title=NULL)
 #'
+#' @param physeq (Required). 
+#'  The name of the phyloseq object. This must have sample data with Latitude and Longitude Columns.
+#'  
+#' @param region (Optional). Default \code{NULL}.
+#'  The name of geographic region that can be used to zoom.
+#' 
+#' @param color (Optional). Default \code{NULL}.
+#'  The name of the sample variable in \code{physeq} to use for color mapping
+#'  of points (graph vertices).
+#'  
+#' @param shape (Optional). Default \code{NULL}.
+#'  The name of the sample variable in \code{physeq} to use for shape mapping.
+#'  of points (graph vertices).
+#'  
+#' @param point_size (Optional). Default \code{4}. 
+#'  The size of the vertex points.
+#'  
+#' @param alpha (Optional). Default \code{0.8}. 
+#'  A value between 0 and 1 for the alpha transparency of the vertex points.
+#'  
+#'  
 #' @import ggplot2  
+#' @import maps
 #' @export
 #' @examples 
 #' data(AD)
 #' map_phylo(AD)
 #' map_phylo(AD, region="bra") 
-#' map_phylo(AD, color="Geotype", pointsize="richness") 
-map_phyloseq <- function(physeq, region=NULL, color=NULL, pointsize=4, pointalpha = 0.8, jitter=FALSE, jitter.x=0.1, jitter.y=0.1){
+#' map_phylo(AD, color="Geotype", point_size="richness") 
+#' map_phylo(AD, color="cluster", point_size=3, jitter=T)
+#' map_phylo(AD, color="cluster", point_size=3, jitter=T, jitter.x = 0.1, jitter.y=0.1)
+#'  
+map_phyloseq <- function(physeq, region=NULL, color=NULL, shape=NULL, point_size=4, alpha = 0.8, jitter=FALSE, jitter.x=3, jitter.y=3){
   #check basic physeq and lat/lon
   latlon <- .check_physeq(physeq)
   latcol <- as.character( latlon[1] )
@@ -27,7 +52,7 @@ map_phyloseq <- function(physeq, region=NULL, color=NULL, pointsize=4, pointalph
   
   #check plot options
   .check_names(color,data)
-  .check_names(pointsize,data, allownumeric=T)
+  .check_names(point_size,data, allownumeric=T)
   
   #create map
   ############################################################################################################
@@ -38,13 +63,13 @@ map_phyloseq <- function(physeq, region=NULL, color=NULL, pointsize=4, pointalph
   }else{
     pos=NULL
   }
-  #how to hande when pointsize information can be either global (outside of aes), orper-sample (inseide of aes)
-  if(is.numeric(pointsize)){
+  #how to hande when point_size information can be either global (outside of aes), orper-sample (inseide of aes)
+  if(is.numeric(point_size)){
     worldmap <- worldmap + geom_point(data=data, aes_string( x=loncol, y=latcol, group=NULL, color=color), 
-                                      size = pointsize, alpha= pointalpha, position = pos) 
+                                      size = point_size, alpha= alpha, position = pos) 
   }else{
-    worldmap <- worldmap + geom_point(data=data, aes_string( x=loncol, y=latcol, group=NULL, color=color, size = pointsize),
-                                      alpha= pointalpha, position=pos) 
+    worldmap <- worldmap + geom_point(data=data, aes_string( x=loncol, y=latcol, group=NULL, color=color, size = point_size),
+                                      alpha= alpha, position=pos) 
   } 
   
   worldmap
@@ -61,7 +86,47 @@ map_phyloseq <- function(physeq, region=NULL, color=NULL, pointsize=4, pointalph
 #' 	line_weight=0.5, line_color=color, line_alpha=0.4,
 #' 	layout.method=layout.fruchterman.reingold, title=NULL)
 #'   
+#' @param physeq (Required). 
+#'  The name of the phyloseq object. This must have sample data with Latitude and Longitude Columns.
+#'  
+#' @param region (Optional). Default \code{NULL}.
+#'  The name of geographic region that can be used to zoom.
+#' 
+#' @param color (Optional). Default \code{NULL}.
+#'  The name of the sample variable in \code{physeq} to use for color mapping
+#'  of points (graph vertices).
+#'  
+#' @param shape (Optional). Default \code{NULL}.
+#'  The name of the sample variable in \code{physeq} to use for shape mapping.
+#'  of points (graph vertices).
+#'  
+#' @param point_size (Optional). Default \code{4}. 
+#'  The size of the vertex points.
+#'  
+#' @param alpha (Optional). Default \code{0.8}. 
+#'  A value between 0 and 1 for the alpha transparency of the vertex points.
+#'
+#' @param maxdist (Optional). Default \code{0.9}. 
+#'  Cutoff of the \code{distance} used to detmine whether a sample is included in the network.
+#'  
+#' @param distance (Optional). Default \code{"jaccard"}. 
+#'  Distance metric used to calculate between-sample distances.
+#'  
+#' @param lines (Optional). Default \code{FALSE}. 
+#'  Boolean value. Determines whether lines are drawn between samples
+#'  
+#' @param jitter (Optional). Default \code{FALSE}. 
+#'  Boolean value. Determines whether to use geom_jitter() to reposition points.
+#'  
+#' @param jitter.x (Optional). Default \code{5}. 
+#'  Value to jitter in the X direction if using \code{jitter}
+#' 
+#' @param jitter.y (Optional). Default \code{5}. 
+#'  Value to jitter in the Y direction if using \code{jitter}
+#'   
+#' 
 #' @import ggplot2
+#' @import maps
 #' @import igraph
 #' @importFrom igraph get.data.frame
 #' @importFrom igraph get.vertex.attribute
@@ -71,8 +136,8 @@ map_phyloseq <- function(physeq, region=NULL, color=NULL, pointsize=4, pointalph
 #' data(AD)
 #' map_phylo(AD)
 #' map_phylo(AD, region="bra") 
-#' map_phylo(AD, color="Geotype", pointsize="richness") 
-map_network <- function(physeq, maxdist=0.9, distance="jaccard", color=NULL, region=NULL, pointsize=4, pointalpha = 0.8, lines=FALSE, jitter=FALSE){
+#' map_phylo(AD, color="Geotype", point_size="richness") 
+map_network <- function(physeq, maxdist=0.9, distance="jaccard", color=NULL, region=NULL, point_size=4, alpha = 0.8, lines=FALSE, jitter=FALSE){
 
   #helper functions to calculate membership in clusters or lines
   ######################################################################################################
@@ -126,7 +191,7 @@ map_network <- function(physeq, maxdist=0.9, distance="jaccard", color=NULL, reg
   
   #check plot options
   .check_names(color,mdf)
-  .check_names(pointsize,mdf, allownumeric=T)
+  .check_names(point_size,mdf, allownumeric=T)
   
   #create map
   ############################################################################################################
@@ -137,13 +202,13 @@ map_network <- function(physeq, maxdist=0.9, distance="jaccard", color=NULL, reg
   }else{
     pos=NULL
   }
-  #how to hande when pointsize information can be either global (outside of aes), orper-sample (inseide of aes)
-  if(is.numeric(pointsize)){
+  #how to hande when point_size information can be either global (outside of aes), orper-sample (inseide of aes)
+  if(is.numeric(point_size)){
     worldmap <- worldmap + geom_point(data=mdf, aes_string( x=loncol, y=latcol, group=NULL, color=color), 
-                                      size = pointsize, alpha= pointalpha, position = pos) 
+                                      size = point_size, alpha= alpha, position = pos) 
   }else{
-    worldmap <- worldmap + geom_point(data=mdf, aes_string( x=loncol, y=latcol, group=NULL, color=color, size = pointsize), 
-                                      alpha= pointalpha, position = pos) 
+    worldmap <- worldmap + geom_point(data=mdf, aes_string( x=loncol, y=latcol, group=NULL, color=color, size = point_size), 
+                                      alpha= alpha, position = pos) 
   } 
 
   #addlines
