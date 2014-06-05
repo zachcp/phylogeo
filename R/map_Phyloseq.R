@@ -105,14 +105,14 @@ map_phyloseq <- function(physeq, region=NULL, color=NULL, shape=NULL, point_size
 #' @param alpha (Optional). Default \code{0.8}. 
 #'  A value between 0 and 1 for the alpha transparency of the vertex points.
 #'
-#' @param maxdist (Optional). Default \code{0.9}. 
-#'  Cutoff of the \code{distance} used to detmine whether a sample is included in the network.
+#' @param lines (Optional). Default \code{FALSE}. 
+#'  Boolean value. Determines whether lines are drawn between samples
 #'  
 #' @param distance (Optional). Default \code{"jaccard"}. 
 #'  Distance metric used to calculate between-sample distances.
 #'  
-#' @param lines (Optional). Default \code{FALSE}. 
-#'  Boolean value. Determines whether lines are drawn between samples
+#' @param maxdist (Optional). Default \code{0.9}. 
+#'  Cutoff of the \code{distance} used to detmine whether a sample is included in the network.
 #'  
 #' @param jitter (Optional). Default \code{FALSE}. 
 #'  Boolean value. Determines whether to use geom_jitter() to reposition points.
@@ -122,7 +122,17 @@ map_phyloseq <- function(physeq, region=NULL, color=NULL, shape=NULL, point_size
 #' 
 #' @param jitter.y (Optional). Default \code{5}. 
 #'  Value to jitter in the Y direction if using \code{jitter}
-#'   
+#'  
+#' @param line_weight (Optional). Default \code{0.3}.
+#'  The line thickness to use to label graph edges.
+#' 
+#' @param line_color (Optional). Default \code{Black}.
+#'  The name of the sample variable in \code{physeq} to use for color mapping
+#'  of lines (graph edges).
+#' 
+#' @param line_alpha (Optional). Default \code{0.4}.
+#'  The transparency level for graph-edge lines.
+#'  
 #' 
 #' @import ggplot2
 #' @import maps
@@ -139,7 +149,8 @@ map_phyloseq <- function(physeq, region=NULL, color=NULL, shape=NULL, point_size
 #' map_network(AD, point_size=2, lines=T)
 #' map_network(AD, point_size=2, lines=T, jitter=T)
 map_network <- function(physeq, maxdist=0.9, distance="jaccard", color=NULL, region=NULL, point_size=4, 
-                        alpha = 0.8, lines=FALSE, jitter=FALSE, jitter.x=3, jitter.y=3, shape=NULL){
+                        alpha = 0.8, lines=FALSE, jitter=FALSE, jitter.x=3, jitter.y=3, shape=NULL, 
+                        line_weight=0.3, line_color ="Black" ,line_alpha=0.4 ){
 
   #helper functions to calculate membership in clusters or lines
   ######################################################################################################
@@ -199,13 +210,23 @@ map_network <- function(physeq, maxdist=0.9, distance="jaccard", color=NULL, reg
   #create map
   ############################################################################################################
   
- #modify points if using jitter
+  worldmap <- .create_basemap(region=region, df=mdf, latcol=latcol, loncol=loncol)
+  
+  #modify points if using jitter
   if(jitter){
     mdf <- .jitter_df( df=mdf, xcol=loncol, ycol=latcol, jitter.x=jitter.x, jitter.y=jitter.y)
   }
   
-  worldmap <- .create_basemap(region=region, df=mdf, latcol=latcol, loncol=loncol)
-  
+  #addlines
+  if(lines){
+    linelist <- get_lines(df=mdf) 
+    for(i in linelist){
+    worldmap <- worldmap + geom_line(data=i ,aes_string(x=loncol,y=latcol, group=NULL), size=line_weight, alpha=line_alpha, color=line_color)
+    }
+#    worldmap <- worldmap  + lapply(linelist, geom_line, mapping = aes_string(x=loncol,y=latcol, group=NULL))
+  }
+ 
+  #add points
   #how to hande when point_size information can be either global (outside of aes), orper-sample (inseide of aes)
   if(is.numeric(point_size)){
    points <- geom_point(data=mdf, aes_string( x=loncol, y=latcol, group=NULL, color=color, shape=shape), 
@@ -216,11 +237,7 @@ map_network <- function(physeq, maxdist=0.9, distance="jaccard", color=NULL, reg
   } 
   worldmap <- worldmap + points
   
-  #addlines
-  if(lines){
-    linelist <- get_lines(df=mdf) 
-    worldmap <- worldmap  + lapply(linelist, geom_line, mapping = aes_string(x=loncol,y=latcol, group=NULL))
-  }
+
   ###########################################################################################################
   
   return(worldmap)
