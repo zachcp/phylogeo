@@ -133,6 +133,8 @@ map_phyloseq <- function(physeq, region=NULL, color=NULL, shape=NULL, point_size
 #' @param line_alpha (Optional). Default \code{0.4}.
 #'  The transparency level for graph-edge lines.
 #'  
+#' @param base_data (Optional). Default \code{FALSE}.
+#'  Boolean to determine whether to include dat points that aren't in a network.
 #' 
 #' @import ggplot2
 #' @import maps
@@ -150,7 +152,7 @@ map_phyloseq <- function(physeq, region=NULL, color=NULL, shape=NULL, point_size
 #' map_network(AD, point_size=2, lines=T, jitter=T)
 map_network <- function(physeq, maxdist=0.9, distance="jaccard", color=NULL, region=NULL, point_size=4, 
                         alpha = 0.8, lines=FALSE, jitter=FALSE, jitter.x=3, jitter.y=3, shape=NULL, 
-                        line_weight=0.3, line_color ="Black" ,line_alpha=0.4 ){
+                        line_weight=0.3, line_color ="Black" ,line_alpha=0.4 , base_data=FALSE){
 
   #helper functions to calculate membership in clusters or lines
   ######################################################################################################
@@ -210,6 +212,7 @@ map_network <- function(physeq, maxdist=0.9, distance="jaccard", color=NULL, reg
   #create map
   ############################################################################################################
   
+  #basemap
   worldmap <- .create_basemap(region=region, df=mdf, latcol=latcol, loncol=loncol)
   
   #modify points if using jitter
@@ -217,11 +220,18 @@ map_network <- function(physeq, maxdist=0.9, distance="jaccard", color=NULL, reg
     mdf <- .jitter_df( df=mdf, xcol=loncol, ycol=latcol, jitter.x=jitter.x, jitter.y=jitter.y)
   }
   
+  #add points that aren't part of a network
+  if(base_data){
+    network_points <- rownames(mdf)
+    nonetworkdf <- data[!rownames(data) %in% network_points, ] 
+    worldmap <- worldmap + geom_point(data = nonetworkdf, aes_string(x=loncol,y=latcol, group=NULL), color="grey", size=point_size)
+  }
+  
   #addlines
   if(lines){
     linelist <- get_lines(df=mdf) 
     for(i in linelist){
-    worldmap <- worldmap + geom_line(data=i ,aes_string(x=loncol,y=latcol, group=NULL), size=line_weight, alpha=line_alpha, color=line_color)
+    worldmap <- worldmap + geom_line(data=i,aes_string(x=loncol,y=latcol, group=NULL), size=line_weight, alpha=line_alpha, color=line_color)
     }
 #    worldmap <- worldmap  + lapply(linelist, geom_line, mapping = aes_string(x=loncol,y=latcol, group=NULL))
   }
