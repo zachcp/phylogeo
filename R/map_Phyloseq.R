@@ -47,8 +47,13 @@ map_phyloseq <- function(physeq, region=NULL, color=NULL, shape=NULL, point_size
   latlon <- .check_physeq(physeq)
   latcol <- as.character( latlon[1] )
   loncol <- as.character( latlon[2] )
-  data <- sample_data(physeq)
+  data <- data.frame( sample_data(physeq) )
+  data <- .check_NA(data, latcol)
+  data <- .coerce_numeric(data,latcol)
+  data <- .check_NA(data, loncol)
+  data <- .coerce_numeric(data,loncol)
   names <- names(data)
+  
   
   #check plot options
   .check_names(color,data)
@@ -152,7 +157,7 @@ map_phyloseq <- function(physeq, region=NULL, color=NULL, shape=NULL, point_size
 #' map_network(AD, point_size=2, lines=T, jitter=T)
 map_network <- function(physeq, maxdist=0.9, distance="jaccard", color=NULL, region=NULL, point_size=4, 
                         alpha = 0.8, lines=FALSE, jitter=FALSE, jitter.x=3, jitter.y=3, shape=NULL, 
-                        line_weight=0.3, line_color ="Black" ,line_alpha=0.4 , base_data=FALSE){
+                        line_weight=1, line_color ="Black" ,line_alpha=0.4 , base_data=FALSE){
 
   #helper functions to calculate membership in clusters or lines
   ######################################################################################################
@@ -195,10 +200,14 @@ map_network <- function(physeq, maxdist=0.9, distance="jaccard", color=NULL, reg
   latlon <- .check_physeq(physeq)
   latcol <- as.character( latlon[1] )
   loncol <- as.character( latlon[2] )
-  data <- sample_data(physeq)
+  data <- data.frame( sample_data(physeq) )
+  data <- .check_NA(data, latcol)
+  data <- .coerce_numeric(data,latcol)
+  data <- .check_NA(data, loncol)
+  data <- .coerce_numeric(data,loncol)
   names <- names(data)
   
-  #make network, get cluster information, and add that to the  original dataframe. 
+  #make network, get cluster information, and add thamesat to the  original dataframe. 
   ig <- make_network(physeq, max.dist = maxdist, distance=distance)
   clusts <- seq(clusters(ig)$no)
   clustdf <- Reduce( rbind, Map(get_clusters, clusts))
@@ -248,6 +257,8 @@ map_network <- function(physeq, maxdist=0.9, distance="jaccard", color=NULL, reg
   worldmap <- worldmap + points
   
 
+
+points <- geom_point(data=mdf, aes_string( x=loncol, y=latcol, group=NULL, color=NULL, shape=NULL),  size = point_size, alpha= alpha) 
   ###########################################################################################################
   
   return(worldmap)
@@ -376,5 +387,21 @@ plot_heatmap <- function() {
   disty    <- runif(dflength, min= -jitter.y, max=jitter.y)
   df[xcol] <- df[,xcol] + distx
   df[ycol] <- df[,ycol] + disty
+  df
+}
+
+.check_NA <- function(df, col){
+  colvals <- df[col]
+  colvals[ colvals == "None"] <- NA  #some data has "None" so be sure to replace with NA
+  truth    <- lapply(colvals, is.na)
+  if( any(as.character(truth) == T)){
+    warning(paste("Null Values in ",col, sep=""))
+    df <- df[ !is.na(df[col,]), ]
+  }
+  df
+}
+
+.coerce_numeric <- function(df, col){
+  df[col] <- lapply( lapply(df[col], as.character), as.numeric)
   df
 }
