@@ -47,12 +47,12 @@ map_phyloseq <- function(physeq, region=NULL, color=NULL, shape=NULL, point_size
   latlon <- .check_physeq(physeq)
   latcol <- as.character( latlon[1] )
   loncol <- as.character( latlon[2] )
-  data <- data.frame( sample_data(physeq) )
-  data <- .check_NA(data, latcol)
-  data <- .coerce_numeric(data,latcol)
-  data <- .check_NA(data, loncol)
-  data <- .coerce_numeric(data,loncol)
-  names <- names(data)
+  data   <- data.frame( sample_data(physeq) )
+  data   <- .check_NA(data, latcol)
+  data   <- .coerce_numeric(data,latcol)
+  data   <- .check_NA(data, loncol)
+  data   <- .coerce_numeric(data,loncol)
+  names  <- names(data)
   
   
   #check plot options
@@ -401,7 +401,7 @@ plot_heatmap <- function() {
   df
 }
 
-.coerce_numeric <- function(df, col){
+.coerce_numeric <- function(df, col){st
   df[col] <- lapply( lapply(df[col], as.character), as.numeric)
   df
 }
