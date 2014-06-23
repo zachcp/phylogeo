@@ -37,3 +37,5 @@ R/.Rapp.history
 R/.Rhistory
 
 *.Rproj
+
+*.Rdata
