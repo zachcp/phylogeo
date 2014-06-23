@@ -401,7 +401,7 @@ plot_heatmap <- function() {
   df
 }
 
-.coerce_numeric <- function(df, col){st
+.coerce_numeric <- function(df, col){
   df[col] <- lapply( lapply(df[col], as.character), as.numeric)
   df
 }
