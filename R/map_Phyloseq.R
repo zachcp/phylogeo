@@ -161,7 +161,7 @@ map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard", co
 
   #helper functions to calculate membership in clusters or lines
   ######################################################################################################
-  get_clusters <- function(num, graph=ig){
+  get_clusters <- function(num, graph=igraph){
     #get cluster membership info from igraph object from cluster with clusterid of "num
     clusts  <- clusters(graph)
     members <- which(clusts$membership == num) #get membership
@@ -172,7 +172,7 @@ map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard", co
     df    #return a df with name/cluster columns
   }
   
-  get_lines <- function(graph=ig, df=data){
+  get_lines <- function(graph=igraph, df=data){
     #get each edge of the network and return a list of dataframes with the node info
  
     getline_df <- function(i, l=links, df1=df){
@@ -183,7 +183,7 @@ map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard", co
       smalldf
     }
     
-    links <- get.data.frame(ig)
+    links <- get.data.frame(igraph)
     links_range <- seq( 1:dim(links)[1])
     lines_dfs <- Map(getline_df, links_range)
     lines_dfs
@@ -209,12 +209,12 @@ map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard", co
   
   #make network, get cluster information, and add thamesat to the  original dataframe. 
   if(is.null(igraph)){
-    ig <- make_network(physeq, max.dist = maxdist, distance=distance)
+    igraph <- make_network(physeq, max.dist = maxdist, distance=distance)
   }else{
     if( !"igraph" %in% class(igraph) ){
       stop("igraph must be an igraph network object")} 
   }
-  clusts <- seq(clusters(ig)$no)
+  clusts <- seq(clusters(igraph)$no)
   clustdf <- Reduce( rbind, Map(get_clusters, clusts))
   mdf <- merge(clustdf, data.frame(data), by="row.names", all.x=T)
   rownames(mdf) <- mdf$Row.names
