@@ -155,7 +155,7 @@ map_phyloseq <- function(physeq, region=NULL, color=NULL, shape=NULL, point_size
 #' map_network(AD, color="Geotype", point_size="richness") 
 #' map_network(AD, point_size=2, lines=T)
 #' map_network(AD, point_size=2, lines=T, jitter=T)
-map_network <- function(physeq, maxdist=0.9, distance="jaccard", color=NULL, region=NULL, point_size=4, 
+map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard", color=NULL, region=NULL, point_size=4, 
                         alpha = 0.8, lines=FALSE, jitter=FALSE, jitter.x=3, jitter.y=3, shape=NULL, 
                         line_weight=1, line_color ="Black" ,line_alpha=0.4 , base_data=FALSE){
 
@@ -208,7 +208,12 @@ map_network <- function(physeq, maxdist=0.9, distance="jaccard", color=NULL, reg
   names <- names(data)
   
   #make network, get cluster information, and add thamesat to the  original dataframe. 
-  ig <- make_network(physeq, max.dist = maxdist, distance=distance)
+  if(igraph == NULL){
+    ig <- make_network(physeq, max.dist = maxdist, distance=distance)
+  }else{
+    if( "igraph" %in% class(igraph) ){
+      stop("igraph must be an igraph network object")} 
+  }
   clusts <- seq(clusters(ig)$no)
   clustdf <- Reduce( rbind, Map(get_clusters, clusts))
   mdf <- merge(clustdf, data.frame(data), by="row.names", all.x=T)
