@@ -93,6 +93,9 @@ map_phyloseq <- function(physeq, region=NULL, color=NULL, shape=NULL, point_size
 #' @param physeq (Required). 
 #'  The name of the phyloseq object. This must have sample data with Latitude and Longitude Columns.
 #'  
+#' @param igraph  (Optional). Default \code{NULL}
+#'  An optional igraph object. Will reduce plotting time to use a precalculated network 
+#'  
 #' @param region (Optional). Default \code{NULL}.
 #'  The name of geographic region that can be used to zoom.
 #' 
