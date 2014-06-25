@@ -247,11 +247,6 @@ map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard", co
   if(lines){
     linedf <- get_lines(df=mdf) 
     worldmap <- worldmap + geom_line(data=linedf,aes_string(x=loncol,y=latcol, group="link"), size=line_weight, alpha=line_alpha, color=line_color)
-    
-#    for(i in linelist){
-#    worldmap <- worldmap + geom_line(data=i,aes_string(x=loncol,y=latcol, group=NULL), size=line_weight, alpha=line_alpha, color=line_color)
-#    }
-#    worldmap <- worldmap  + lapply(linelist, geom_line, mapping = aes_string(x=loncol,y=latcol, group=NULL) )
   }
  
   #add points
