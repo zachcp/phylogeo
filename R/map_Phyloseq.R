@@ -180,13 +180,15 @@ map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard", co
       temprow   <- l[i,]
       tempnames <-c(temprow$from,temprow$to)
       smalldf <- df1[rownames(df1) %in% tempnames, ]
+      smalldf['link'] <- i
       smalldf
     }
     
-    links <- get.data.frame(igraph)
+    links <- get.data.frame(graph)
     links_range <- seq( 1:dim(links)[1])
     lines_dfs <- Map(getline_df, links_range)
-    lines_dfs
+    lines_df <- Reduce(rbind, lines_dfs)
+    lines_df
   }
   
   #add lines to ggplot object
@@ -243,11 +245,13 @@ map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard", co
   
   #addlines
   if(lines){
-    linelist <- get_lines(df=mdf) 
-    for(i in linelist){
-    worldmap <- worldmap + geom_line(data=i,aes_string(x=loncol,y=latcol, group=NULL), size=line_weight, alpha=line_alpha, color=line_color)
-    }
-#    worldmap <- worldmap  + lapply(linelist, geom_line, mapping = aes_string(x=loncol,y=latcol, group=NULL))
+    linedf <- get_lines(df=mdf) 
+    worldmap <- worldmap + geom_line(data=linedf,aes_string(x=loncol,y=latcol, group="link"), size=line_weight, alpha=line_alpha, color=line_color)
+    
+#    for(i in linelist){
+#    worldmap <- worldmap + geom_line(data=i,aes_string(x=loncol,y=latcol, group=NULL), size=line_weight, alpha=line_alpha, color=line_color)
+#    }
+#    worldmap <- worldmap  + lapply(linelist, geom_line, mapping = aes_string(x=loncol,y=latcol, group=NULL) )
   }
  
   #add points
