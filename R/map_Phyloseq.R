@@ -208,10 +208,10 @@ map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard", co
   names <- names(data)
   
   #make network, get cluster information, and add thamesat to the  original dataframe. 
-  if(igraph == NULL){
+  if(!is.null(igraph)){
     ig <- make_network(physeq, max.dist = maxdist, distance=distance)
   }else{
-    if( "igraph" %in% class(igraph) ){
+    if( !"igraph" %in% class(igraph) ){
       stop("igraph must be an igraph network object")} 
   }
   clusts <- seq(clusters(ig)$no)
