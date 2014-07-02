@@ -1,2 +1,7 @@
 export("map_phyloseq")
 export("map_network")
+import(ggplot2)
+import(phyloseq)
+import(maps)
+import(map_proj)
+import(igraph)
