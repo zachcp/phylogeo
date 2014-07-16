@@ -12,5 +12,5 @@ library("devtools")
 install_github("phyloseq-geo", "zachcp")
 ```
 
-
+Maps like this one can be made with phyloseq-geo [](https://dl.dropboxusercontent.com/u/1803062/examplemap.png)
 
