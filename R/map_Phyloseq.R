@@ -290,19 +290,29 @@ map_tree    <- function(physeq,
                         label.tips = NULL, text.size = NULL, sizebase = 5, base.spacing = 0.02, ladderize = TRUE,
                         plot.margin = 0.2, title = NULL, treetheme = NULL, justify = "jagged",
                         #global options
-                        width_ratio = 2) {
+                        width_ratio = 2, map_on_left = TRUE) {
     #trim samples that are not in the tree
     physeq2 <- prune_samples(sample_sums(physeq) > 0, physeq)
+    
     mapplot  <- map_phyloseq(physeq2, region=region, color= color, point_size=point_size, alpha = alpha, jitter=jitter, 
                               jitter.x=jitter.x, jitter.y=jitter.y)  + 
                               theme(legend.position="none") 
     treeplot <- plot_tree(physeq2, color= color ,label.tips =label.tips , text.size = text.size, sizebase = sizebase, base.spacing = base.spacing, ladderize = ladderize,
                           plot.margin = plot.margin, title = title, treetheme =treetheme, justify = justify,nodelabf = nodelabf ) +
                           theme(legend.key = element_rect(fill = "white"))
-                          
+    # # trim space by setting xlims
+    # xvals <- treeplot$data$x
+    # xvals <- xvals[!is.na(xvals)]
+    # xmin <- min(xvals)
+    # xmax <- max(xvals) * 1.5
+    # treeplot <- treeplot + xlim( min(xvals), max(xvals))
     
-    combinedplot <- grid.arrange(mapplot,treeplot, ncol=2, widths=c(width_ratio,1))
-    
+    if(map_on_left){
+        combinedplot <- arrangeGrob(mapplot + theme(legend.position="none") ,treeplot, ncol=2, widths=c(width_ratio,1))
+    } else{
+        combinedplot <- arrangeGrob(treeplot + theme(legend.position="none"),mapplot, ncol=2, widths=c(1,width_ratio))    
+    }
+    return(combinedplot)
 }
 # do this?
 plot_heatmap <- function() {
