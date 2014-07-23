@@ -36,11 +36,11 @@
 #' @export
 #' @examples 
 #' data(AD)
-#' map_phylo(AD)
-#' map_phylo(AD, region="bra") 
-#' map_phylo(AD, color="Geotype", point_size="richness") 
-#' map_phylo(AD, color="cluster", point_size=3, jitter=T)
-#' map_phylo(AD, color="cluster", point_size=3, jitter=T, jitter.x = 0.1, jitter.y=0.1)
+#' map_phyloseq(AD)
+#' map_phyloseq(AD, region="bra") 
+#' map_phyloseq(AD, color="Geotype", point_size="richness") 
+#' map_phyloseq(AD, color="cluster", point_size=3, jitter=T)
+#' map_phyloseq(AD, color="cluster", point_size=3, jitter=T, jitter.x = 0.1, jitter.y=0.1)
 #'  
 map_phyloseq <- function(physeq, region=NULL, color=NULL, shape=NULL, point_size=4, alpha = 0.8, jitter=FALSE, jitter.x=3, jitter.y=3){
   #check basic physeq and lat/lon
