@@ -4,7 +4,7 @@
 #' nodes is below a potentially arbitrary threshold,
 #' and special care should be given to considering the choice of this threshold.
 #'
-#' @usage map_phylseq(physeq, type="samples",  region=NULL,
+#' @usage map_phyloseq(physeq, type="samples",  region=NULL,
 #'   color=NULL, shape=NULL, point_size=4, alpha=1,
 #'   label="value", hjust = 1.35, 
 #'   line_weight=0.5, line_color=color, line_alpha=0.4,
