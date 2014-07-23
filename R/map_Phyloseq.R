@@ -270,37 +270,36 @@ points <- geom_point(data=mdf, aes_string( x=loncol, y=latcol, group=NULL, color
   
   return(worldmap)
 }
-#' Plot a network using ggplot2 (represent microbiome)
+#' Map a Phyloseq Object while also drawing a phlogenetic tree of the taxa
 #'
-#' There are many useful examples of phyloseq network graphics in the
-#' \href{http://joey711.github.io/phyloseq/plot_network-examples}{phyloseq online tutorials}.
-#' A custom plotting function for displaying networks
-#' using advanced \code{\link[ggplot2]{ggplot}}2 formatting.
-#' The network itself should be represented using
-#' the \code{igraph} package.
-#' For the \code{\link{phyloseq-package}} it is suggested that the network object
-#' (argument \code{g})
-#' be created using the
-#'  \code{\link{make_network}} function, 
-#' and based upon sample-wise or taxa-wise microbiome ecological distances 
-#' calculated from a phylogenetic sequencing experiment 
-#' (\code{\link{phyloseq-class}}).
-#' In this case, edges in the network are created if the distance between
-#' nodes is below a potentially arbitrary threshold,
-#' and special care should be given to considering the choice of this threshold.
-#'
-#' @usage plot_network(g, physeq=NULL, type="samples", 
-#'   color=NULL, shape=NULL, point_size=4, alpha=1,
-#'   label="value", hjust = 1.35, 
-#' 	line_weight=0.5, line_color=color, line_alpha=0.4,
-#' 	layout.method=layout.fruchterman.reingold, title=NULL)
-#'
-map_richness <- function() {
-}
-#
-#plot a tree and the location of the samples
-plot_tree    <- function() {
-  
+#' @usage map_tree(physeq, region=NULL, color = NULL, size= NULL, point_size=4, alpha=0.8,jitter= FALSE,
+#'                jitter.x=3, jitter.y=3)
+#'   
+#' @param physeq (Required). 
+#'  The name of the phyloseq object. This must have sample data with Latitude and Longitude Columns.
+#'  
+#' @import(gridExtra)
+#' @import ggplot2
+#' @import maps
+map_tree    <- function(physeq, 
+                        # map options
+                        region=NULL, color = NULL, size= NULL, point_size=4, alpha=0.8,
+                        jitter= FALSE, jitter.x=3, jitter.y=3,
+                        method = "sampledodge", nodelabf =nodeplotblank, treesize = NULL, min.abundance = Inf, 
+                        # tree options
+                        label.tips = NULL, text.size = NULL, sizebase = 5, base.spacing = 0.02, ladderize = TRUE,
+                        plot.margin = 0.2, title = NULL, treetheme = NULL, justify = "jagged"
+                        #global options
+                        width_ratio = 3) {
+    #trim samples that are not in the tree
+    physeq2 <- prune_samples(sample_sums(physeq) > 0, physeq)
+    
+    mapplot  <- map_phyloseq (physeq2, region=region, color= color, point_size=point_size, alpha = alpha, jitter=jitter, jitter.x=jitter.x, jitter.y=jitter.y)
+    treeplot <- plot_tree(physeq2, color= color ,label.tips =label.tips , text.size = text.size, sizebase = sizebase, base.spacing = base.spacing, ladderize = ladderize,
+                          plot.margin = plot.margin, title = title, treetheme =treetheme, justify = justify,nodelabf = nodelabf )
+    
+    combinedplot <- grid.arrange(mapplot,treeplot, ncol=2, widths=c(width_ratio,1))
+    
 }
 # do this?
 plot_heatmap <- function() {
