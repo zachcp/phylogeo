@@ -288,15 +288,18 @@ map_tree    <- function(physeq,
                         method = "sampledodge", nodelabf =nodeplotblank, treesize = NULL, min.abundance = Inf, 
                         # tree options
                         label.tips = NULL, text.size = NULL, sizebase = 5, base.spacing = 0.02, ladderize = TRUE,
-                        plot.margin = 0.2, title = NULL, treetheme = NULL, justify = "jagged"
+                        plot.margin = 0.2, title = NULL, treetheme = NULL, justify = "jagged",
                         #global options
-                        width_ratio = 3) {
+                        width_ratio = 2) {
     #trim samples that are not in the tree
     physeq2 <- prune_samples(sample_sums(physeq) > 0, physeq)
-    
-    mapplot  <- map_phyloseq (physeq2, region=region, color= color, point_size=point_size, alpha = alpha, jitter=jitter, jitter.x=jitter.x, jitter.y=jitter.y)
+    mapplot  <- map_phyloseq(physeq2, region=region, color= color, point_size=point_size, alpha = alpha, jitter=jitter, 
+                              jitter.x=jitter.x, jitter.y=jitter.y)  + 
+                              theme(legend.position="none") 
     treeplot <- plot_tree(physeq2, color= color ,label.tips =label.tips , text.size = text.size, sizebase = sizebase, base.spacing = base.spacing, ladderize = ladderize,
-                          plot.margin = plot.margin, title = title, treetheme =treetheme, justify = justify,nodelabf = nodelabf )
+                          plot.margin = plot.margin, title = title, treetheme =treetheme, justify = justify,nodelabf = nodelabf ) +
+                          theme(legend.key = element_rect(fill = "white"))
+                          
     
     combinedplot <- grid.arrange(mapplot,treeplot, ncol=2, widths=c(width_ratio,1))
     
