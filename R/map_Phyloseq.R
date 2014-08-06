@@ -295,9 +295,7 @@ points <- geom_point(data=mdf, aes_string( x=loncol, y=latcol, group=NULL, color
 #'  
 #'  @param map_on_left (Optional). Default \code{TRUE}.
 #'  determine whether the map is on the left
-
-width_ratio map_on_left
-
+#'  
 #' @import gridExtra
 #' @import ggplot2
 #' @import maps
