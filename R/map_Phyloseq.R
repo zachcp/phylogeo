@@ -30,6 +30,15 @@
 #' @param alpha (Optional). Default \code{0.8}. 
 #'  A value between 0 and 1 for the alpha transparency of the vertex points.
 #'  
+#' @param jitter (Optional). Default \code{False}. 
+#'  Determines whether or not to jitter your points.
+#'
+#' @param jitter.x (Optional). Default \code{3}. 
+#'  Value for X jitter
+#'
+#' @param jitter.y (Optional). Default \code{3}. 
+#'  Value for Y jitter
+#'
 #'  
 #' @import ggplot2  
 #' @import maps
@@ -146,7 +155,7 @@ map_phyloseq <- function(physeq, region=NULL, color=NULL, shape=NULL, point_size
 #' 
 #'  @param base_data_color (Optional). Default \code{grey}.
 #'  named color to determine base data coloe
-#' 
+#'
 #' @import ggplot2
 #' @import maps
 #' @import igraph
@@ -281,7 +290,15 @@ points <- geom_point(data=mdf, aes_string( x=loncol, y=latcol, group=NULL, color
 #' @param physeq (Required). 
 #'  The name of the phyloseq object. This must have sample data with Latitude and Longitude Columns.
 #'  
-#' @import(gridExtra)
+#'  @param width_ratio (Optional). Default \code{2}.
+#'  relative widths of tree and map
+#'  
+#'  @param map_on_left (Optional). Default \code{TRUE}.
+#'  determine whether the map is on the left
+
+width_ratio map_on_left
+
+#' @import gridExtra
 #' @import ggplot2
 #' @import maps
 map_tree    <- function(physeq, 
