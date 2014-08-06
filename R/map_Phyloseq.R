@@ -144,6 +144,9 @@ map_phyloseq <- function(physeq, region=NULL, color=NULL, shape=NULL, point_size
 #' @param base_data (Optional). Default \code{FALSE}.
 #'  Boolean to determine whether to include dat points that aren't in a network.
 #' 
+#'  @param base_data_color (Optional). Default \code{grey}.
+#'  named color to determine base data coloe
+#' 
 #' @import ggplot2
 #' @import maps
 #' @import igraph
@@ -160,7 +163,7 @@ map_phyloseq <- function(physeq, region=NULL, color=NULL, shape=NULL, point_size
 #' map_network(AD, point_size=2, lines=T, jitter=T)
 map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard", color=NULL, region=NULL, point_size=4, 
                         alpha = 0.8, lines=FALSE, jitter=FALSE, jitter.x=3, jitter.y=3, shape=NULL, 
-                        line_weight=1, line_color ="Black" ,line_alpha=0.4 , base_data=FALSE){
+                        line_weight=1, line_color ="Black" ,line_alpha=0.4 , base_data=FALSE, base_data_color="grey"){
 
   #helper functions to calculate membership in clusters or lines
   ######################################################################################################
@@ -243,7 +246,7 @@ map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard", co
   if(base_data){
     network_points <- rownames(mdf)
     nonetworkdf <- data[!rownames(data) %in% network_points, ] 
-    worldmap <- worldmap + geom_point(data = nonetworkdf, aes_string(x=loncol,y=latcol, group=NULL), color="grey", size=point_size)
+    worldmap <- worldmap + geom_point(data = nonetworkdf, aes_string(x=loncol,y=latcol, group=NULL), color=base_data_color, size=point_size)
   }
   
   #addlines
