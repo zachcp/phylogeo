@@ -1,15 +1,15 @@
-#' @usage plot_greatcircle_distance(physeq,  distancemethod="jaccard")
+#' @usage plot_greatcircle_distance(physeq, distancemethod="jaccard")
 #'
 #' @param physeq (Required). 
 #'  The name of the phyloseq object. This must have sample data with Latitude and Longitude Columns.
 #'  
-#' @param distance method (Optional). Default \code{"jaccard"}.
-#'  The name of an ecological distance method. See "?distance" for more information
+#' @param distancemethod (Optional). Default \code{"jaccard"}.
+#'  The name of an ecological distance method. See ?distance for more information
 #'  
 #' @importFrom sp spDists
 #' @importFrom reshape2 melt
-#' @importFrom phyloseq distance
-#' #' @export
+#' @import phyloseq
+#' @export
 plot_greatcircle_distance <- function(physeq, distancemethod="jaccard"){
     latlon <- .check_physeq(physeq)
     latcol <- as.character( latlon[1] )
