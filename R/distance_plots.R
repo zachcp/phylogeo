@@ -1,6 +1,15 @@
-#' @importFrom(sp, spDists)
-#' @importFrom(reshape2, melt)
-#' @importFrom(phyloseq, distances)
+#' @usage plot_greatcircle_distance(physeq,  distancemethod="jaccard")
+#'
+#' @param physeq (Required). 
+#'  The name of the phyloseq object. This must have sample data with Latitude and Longitude Columns.
+#'  
+#' @param distance method (Optional). Default \code{"jaccard"}.
+#'  The name of an ecological distance method. See "?distance" for more information
+#'  
+#' @importFrom sp spDists
+#' @importFrom reshape2 melt
+#' @importFrom phyloseq distance
+#' #' @export
 plot_greatcircle_distance <- function(physeq, distancemethod="jaccard"){
     latlon <- .check_physeq(physeq)
     latcol <- as.character( latlon[1] )
@@ -40,59 +49,6 @@ plot_greatcircle_distance <- function(physeq, distancemethod="jaccard"){
     p <- ggplot(df, aes(y = ecodist,x=geodist)) + geom_point() 
     return(p)
 }
- 
-
-.great_circle_distance <- function(row1,row2) {
-  
-  ### get great circle distance from two lat/lon coordinates
-  ### data format is in a row where the first column is lat an dthe second is lon
-  lat1 <- as.numeric( row1[1] )
-  lon1 <- as.numeric( row1[2] )
-  lat2 <- as.numeric( row2[1] )
-  lon2 <- as.numeric( row2[2] )
-  
-  print(as.numeric(lat1))
-  #check data is small enough to be radians
-  max_radian <- pi * 2 
-  message <- "lat and Long must be in radians"
-  for( x in c(lat1,lon1,lat2,lon2)){
-    if(x >max_radian){
-      stop(message)
-    }
-  }
-  
-  ## http://www.movable-type.co.uk/scripts/latlong.html
-  # Haversine formula:  
-  # a = sin²(Δφ/2) + cos φ1 ⋅ cos φ2 ⋅ sin²(Δλ/2)
-  # c = 2 ⋅ atan2( √a, √(1−a) )
-  # d = R ⋅ c
-  # where  φ is latitude, λ is longitude, R is earth’s radius (mean radius = 6,371km);
-  # note that angles need to be in radians to pass to trig functions!
-  #   JavaScript:  
-  #   var R = 6371; // km
-  # var φ1 = lat1.toRadians();
-  # var φ2 = lat2.toRadians();
-  # var Δφ = (lat2-lat1).toRadians();
-  # var Δλ = (lon2-lon1).toRadians();
-  # 
-  # var a = Math.sin(Δφ/2) * Math.sin(Δφ/2) +
-  #   Math.cos(φ1) * Math.cos(φ2) *
-  #   Math.sin(Δλ/2) * Math.sin(Δλ/2);
-  # var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-  # 
-  # var d = R * c;
-  #Note in these scripts, I generally use lat/lon for latitude/longitude in degrees, and φ/λ for latitude/longitude in radians – having found that mixing degrees & radians is often the easiest route to head-scratching bugs...
-  
-  r= 6378137 #meters
-  delta_lon = abs(lon1 - lon2)
-  delta_lat = abs(lat1 - lat2)
-  print(delta_lon)
-  a <- sin(delta_lat/2) * sin(delta_lat/2) + cos(lon1) * cos(lon2) * sin( delta_lon/2) * sin(delta_lon/2)
-  c <- 2 * atan2( sqrt(a), sqrt(1-a))
-  dist <- r*c
-  return(dist)
-}
-  
 .degree_to_radian <- function(degree) {
   ### angle in radians = angle in degrees * Pi / 180
   radian <- degree * pi / 180
