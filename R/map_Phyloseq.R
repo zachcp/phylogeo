@@ -158,7 +158,6 @@ map_phyloseq <- function(physeq, region=NULL, color=NULL, shape=NULL, point_size
 #'
 #' @import ggplot2
 #' @import maps
-#' @import igraph
 #' @importFrom igraph get.data.frame
 #' @importFrom igraph get.vertex.attribute
 #' @importFrom igraph clusters  
