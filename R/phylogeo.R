@@ -1,12 +1,11 @@
 ###############################################
 #'  Mapping of microbiome data.
 #'
-#' @name phyloseq.geo
+#' @name phylogeo
 #' @author Zach Charlop-Powers \email{zcharlop@@rockefeller.edu}
 #' @docType package
 #' @import phyloseq
 #' @keywords package
-
 
 #' Phyloseq Object for Bat Guano
 #'
