@@ -4,11 +4,8 @@
 #' nodes is below a potentially arbitrary threshold,
 #' and special care should be given to considering the choice of this threshold.
 #'
-#' @usage map_phyloseq(physeq, type="samples",  region=NULL,
-#'   color=NULL, shape=NULL, point_size=4, alpha=1,
-#'   label="value", hjust = 1.35, 
-#'   line_weight=0.5, line_color=color, line_alpha=0.4,
-#' 	layout.method=layout.fruchterman.reingold, title=NULL)
+#' @usage map_phyloseq(physeq, region=NULL, color=NULL, shape=NULL,
+#'   point_size=4, alpha=0.5 )
 #'
 #' @param physeq (Required). 
 #'  The name of the phyloseq object. This must have sample data with Latitude and Longitude Columns.
@@ -86,11 +83,8 @@ map_phyloseq <- function(physeq, region=NULL, color=NULL, shape=NULL, point_size
 #' nodes is below a potentially arbitrary threshold,
 #' and special care should be given to considering the choice of this threshold.
 #'
-#' @usage map_network(physeq,maxdist=0.9, distance="jaccard"
-#'   color=NULL, shape=NULL, region=NULL, point_size=4, alpha=1,
-#'   label="value", hjust = 1.35, 
-#' 	line_weight=0.5, line_color=color, line_alpha=0.4,
-#' 	layout.method=layout.fruchterman.reingold, title=NULL)
+#' @usage map_network(physeq,maxdist=0.9, distance="bray", point_size=6, alpha=0.5, lines=TRUE,
+#'  line_color= "Red", line_alpha=0.4, title="Awesome Netwrok Graph")
 #'   
 #' @param physeq (Required). 
 #'  The name of the phyloseq object. This must have sample data with Latitude and Longitude Columns.
@@ -444,7 +438,6 @@ plot_heatmap <- function() {
   }
   df
 }
-
 .coerce_numeric <- function(df, col){
   df[col] <- lapply( lapply(df[col], as.character), as.numeric)
   df
