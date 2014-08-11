@@ -41,17 +41,10 @@
 #'
 #'  
 #' @import ggplot2  
-#' @import maps
+#' @importFrom ggplot2 map_data
 #' @export
-#' @examples 
-#' data(AD)
-#' map_phyloseq(AD)
-#' map_phyloseq(AD, region="bra") 
-#' map_phyloseq(AD, color="Geotype", point_size="richness") 
-#' map_phyloseq(AD, color="cluster", point_size=3, jitter=T)
-#' map_phyloseq(AD, color="cluster", point_size=3, jitter=T, jitter.x = 0.1, jitter.y=0.1)
-#'  
-map_phyloseq <- function(physeq, region=NULL, color=NULL, shape=NULL, point_size=4, alpha = 0.8, jitter=FALSE, jitter.x=3, jitter.y=3){
+map_phyloseq <- function(physeq, region=NULL, color=NULL, shape=NULL, point_size=4, alpha = 0.8, 
+                         jitter=FALSE, jitter.x=3, jitter.y=3){
   #check basic physeq and lat/lon
   latlon <- .check_physeq(physeq)
   latcol <- as.character( latlon[1] )
@@ -157,21 +150,14 @@ map_phyloseq <- function(physeq, region=NULL, color=NULL, shape=NULL, point_size
 #'  named color to determine base data coloe
 #'
 #' @import ggplot2
-#' @import maps
+#' @importFrom ggplot2 map_data
 #' @importFrom igraph get.data.frame
 #' @importFrom igraph get.vertex.attribute
 #' @importFrom igraph clusters  
 #' @export
-#' @examples 
-#' data(AD)
-#' map_network(AD)
-#' map_network(AD, region="bra") 
-#' map_network(AD, color="Geotype", point_size="richness") 
-#' map_network(AD, point_size=2, lines=T)
-#' map_network(AD, point_size=2, lines=T, jitter=T)
-map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard", color=NULL, region=NULL, point_size=4, 
-                        alpha = 0.8, lines=FALSE, jitter=FALSE, jitter.x=3, jitter.y=3, shape=NULL, 
-                        line_weight=1, line_color ="Black" ,line_alpha=0.4 , base_data=FALSE, base_data_color="grey"){
+map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard", color=NULL, region=NULL, 
+                        point_size=4, alpha = 0.8, jitter=FALSE, jitter.x=3, jitter.y=3, shape=NULL, 
+                        lines=FALSE, line_weight=1, line_color ="Black" ,line_alpha=0.4 , base_data=FALSE, base_data_color="grey"){
 
   #helper functions to calculate membership in clusters or lines
   ######################################################################################################
@@ -289,6 +275,29 @@ points <- geom_point(data=mdf, aes_string( x=loncol, y=latcol, group=NULL, color
 #' @param physeq (Required). 
 #'  The name of the phyloseq object. This must have sample data with Latitude and Longitude Columns.
 #'  
+#' @param color (Optional). Default \code{NULL}.
+#'  The name of the sample variable in \code{physeq} to use for color mapping
+#'  of points (graph vertices).
+#'  
+#' @param size (Optional). Default \code{NULL}.
+#'  The name of the sample variable in \code{physeq} to use for size mapping.
+#'  of points (graph vertices).
+#'  
+#' @param point_size (Optional). Default \code{4}. 
+#'  The size of the vertex points.
+#'  
+#' @param alpha (Optional). Default \code{0.8}. 
+#'  A value between 0 and 1 for the alpha transparency of the vertex points.
+#'  
+#' @param jitter (Optional). Default \code{False}. 
+#'  Determines whether or not to jitter your points.
+#'
+#' @param jitter.x (Optional). Default \code{3}. 
+#'  Value for X jitter
+#'
+#' @param jitter.y (Optional). Default \code{3}. 
+#'  Value for Y jitter
+
 #'  @param width_ratio (Optional). Default \code{2}.
 #'  relative widths of tree and map
 #'  
@@ -297,7 +306,6 @@ points <- geom_point(data=mdf, aes_string( x=loncol, y=latcol, group=NULL, color
 #'  
 #' @import gridExtra
 #' @import ggplot2
-#' @import maps
 map_tree    <- function(physeq, 
                         # map options
                         region=NULL, color = NULL, size= NULL, point_size=4, alpha=0.8,
