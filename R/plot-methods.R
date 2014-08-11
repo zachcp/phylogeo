@@ -1,3 +1,7 @@
+#' Calculate and Plot Sample Distances by Geogrpahy/Ecological Distance
+#'
+#' Scatterplot generation of samples using geogrpahic and eoclogical distances
+#'
 #' @usage plot_greatcircle_distance(physeq, distancemethod="jaccard")
 #'
 #' @param physeq (Required). 
