@@ -318,16 +318,16 @@ points <- geom_point(data=mdf, aes_string( x=loncol, y=latcol, group=NULL, color
 #' @import gridExtra
 #' @import ggplot2
 #' @export
-map_tree    <- function(physeq, 
-                        # map options
-                        region=NULL, color = NULL, size= NULL, point_size=4, alpha=0.8,
-                        jitter= FALSE, jitter.x=3, jitter.y=3,
-                        method = "sampledodge", nodelabf =nodeplotblank, treesize = NULL, min.abundance = Inf, 
-                        # tree options
-                        label.tips = NULL, text.size = NULL, sizebase = 5, base.spacing = 0.02, ladderize = TRUE,
-                        plot.margin = 0.2, title = NULL, treetheme = NULL, justify = "jagged",
-                        #global options
-                        width_ratio = 2, map_on_left = TRUE) {
+map_tree <- function(physeq, 
+                    # map options
+                    region=NULL, color = NULL, size= NULL, point_size=4, alpha=0.8,
+                    jitter= FALSE, jitter.x=3, jitter.y=3,
+                    method = "sampledodge", nodelabf =nodeplotblank, treesize = NULL, min.abundance = Inf, 
+                    # tree options
+                    label.tips = NULL, text.size = NULL, sizebase = 5, base.spacing = 0.02, ladderize = TRUE,
+                    plot.margin = 0.2, title = NULL, treetheme = NULL, justify = "jagged",
+                    #global options
+                    width_ratio = 2, map_on_left = TRUE) {
     #trim samples that are not in the tree
     physeq2 <- prune_samples(sample_sums(physeq) > 0, physeq)
     
