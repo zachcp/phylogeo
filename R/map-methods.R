@@ -40,6 +40,11 @@
 #' @import ggplot2  
 #' @importFrom ggplot2 map_data
 #' @export
+#' @examples 
+#' 
+#' data(batfecal)
+#' map_phyloseq(batfecal, region="china", jitter=T, jitter.x=2,jitter.y=2, color="PH")
+#' 
 map_phyloseq <- function(physeq, region=NULL, color=NULL, shape=NULL, point_size=4, alpha = 0.8, 
                          jitter=FALSE, jitter.x=3, jitter.y=3){
   #check basic physeq and lat/lon
@@ -149,6 +154,11 @@ map_phyloseq <- function(physeq, region=NULL, color=NULL, shape=NULL, point_size
 #' @importFrom igraph get.vertex.attribute
 #' @importFrom igraph clusters  
 #' @export
+#' @examples
+#' data(batfecal)
+#' map_network(batfecal)
+#' map_network(batfecal, region="china", jitter=TRUE, lines=TRUE)
+#' map_network(batfecal, region="china", jitter=TRUE, lines=TRUE, maxdist=0.9)
 map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard", color=NULL, region=NULL, 
                         point_size=4, alpha = 0.8, jitter=FALSE, jitter.x=3, jitter.y=3, shape=NULL, 
                         lines=FALSE, line_weight=1, line_color ="Black" ,line_alpha=0.4 , base_data=FALSE, base_data_color="grey"){

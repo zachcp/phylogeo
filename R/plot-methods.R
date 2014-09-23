@@ -11,9 +11,12 @@
 #'  The name of an ecological distance method. See ?distance for more information
 #'  
 #' @importFrom sp spDists
-#' @importFrom reshape2 melt
 #' @import phyloseq
+#' @importFrom reshape2 melt
 #' @export
+#' @example
+#' data(batfecal)
+#' plot_greatcircle_distance(batfecal)
 plot_greatcircle_distance <- function(physeq, distancemethod="jaccard"){
     latlon <- .check_physeq(physeq)
     latcol <- as.character( latlon[1] )
@@ -60,6 +63,8 @@ plot_greatcircle_distance <- function(physeq, distancemethod="jaccard"){
 #' Utility Function for Converting Distance Matrices to 
 #' three column distances while removing all of the duplicates
 #' lifted/modified from here: https://github.com/joey711/phyloseq/blob/master/R/plot-methods.R
+#' 
+#' @importFrom reshape2 melt
 .dist_to_edge_table = function(Dist, dname = "dist"){
   dmat <- as.matrix(Dist)
   # Set duplicate entries and self-links to Inf

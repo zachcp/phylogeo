@@ -13,7 +13,7 @@
 #' 
 #' @docType data
 #' @keywords datasets
-#' @name diamonds
+#' @name batfecal
 #' @usage data()
-#' @format A data frame with 53940 rows and 10 variables
+#' @format this is the Earth Microbiome Data study 1702 about bat guano from Chine
 NULL
