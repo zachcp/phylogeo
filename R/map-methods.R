@@ -44,7 +44,8 @@
 #' 
 #' data(batfecal)
 #' map_phyloseq(batfecal, region="china", jitter=T, jitter.x=2,jitter.y=2, color="PH")
-#' 
+#' data(batmicrobiome)
+#' map_phyloseq(batmicrobiome, jitter=TRUE, color="SCIENTIFIC_NAME")
 map_phyloseq <- function(physeq, region=NULL, color=NULL, shape=NULL, point_size=4, alpha = 0.8, 
                          jitter=FALSE, jitter.x=3, jitter.y=3){
   #check basic physeq and lat/lon
@@ -159,6 +160,12 @@ map_phyloseq <- function(physeq, region=NULL, color=NULL, shape=NULL, point_size
 #' map_network(batfecal)
 #' map_network(batfecal, region="china", jitter=TRUE, lines=TRUE)
 #' map_network(batfecal, region="china", jitter=TRUE, lines=TRUE, maxdist=0.9)
+#' data(batmicrobiome)
+#' map_network(batmicrobiome, lines=TRUE)
+#' ig <- make_network(batmicrobiome)
+#' map_network(batmicrobiome, igraph= ig, lines=TRUE)
+#' map_network(batmicrobiome, igraph= ig, lines=TRUE, color="SCIENTIFIC_NAME")
+#' map_network(batmicrobiome, igraph= ig, lines=TRUE, color="SCIENTIFIC_NAME", jitter=TRUE)
 map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard", color=NULL, region=NULL, 
                         point_size=4, alpha = 0.8, jitter=FALSE, jitter.x=3, jitter.y=3, shape=NULL, 
                         lines=FALSE, line_weight=1, line_color ="Black" ,line_alpha=0.4 , base_data=FALSE, base_data_color="grey"){
