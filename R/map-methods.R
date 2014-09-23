@@ -317,6 +317,7 @@ points <- geom_point(data=mdf, aes_string( x=loncol, y=latcol, group=NULL, color
 #'  
 #' @import gridExtra
 #' @import ggplot2
+#' @export
 map_tree    <- function(physeq, 
                         # map options
                         region=NULL, color = NULL, size= NULL, point_size=4, alpha=0.8,
