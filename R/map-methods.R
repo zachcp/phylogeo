@@ -271,7 +271,7 @@ map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard", co
   
 
 
-points <- geom_point(data=mdf, aes_string( x=loncol, y=latcol, group=NULL, color=NULL, shape=NULL),  size = point_size, alpha= alpha) 
+  points <- geom_point(data=mdf, aes_string( x=loncol, y=latcol, group=NULL, color=NULL, shape=NULL),  size = point_size, alpha= alpha) 
   ###########################################################################################################
   
   return(worldmap)
