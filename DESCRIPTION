@@ -1,5 +1,5 @@
 Package: phylogeo
-Version: 0.0.1
+Version: 0.0.2
 Date: 2014-06-03
 Title: Mapping of Phloseq Information.
 Description: phyloseq-geo is a convient wrapper around phyloseq
