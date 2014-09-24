@@ -346,9 +346,9 @@ map_tree <- function(physeq,  region=NULL, color = NULL, size= NULL, point_size=
     # treeplot <- treeplot + xlim( min(xvals), max(xvals))
     
     if(map_on_left){
-        combinedplot <- gridExtra::arrangeGrob(mapplot + theme(legend.position="none") ,treeplot, ncol=2, widths=c(width_ratio,1))
+        combinedplot <- gridExtra::grid.arrange(mapplot + theme(legend.position="none") ,treeplot, ncol=2, widths=c(width_ratio,1))
     } else{
-        combinedplot <- gridExtra::arrangeGrob(treeplot + theme(legend.position="none"),mapplot, ncol=2, widths=c(1,width_ratio))    
+        combinedplot <- gridExtra::grid.arrange(treeplot + theme(legend.position="none"),mapplot, ncol=2, widths=c(1,width_ratio))    
     }
     return(combinedplot)
 }
