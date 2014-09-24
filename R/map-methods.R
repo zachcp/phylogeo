@@ -316,7 +316,6 @@ map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard", co
 #'  @param map_on_left (Optional). Default \code{TRUE}.
 #'  determine whether the map is on the left
 #'  
-#' @import gridExtra
 #' @import ggplot2
 #' @export
 #' @examples
@@ -347,9 +346,9 @@ map_tree <- function(physeq,  region=NULL, color = NULL, size= NULL, point_size=
     # treeplot <- treeplot + xlim( min(xvals), max(xvals))
     
     if(map_on_left){
-        combinedplot <- arrangeGrob(mapplot + theme(legend.position="none") ,treeplot, ncol=2, widths=c(width_ratio,1))
+        combinedplot <- gridExtra::arrangeGrob(mapplot + theme(legend.position="none") ,treeplot, ncol=2, widths=c(width_ratio,1))
     } else{
-        combinedplot <- arrangeGrob(treeplot + theme(legend.position="none"),mapplot, ncol=2, widths=c(1,width_ratio))    
+        combinedplot <- gridExtra::arrangeGrob(treeplot + theme(legend.position="none"),mapplot, ncol=2, widths=c(1,width_ratio))    
     }
     return(combinedplot)
 }
