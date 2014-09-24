@@ -1,3 +1,4 @@
+###########################################################################################################
 #' Draw A Map from a Phyloseq Object
 #'
 #' In this case, edges in the network are created if the distance between
@@ -82,6 +83,7 @@ map_phyloseq <- function(physeq, region=NULL, color=NULL, shape=NULL, point_size
   
   worldmap
 }
+###########################################################################################################
 #' Create a Network from the Phyloseq Objects and Draw A Map of the Clusters
 #'
 #' In this case, edges in the network are created if the distance between
@@ -205,7 +207,7 @@ map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard", co
     df2 <- data.frame(df2) #to ensure list returns a df object
     plt <- plt + geom_line(data=df2,  aes_string( x=loncol, y=latcol, group=names(df2)[1]))
   }
-  ######################################################################################################
+  #####################################
   
   #check basic physeq and lat/lon
   latlon <- .check_physeq(physeq)
@@ -235,7 +237,7 @@ map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard", co
   .check_names(point_size,mdf, allownumeric=T)
   
   #create map
-  ############################################################################################################
+  ############################################
   
   #basemap
   worldmap <- .create_basemap(region=region, df=mdf, latcol=latcol, loncol=loncol)
@@ -272,10 +274,11 @@ map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard", co
 
 
   points <- geom_point(data=mdf, aes_string( x=loncol, y=latcol, group=NULL, color=NULL, shape=NULL),  size = point_size, alpha= alpha) 
-  ###########################################################################################################
+  ###########################
   
   return(worldmap)
 }
+###########################################################################################################
 #' Map a Phyloseq Object while also drawing a phlogenetic tree of the taxa
 #'
 #' @usage map_tree(physeq, region=NULL, color = NULL, size= NULL, point_size=4, alpha=0.8,jitter= FALSE,
