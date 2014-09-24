@@ -179,7 +179,7 @@ map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard", co
   #helper functions to calculate membership in clusters or lines
   ######################################################################################################
   get_clusters <- function(num, graph=igraph){
-    #get cluster membership info from igraph object from cluster with clusterid of "num
+    #get cluster membership info from igraph object from cluster with clusterid of 'num'
     clusts  <- clusters(graph)
     members <- which(clusts$membership == num) #get membership
     names   <- get.vertex.attribute(graph, 'name', members)
