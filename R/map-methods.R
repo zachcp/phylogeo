@@ -1,3 +1,6 @@
+#
+# methods for drawing maps of phyloseq objects
+#
 ###########################################################################################################
 #' Draw A Map from a Phyloseq Object
 #'
@@ -150,6 +153,9 @@ map_phyloseq <- function(physeq, region=NULL, color=NULL, shape=NULL, point_size
 #'  @param base_data_color (Optional). Default \code{grey}.
 #'  named color to determine base data coloe
 #'
+#' @seealso
+#' \href{https://joey711.github.io/phyloseq/distance}{phyloseq's distance command}.
+#' 
 #' @import ggplot2
 #' @importFrom igraph get.data.frame
 #' @importFrom igraph get.vertex.attribute
@@ -316,6 +322,9 @@ map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard", co
 #'  @param map_on_left (Optional). Default \code{TRUE}.
 #'  determine whether the map is on the left
 #'  
+#' @seealso 
+#' \href{http://docs.ggplot2.org/current/}{ggplot2 for `map_data` command}.
+#'
 #' @import ggplot2
 #' @export
 #' @examples
@@ -329,7 +338,7 @@ map_tree <- function(physeq,  region=NULL, color = NULL, size= NULL, point_size=
                     plot.margin = 0.2, title = NULL, treetheme = NULL, justify = "jagged",
                     width_ratio = 2, map_on_left = TRUE) {
     #trim samples that are not in the tree
-    physeq2 <- prune_samples(sample_sums(physeq) > 0, physeq)
+    physeq2 <- phyloseq::prune_samples(phyloseq::sample_sums(physeq) > 0, physeq)
     
     mapplot  <- map_phyloseq(physeq2, region=region, color= color, point_size=point_size, alpha = alpha, jitter=jitter, 
                               jitter.x=jitter.x, jitter.y=jitter.y)  + 

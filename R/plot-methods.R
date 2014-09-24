@@ -1,3 +1,7 @@
+#
+# methods for plotting geographic-distance plots
+#
+###########################################################################################
 #' Calculate and Plot Sample Distances by Geography/Ecological Distance
 #'
 #' Scatterplot generation of samples using geogrpahic and eoclogical distances
