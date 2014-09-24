@@ -38,7 +38,6 @@
 #'
 #'  
 #' @import ggplot2  
-#' @importFrom ggplot2 map_data
 #' @export
 #' @examples 
 #' 
@@ -150,7 +149,6 @@ map_phyloseq <- function(physeq, region=NULL, color=NULL, shape=NULL, point_size
 #'  named color to determine base data coloe
 #'
 #' @import ggplot2
-#' @importFrom ggplot2 map_data
 #' @importFrom igraph get.data.frame
 #' @importFrom igraph get.vertex.attribute
 #' @importFrom igraph clusters  
@@ -385,7 +383,7 @@ plot_heatmap <- function() {
 #' Create a basemap from the maps() worldmap focusing on a region
 .create_basemap <-function(region, df, latcol, loncol){
   if (!is.null(region)){
-    world <- map_data("world", region = region)
+    world <- ggplot2::map_data("world", region = region)
     
     #ToDO: allow subsetting of samples by region. Is there a point-in-polygon library?
     #this is a quick filter based on latitude and longitude not point-in-polygon
@@ -398,7 +396,7 @@ plot_heatmap <- function() {
     df <- df[ df[, latcol] < maxlat, ]
     df <- df[ df[, latcol] > minlat, ]
   } else {
-    world <- map_data("world")
+    world <- ggplot2::map_data("world")
   }
   
   worldmap <- ggplot(world, aes(x=long, y=lat, group=group)) +

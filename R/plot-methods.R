@@ -1,4 +1,4 @@
-#' Calculate and Plot Sample Distances by Geogrpahy/Ecological Distance
+#' Calculate and Plot Sample Distances by Geography/Ecological Distance
 #'
 #' Scatterplot generation of samples using geogrpahic and eoclogical distances
 #'
@@ -10,11 +10,10 @@
 #' @param distancemethod (Optional). Default \code{"jaccard"}.
 #'  The name of an ecological distance method. See ?distance for more information
 #'  
-#' @importFrom sp spDists
 #' @import phyloseq
 #' @importFrom reshape2 melt
 #' @export
-#' @example
+#' @examples
 #' data(batfecal)
 #' plot_greatcircle_distance(batfecal)
 plot_greatcircle_distance <- function(physeq, distancemethod="jaccard"){
@@ -34,7 +33,7 @@ plot_greatcircle_distance <- function(physeq, distancemethod="jaccard"){
     df2$lat <- sapply(df2$lat, .degree_to_radian)
     df2$lon <- sapply(df2$lon, .degree_to_radian)
     df2 <- as.matrix(df2)
-    geodistances <- spDists(df2, longlat=TRUE)
+    geodistances <- sp::spDists(df2, longlat=TRUE)
     colnames(geodistances) <- row.names(df2)
     row.names(geodistances) <- row.names(df2)
     geodistances <- .dist_to_edge_table(geodistances, dname = "geodist")
@@ -63,8 +62,6 @@ plot_greatcircle_distance <- function(physeq, distancemethod="jaccard"){
 #' Utility Function for Converting Distance Matrices to 
 #' three column distances while removing all of the duplicates
 #' lifted/modified from here: https://github.com/joey711/phyloseq/blob/master/R/plot-methods.R
-#' 
-#' @importFrom reshape2 melt
 .dist_to_edge_table = function(Dist, dname = "dist"){
   dmat <- as.matrix(Dist)
   # Set duplicate entries and self-links to Inf
