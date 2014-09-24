@@ -316,6 +316,10 @@ map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard", co
 #' @import gridExtra
 #' @import ggplot2
 #' @export
+#' @examples
+#' data(epoxamicin_KS)
+#' map_tree(epoxamicin_KS)
+#' map_tree(epoxamicin_KS, color="Geotype", jitter=TRUE)
 map_tree <- function(physeq,  region=NULL, color = NULL, size= NULL, point_size=4, alpha=0.8,
                     jitter= FALSE, jitter.x=3, jitter.y=3, method = "sampledodge", 
                     nodelabf =nodeplotblank, treesize = NULL, min.abundance = Inf, 
@@ -328,8 +332,9 @@ map_tree <- function(physeq,  region=NULL, color = NULL, size= NULL, point_size=
     mapplot  <- map_phyloseq(physeq2, region=region, color= color, point_size=point_size, alpha = alpha, jitter=jitter, 
                               jitter.x=jitter.x, jitter.y=jitter.y)  + 
                               theme(legend.position="none") 
-    treeplot <- plot_tree(physeq2, color= color ,label.tips =label.tips , text.size = text.size, sizebase = sizebase, base.spacing = base.spacing, ladderize = ladderize,
-                          plot.margin = plot.margin, title = title, treetheme =treetheme, justify = justify,nodelabf = nodelabf ) +
+    treeplot <- phyloseq::plot_tree(physeq2, color=color, label.tips=label.tips, text.size=text.size, 
+                          sizebase=sizebase, base.spacing = base.spacing, ladderize = ladderize,
+                          plot.margin = plot.margin, title = title, treetheme=treetheme, justify = justify, nodelab =nodelabf ) +
                           theme(legend.key = element_rect(fill = "white"))
     # # trim space by setting xlims
     # xvals <- treeplot$data$x
