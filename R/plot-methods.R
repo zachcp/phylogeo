@@ -41,18 +41,11 @@ plot_greatcircle_distance <- function(physeq, distancemethod="jaccard"){
     geodistances <- sp::spDists(df2, longlat=TRUE)
     colnames(geodistances) <- row.names(df2)
     row.names(geodistances) <- row.names(df2)
-    geodistances <- .dist_to_edge_table(geodistances, dname = "geodist")
-    
-    #geodistances <- melt(geodistances)
-    #names(geodistances) <- c("Var1", "Var2", "geodist")
+    geodistances <- phlyogeo:::.dist_to_edge_table(geodistances, dname = "geodist")
     
     #get ecologicaldistances
     ecodistance <- distance(physeq, method = distancemethod)
-    ecodistance <- .dist_to_edge_table(ecodistance, dname="ecodist" )
-    #ecodistance <- as.matrix(ecodistance)
-    #ecodistance <- melt(ecodistance)
-    #names(ecodistance) <- c("Var1", "Var2", "ecodist")
-        
+    ecodistance <- phlyogeo:::.dist_to_edge_table(ecodistance, dname="ecodist" )
     
     #make mergeable names for the two distance functions and merge
     concatvals <- function(x,y){ return(paste(x,"_",y,sep=""))}
