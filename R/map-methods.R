@@ -52,14 +52,14 @@
 map_phyloseq <- function(physeq, region=NULL, color=NULL, shape=NULL, point_size=4, alpha = 0.8, 
                          jitter=FALSE, jitter.x=3, jitter.y=3){
   #check basic physeq and lat/lon
-  latlon <- .check_physeq(physeq)
+  latlon <- phylogeo:::.check_physeq(physeq)
   latcol <- as.character( latlon[1] )
   loncol <- as.character( latlon[2] )
   data   <- data.frame( sample_data(physeq) )
-  data   <- .check_NA(data, latcol)
-  data   <- .coerce_numeric(data,latcol)
-  data   <- .check_NA(data, loncol)
-  data   <- .coerce_numeric(data,loncol)
+  data   <- phylogeo:::.check_NA(data, latcol)
+  data   <- phylogeo:::.coerce_numeric(data,latcol)
+  data   <- phylogeo:::.check_NA(data, loncol)
+  data   <- phylogeo:::.coerce_numeric(data,loncol)
   names  <- names(data)
   
   
