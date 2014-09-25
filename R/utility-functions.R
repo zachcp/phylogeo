@@ -6,7 +6,7 @@
 .check_physeq <- function(physeq){
   #check phyloseq objects for Lat/Lon
   if (!"sam_data" %in% getslots.phyloseq(physeq)){
-    stop("Mapping requires that phylos objects have Sample_Data with Latitude and Longitude ")
+    stop("Mapping requires that phylos objects have Sample_Data with Latitude and Longitude")
   } 
   #check that sampledata has latitude and longitude columns
   lat <- c('latitude', 'lat', 'lattitude')
