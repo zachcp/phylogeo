@@ -8,13 +8,11 @@
   if (!"sam_data" %in% getslots.phyloseq(physeq)){
     stop("Mapping requires that phylos objects have Sample_Data with Latitude and Longitude ")
   } 
-  
   #check that sampledata has latitude and longitude columns
   lat <- c('latitude', 'lat', 'lattitude')
   lon <- c('longitude', 'lon', 'long')
   lat_present = FALSE
   lon_present = FALSE
-  
   sampledata <- sample_data(physeq)
   names <- names(sampledata)
   
