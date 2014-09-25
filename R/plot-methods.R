@@ -64,29 +64,3 @@ plot_greatcircle_distance <- function(physeq, distancemethod="jaccard"){
     p <- ggplot(df, aes(y = ecodist,x=geodist)) + geom_point() 
     return(p)
 }
-#' Utility Function for Converting Distance Matrices to 
-#' three column distances while removing all of the duplicates
-#' lifted/modified from here: https://github.com/joey711/phyloseq/blob/master/R/plot-methods.R
-.dist_to_edge_table = function(Dist, dname = "dist"){
-  dmat <- as.matrix(Dist)
-  # Set duplicate entries and self-links to Inf
-  dmat[upper.tri(dmat, diag = TRUE)] <- Inf
-  df_3col = reshape2::melt(dmat, as.is = TRUE)
-  # Eliminate Inf Values (melt's third column is "value")
-  df_3col <- df_3col[is.finite(df_3col$value), ]
-  #change names
-  names(df_3col) <- c("Var1","Var2", dname)
-  return(df_3col)
-}
-#' Utility Function for Converting Degrees to Radians
-.degree_to_radian <- function(degree) {
-  ### angle in radians = angle in degrees * Pi / 180
-  radian <- degree * pi / 180
-  return( radian )
-}
-#' Utility Function for Converting Radians to Degrees
-.radian_to_degree <- function(radian) {
-  ### angle in radians * 180 / Pi = angle in degrees
-  degree <- radian * 180 / pi
-  return(degree)
-}
