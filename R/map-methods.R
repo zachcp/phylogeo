@@ -216,14 +216,14 @@ map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard", co
   #####################################
   
   #check basic physeq and lat/lon
-  latlon <- .check_physeq(physeq)
+  latlon <- phylogeo:::.check_physeq(physeq)
   latcol <- as.character( latlon[1] )
   loncol <- as.character( latlon[2] )
   data <- data.frame( sample_data(physeq) )
-  data <- .check_NA(data, latcol)
-  data <- .coerce_numeric(data,latcol)
-  data <- .check_NA(data, loncol)
-  data <- .coerce_numeric(data,loncol)
+  data <- phylogeo:::.check_NA(data, latcol)
+  data <- phylogeo:::.coerce_numeric(data,latcol)
+  data <- phylogeo:::.check_NA(data, loncol)
+  data <- phylogeo:::.coerce_numeric(data,loncol)
   names <- names(data)
   
   #make network, get cluster information, and add thamesat to the  original dataframe. 
@@ -239,18 +239,18 @@ map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard", co
   rownames(mdf) <- mdf$Row.names
   
   #check plot options
-  .check_names(color,mdf)
-  .check_names(point_size,mdf, allownumeric=T)
+  phylogeo:::.check_names(color,mdf)
+  phylogeo:::.check_names(point_size,mdf, allownumeric=T)
   
   #create map
   ############################################
   
   #basemap
-  worldmap <- .create_basemap(region=region, df=mdf, latcol=latcol, loncol=loncol)
+  worldmap <- phylogeo:::.create_basemap(region=region, df=mdf, latcol=latcol, loncol=loncol)
   
   #modify points if using jitter
   if(jitter){
-    mdf <- .jitter_df( df=mdf, xcol=loncol, ycol=latcol, jitter.x=jitter.x, jitter.y=jitter.y)
+    mdf <- phylogeo:::.jitter_df( df=mdf, xcol=loncol, ycol=latcol, jitter.x=jitter.x, jitter.y=jitter.y)
   }
   
   #add points that aren't part of a network
