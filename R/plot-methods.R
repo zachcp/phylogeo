@@ -21,21 +21,22 @@
 #' data(batfecal)
 #' plot_greatcircle_distance(batfecal)
 plot_greatcircle_distance <- function(physeq, distancemethod="jaccard"){
-    latlon <- .check_physeq(physeq)
+    latlon <- phylogeo:::.check_physeq(physeq)
     latcol <- as.character( latlon[1] )
     loncol <- as.character( latlon[2] )
     data   <- data.frame( sample_data(physeq) )
-    data   <- .check_NA(data, latcol)
-    data   <- .coerce_numeric(data,latcol)
-    data   <- .check_NA(data, loncol)
-    data   <- .coerce_numeric(data,loncol)
+    data   <- phylogeo:::.check_NA(data, latcol)
+    data   <- phylogeo:::.coerce_numeric(data,latcol)
+    data   <- phylogeo:::.check_NA(data, loncol)
+    data   <- phylogeo:::.coerce_numeric(data,loncol)
     names  <- names(data)
     
     #get bigcircle distances using spDists
+    #spDists exlpects the first column to be longitude
     df2 <- data[ c(loncol, latcol) ]
     names(df2) <- c("lon", "lat")
-    df2$lat <- sapply(df2$lat, .degree_to_radian)
-    df2$lon <- sapply(df2$lon, .degree_to_radian)
+    #df2$lat <- sapply(df2$lat, .degree_to_radian)
+    #df2$lon <- sapply(df2$lon, .degree_to_radian)
     df2 <- as.matrix(df2)
     geodistances <- sp::spDists(df2, longlat=TRUE)
     colnames(geodistances) <- row.names(df2)
