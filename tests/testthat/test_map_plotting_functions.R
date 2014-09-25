@@ -1,7 +1,7 @@
 ################################################################################
 # Use testthat to test phyloseq data objects plotting functions
 ################################################################################
-library("phyloseq.geo"); library("testthat")
+library("phylogeo"); library("testthat")
 # # # # TESTS!
 
 
