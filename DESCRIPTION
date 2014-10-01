@@ -19,7 +19,7 @@ Imports:
 Depends:
     R (>= 3.1.1)
 Suggests:
-    testthat
+    testthat,
     dplyr
 VignetteBuilder: knitr
 BugReports: https://github.com/zachcp/phylogeo/issues
