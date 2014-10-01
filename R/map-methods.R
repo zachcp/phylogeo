@@ -337,6 +337,10 @@ map_tree <- function(physeq,  region=NULL, color = NULL, size= NULL, point_size=
                     label.tips = NULL, text.size = NULL, sizebase = 5, base.spacing = 0.02, ladderize = TRUE,
                     plot.margin = 0.2, title = NULL, treetheme = NULL, justify = "jagged",
                     width_ratio = 2, map_on_left = TRUE) {
+    #check for the existence of a tree: lifted from phyloseq's plot_tree
+    if(!inherits(physeq, "phylo")){
+      stop("tree missing or invalid. map-tree requires a phylogenetic tree")
+    }
     #trim samples that are not in the tree
     physeq2 <- phyloseq::prune_samples(phyloseq::sample_sums(physeq) > 0, physeq)
     
