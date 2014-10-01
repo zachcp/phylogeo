@@ -45,7 +45,7 @@ data(epoxamicin_KS)
 ## phyloseq functions
 
 ### map_phyloseq
-`map_phyloseq()` provides a way to quickly look at your data by mapping it. Because no calcultations are done to the underlying data, drawing a map using this command is quite quick. The mapping in this command (and all commands) is handled by the `map_data` function of ggplot. This style of mapping allows zooming in by `region` using a lookup tabel of country-names. Other ggplot goodies like colorign by a variable are all available as is a set of convenience funtions that allows you to jitter points that are overlapping at the scale you are interested in. Two examples showing how these feautures can be used to zoom into a region, sepearte samples and look at the distribution of a variable ("PH") in the phyloseq `sample_data` table.
+*map_phyloseq* provides a way to quickly look at your data by mapping it. Because no calcultations are done to the underlying data, drawing a map using this command is quite quick. The mapping in this command (and all commands) is handled by the `map_data` function of ggplot. This style of mapping allows zooming in by `region` using a lookup tabel of country-names. Other ggplot goodies like colorign by a variable are all available as is a set of convenience funtions that allows you to jitter points that are overlapping at the scale you are interested in. Two examples showing how these feautures can be used to zoom into a region, sepearte samples and look at the distribution of a variable ("PH") in the phyloseq `sample_data` table.
 ```{r}
 #high level world map
 map_phyloseq(batfecal)
@@ -54,7 +54,7 @@ map_phyloseq(batfecal, region="china", jitter=T, jitter.x=2,jitter.y=2, color="P
 ```
 
 ### map_network
-The goal of the map_network function is to visualize the relatedness of ecological samples. It does this using the same technique in phyloseq's `plot_net` and `plot_network` functions, namely, it will calculate an ecological distance between samples. Instead of using a network layout algorithm, however, phylogeo will place points by their geographic location. If the points are crowded, they can be jittered to space them apart. A number of configuration options are available to control the appearance of the points and lines.
+The goal of the *map_network* function is to visualize the relatedness of ecological samples. It does this using the same technique in phyloseq's *plot_net* and *plot_network* functions, namely, it will calculate an ecological distance between samples. Instead of using a network layout algorithm, however, phylogeo will place points by their geographic location. If the points are crowded, they can be jittered to space them apart. A number of configuration options are available to control the appearance of the points and lines.
 ```{r}
 #simple network map without lines 
 map_network(batmicrobiome)
@@ -66,7 +66,7 @@ map_network(batmicrobiome, color="SCIENTIFIC_NAME", jitter=T, jitter.x=20,jitter
 One current downside to the current mapping setup is that the `region` keyword only works on country names and cannot zoom to, say "the western hemisphere". In this example the result is a lot of dead space. For figures you woudl want to ggsave a PDF/SVG and zoom to your region of interest. Down the line a more nuanced mapping systme might be considered.
 
 ### map_tree
-The goal of `map_tree` is to provide access to both phylogenetic and geographic information in one ploe. To be useful, the data may need to be pared back to relatively small number of OTUs/samples. 
+The goal of *map_tree* is to provide access to both phylogenetic and geographic information in one ploe. To be useful, the data may need to be pared back to relatively small number of OTUs/samples. 
 ```{r}
 #simple map + tree
 map_tree(epoxamicin_KS)
