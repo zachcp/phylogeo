@@ -1,10 +1,7 @@
 R/.DS_Store
 .DS_Store
-<<<<<<< HEAD
 inst/.DS_Store
-=======
 .DS_Store
->>>>>>> DS_Store
 
 cache/*
 figure/*
@@ -39,3 +36,5 @@ R/.Rhistory
 *.Rproj
 
 *.Rdata
+
+*.Rout
