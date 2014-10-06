@@ -38,3 +38,5 @@ R/.Rhistory
 *.Rdata
 
 *.Rout
+
+*.RDataTmp
