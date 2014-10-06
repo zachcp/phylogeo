@@ -14,6 +14,9 @@
 #' @param physeq (Required). 
 #'  The name of the phyloseq object. This must have sample data with Latitude and Longitude Columns.
 #'  
+#' @param size (Optional). Default \code{4}. 
+#'  The size of the vertex points."Reads" is a special code that will scale points by the number of reads in a sample
+#'  
 #' @param region (Optional). Default \code{NULL}.
 #'  The name of geographic region that can be used to zoom.
 #' 
@@ -24,9 +27,6 @@
 #' @param shape (Optional). Default \code{NULL}.
 #'  The name of the sample variable in \code{physeq} to use for shape mapping.
 #'  of points (graph vertices).
-#'  
-#' @param point_size (Optional). Default \code{4}. 
-#'  The size of the vertex points.
 #'  
 #' @param alpha (Optional). Default \code{0.8}. 
 #'  A value between 0 and 1 for the alpha transparency of the vertex points.
@@ -49,7 +49,7 @@
 #' map_phyloseq(batfecal, region="china", jitter=T, jitter.x=2,jitter.y=2, color="PH")
 #' data(batmicrobiome)
 #' map_phyloseq(batmicrobiome, jitter=TRUE, color="SCIENTIFIC_NAME")
-map_phyloseq <- function(physeq, region=NULL, color=NULL, shape=NULL, point_size=4, alpha = 0.8, 
+map_phyloseq <- function(physeq, size=4, region=NULL, color=NULL, shape=NULL, alpha = 0.8, 
                          jitter=FALSE, jitter.x=3, jitter.y=3){
   #check basic physeq and lat/lon
   latlon <- phylogeo:::.check_physeq(physeq)
@@ -63,26 +63,34 @@ map_phyloseq <- function(physeq, region=NULL, color=NULL, shape=NULL, point_size
   names  <- names(data)
   
   
-  #check plot options
-  .check_names(color,data)
-  .check_names(point_size,data, allownumeric=T)
+  #check plot options. "Reads" is a special method for plotting by size
+  phylogeo:::.check_names(color,data)
+  if(!size == "Reads"){
+    phylogeo:::.check_names(size,data, allownumeric=T)
+    print(size)
+  }
   
   #create map
   ############################################################################################################
-  worldmap <- .create_basemap(region=region, df=data, latcol=latcol,loncol=loncol)
+  worldmap <- phylogeo:::.create_basemap(region=region, df=data, latcol=latcol,loncol=loncol)
   
   if(jitter){
-    data <- .jitter_df(df=data,xcol=loncol,ycol=latcol,jitter.x=jitter.x,jitter.y=jitter.y)
+    data <- phylogeo:::.jitter_df(df=data,xcol=loncol,ycol=latcol,jitter.x=jitter.x,jitter.y=jitter.y)
   }
   
-  #how to hande when point_size information can be either global (outside of aes), orper-sample (inseide of aes)
-  if(is.numeric(point_size)){
+  #how to hande when point_size information can be either global (outside of aes), per-sample (inside of aes)
+  if(is.numeric(size)){
     worldmap <- worldmap + geom_point(data=data, aes_string( x=loncol, y=latcol, group=NULL, color=color), 
-                                      size = point_size, alpha= alpha) 
-  }else{
-    worldmap <- worldmap + geom_point(data=data, aes_string( x=loncol, y=latcol, group=NULL, color=color, size = point_size),
+                                      size = size, alpha= alpha) 
+  }else if(size == "Reads"){
+    reads <- data.frame(sample_sums(physeq)); names(reads)<- "Reads"
+    data2 <- merge(data,reads,by="row.names")
+    worldmap <- worldmap + geom_point(data=data2, aes_string( x=loncol, y=latcol, group=NULL, color=color, size = "Reads"),
                                       alpha= alpha) 
-  } 
+  }else{
+    worldmap <- worldmap + geom_point(data=data, aes_string( x=loncol, y=latcol, group=NULL, color=color, size = size),
+                                      alpha= alpha) 
+  }
   
   worldmap
 }
