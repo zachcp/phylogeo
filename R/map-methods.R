@@ -373,3 +373,39 @@ map_tree <- function(physeq,  region=NULL, color = NULL, size= NULL, point_size=
     }
     return(combinedplot)
 }
+###########################################################################################################
+#' Explore the spatial distribution of subsets of your sequence data 
+#'
+#' @usage map_tree_kmenas(physeq, clusters=2)
+#'   
+#' @param physeq (Required). 
+#'  The name of the phyloseq object. This must have sample data with Latitude and Longitude Columns.
+#'  
+#' @param clusters (Optional). Default \code{3}.
+#'  Number of kmeans clusters to divide your phylogenetic tree into
+#'  
+map_tree_kmeans <- function(physeq, clusters=3){
+  #check for the existence of a tree: lifted from phyloseq's plot_tree
+  if(!"phy_tree" %in% phyloseq:::getslots.phyloseq(physeq)){
+    stop("tree missing or invalid. map-tree requires a phylogenetic tree")
+  }
+  
+  # get kmeans data from the phylogenetic tree
+  distances <-ape::cophenetic.phylo( phy_tree(physeq))
+  kmeans <- kmeans(distances, centers=clusters)
+  clusters <- data.frame(kmeans$cluster)
+  names(clusters) <- "cluster"
+  clusters$clusterOTU <- row.names(clusters)
+  
+  # get alist of outs in a cluster
+  otus_in_a_cluster <- function(clusterdf, clusternum){
+    df <- clusterdf[clusterdf$cluster == clusternum, ]
+    return(rownames(df))
+  }
+  
+  
+  otulist <- otus_in_a_cluster(clusters,1)
+  
+  return(otulist)
+  
+}
