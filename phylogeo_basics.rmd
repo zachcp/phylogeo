@@ -1,19 +1,8 @@
-<!--
-%\VignetteEngine{knitr::knitr}
-%\VignetteIndexEntry{geographic exploration vignette}
--->
 `r library("knitr")`
-`r opts_chunk$set(cache=FALSE, fig.width=9, message=FALSE, warning=FALSE)`
+`r opts_chunk$set(cache=FALSE, fig.width=12, message=FALSE, warning=FALSE)`
 <link href="http://joey711.github.com/phyloseq/markdown.css" rel="stylesheet"></link>
 
----
-title: "vignette for phylogeo: geographic exploration of biom data"
-author: "zachcp"
-date: "September 24, 2014"
-output: html_document
----
-
-## About this vignette
+# phylogeo basics.
 Analysis of data generated using sequencing of microbial genes has provided a fertile ground for exploring the large fraction of bacterial life that remains uncultured. The phylogeo package provides investigators with a way to explore the geographic components of their microbial gene data by building on the powerful [phyloseq](https://github.com/joey711/phyloseq) package which provides a framework for organizing data while combining it with the elegance of the [ggplot](http://ggplot2.org/) plotting package. 
 
 phylogeo provides a series of functions that allow investigators to explore the geographic dimension of their data. As such, the primary requirement for using phylogeo is the presence of Latitude/Longitude columns in your `sample_data` table. If these are present the following functions become available to you:
@@ -32,7 +21,7 @@ phylogeo has three datasets.
   - `batmicrobiome` is the biomdata and associated sample information from yey another bat-related experiment, microbio.me/qiime [experiment 1734](microbio.me/qiime/1734)
   - `epoxamicin_KS` is the data from the Brady Lab containing OTU and sequence data for ketosynthase domain amplicons from environmental DNA
   
-These datasets have geographic coordinates and are suitable for illustrating the features of the phylogeo package, and they can be laoded using the `data()` command.
+These datasets have geographic coordinates and are suitable for illustrating the features of the phylogeo package, and they can be loaded using the `data()` command.
   
 ```{r}
 library(phylogeo)
