@@ -406,6 +406,13 @@ map_tree_kmeans <- function(physeq, clusters=3){
   
   otulist <- otus_in_a_cluster(clusters,1)
   
+  
+  ## create a list of plots one for each cluster
+     # on the tree highlight OTUs in the cluster with a bright color
+     # on the map subset by OTUs and dsiplay them wither as is or using map_phyloseq'a abundance
+     # use gridExtra to layout a single figure with all of the spots connected
+
+  
   return(otulist)
   
 }
