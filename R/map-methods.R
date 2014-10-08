@@ -19,6 +19,7 @@
 #'  
 #' @param region (Optional). Default \code{NULL}.
 #'  The name of geographic region that can be used to zoom.
+#'  The default worldmap cuts out Antartica. To get it back use region="world"
 #' 
 #' @param color (Optional). Default \code{NULL}.
 #'  The name of the sample variable in \code{physeq} to use for color mapping
