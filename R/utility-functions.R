@@ -33,6 +33,7 @@
 #' Create a basemap from the maps() worldmap focusing on a region
 .create_basemap <-function(region, df, latcol, loncol){
   if (!is.null(region)){
+    #default worldmap cuts out Antarctica by filtering everythign below -59 Latitude
     world <- ggplot2::map_data("world", region = region)
     world <- world[world$lat > -59,]
     #ToDO: allow subsetting of samples by region. Is there a point-in-polygon library?
