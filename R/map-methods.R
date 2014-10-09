@@ -345,7 +345,7 @@ map_tree <- function(physeq,  region=NULL, color = NULL,size=4, alpha=0.8,
                     nodelabf =nodeplotblank, treesize = NULL, min.abundance = Inf, 
                     label.tips = NULL, text.size = NULL, sizebase = 5, base.spacing = 0.02, ladderize = TRUE,
                     plot.margin = 0.2, title = NULL, treetheme = NULL, justify = "jagged",
-                    width_ratio = 2, map_on_left = TRUE) {
+                    width_ratio = 2, map_on_left = FALSE) {
     #check for the existence of a tree: lifted from phyloseq's plot_tree
     if(!"phy_tree" %in% phyloseq:::getslots.phyloseq(physeq)){
       stop("tree missing or invalid. map-tree requires a phylogenetic tree")
@@ -359,7 +359,9 @@ map_tree <- function(physeq,  region=NULL, color = NULL,size=4, alpha=0.8,
     treeplot <- phyloseq::plot_tree(physeq2, color=color, label.tips=label.tips, text.size=text.size, 
                           sizebase=sizebase, base.spacing = base.spacing, ladderize = ladderize,
                           plot.margin = plot.margin, title = title, treetheme=treetheme, justify = justify, nodelab =nodelabf ) +
-                          theme(legend.key = element_rect(fill = "white"))
+                          theme(legend.key = element_rect(fill = "white")) +
+      scale_y_continuous(expand = c(0,0)) + 
+      scale_x_continuous(expand = c(0,0))
     # # trim space by setting xlims
     # xvals <- treeplot$data$x
     # xvals <- xvals[!is.na(xvals)]
@@ -423,7 +425,10 @@ map_tree_kmeans <- function(physeq, clusternum=3){
     otulist <- otus_in_a_cluster(clusternum)
     physeq2 <- add_cluster_to_taxtree(physeq, otulist)
     p <-  plot_tree(physeq2, color="Cluster") +
-      scale_color_manual(values = c("black","red"))
+      scale_color_manual(values = c("black","red")) +
+      theme(legend.position="none") +
+      scale_y_continuous(expand = c(0,0)) + 
+      scale_x_continuous(expand = c(0,0))
     return(p)
   }
   
