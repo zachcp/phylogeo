@@ -93,7 +93,7 @@ map_phyloseq <- function(physeq, size=4, region=NULL, color=NULL, shape=NULL, al
                                       alpha= alpha) 
   }
   
-  worldmap
+  return(worldmap)
 }
 ###########################################################################################################
 #' Create a Network from the Phyloseq Objects and Draw A Map of the Clusters
@@ -435,6 +435,7 @@ map_tree_kmeans <- function(physeq, clusternum=3){
     physeq2 <- subset_taxa(physeq2, Cluster=="1")
     physeq2 <- prune_samples(sample_sums(physeq2)>0, physeq2)
     p <-  map_phyloseq(physeq2, size="Reads")
+    return(p)
 
   }
   
