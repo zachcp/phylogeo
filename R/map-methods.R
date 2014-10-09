@@ -377,7 +377,7 @@ map_tree <- function(physeq,  region=NULL, color = NULL,size=4, alpha=0.8,
 ###########################################################################################################
 #' Explore the spatial distribution of subsets of your sequence data 
 #'
-#' @usage map_tree_kmenas(physeq, clusters=2)
+#' @usage map_tree_kmeans(physeq, clusters=2)
 #'   
 #' @param physeq (Required). 
 #'  The name of the phyloseq object. This must have sample data with Latitude and Longitude Columns.
