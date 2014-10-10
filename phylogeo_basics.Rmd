@@ -1,0 +1,95 @@
+---
+output:
+  html_document:
+    toc: yes
+---
+`r library("knitr")`
+`r opts_chunk$set(cache=FALSE, fig.width=12, message=FALSE, warning=FALSE)`
+<link href="http://joey711.github.com/phyloseq/markdown.css" rel="stylesheet"></link>
+
+# phylogeo basics.
+Analysis of data generated using sequencing of microbial genes has provided a fertile ground for exploring the large fraction of bacterial life that remains uncultured. The phylogeo package provides investigators with a way to explore the geographic components of their microbial gene data by building on the powerful [phyloseq](https://github.com/joey711/phyloseq) package which provides a framework for organizing data while combining it with the elegance of the [ggplot](http://ggplot2.org/) plotting package. 
+
+phylogeo provides a series of functions that allow investigators to explore the geographic dimension of their data. As such, the primary requirement for using phylogeo is the presence of Latitude/Longitude columns in your `sample_data` table. If these are present the following functions become available to you:
+
+  - `map_phyloseq()` can visualize your sample locations on a map
+  - `map_network()` will connect samples based on a specified ecological distance
+  - `map_tree()` will draw a paired plot of a phylogenetic tree and the location of those samples
+  - `plot_greatcircle_distance()` will plot the pairwise distacnes between samples using ecological and greatcircle distance
+
+The use and utility of these functions are explained bewow, after a description of the datasets included in phylogeo.
+
+## Datasets in Phylogeo
+phylogeo has three datasets. 
+
+  - `batfecal` is the biomdata and associated sample information from the microbio.me/qiime [experiment 1702](microbio.me/qiime/1702)
+  - `batmicrobiome` is the biomdata and associated sample information from yey another bat-related experiment, microbio.me/qiime [experiment 1734](microbio.me/qiime/1734)
+  - `epoxamicin_KS` is the data from the Brady Lab containing OTU and sequence data for ketosynthase domain amplicons from environmental DNA
+  
+These datasets have geographic coordinates and are suitable for illustrating the features of the phylogeo package, and they can be loaded using the `data()` command.
+  
+```{r}
+library(phyloseq)
+library(phylogeo)
+library(ggplot2)
+data(batfecal)
+data(batmicrobiome)
+data(epoxamicin_KS)
+```
+
+## phyloseq mapping functions
+
+### map_phyloseq
+*map_phyloseq* provides a way to quickly look at your data by mapping it. Because no calcultations are done to the underlying data, drawing a map using this command is quite quick. The mapping in this command (and all commands) is handled by the `map_data` function of ggplot. This style of mapping allows zooming in by `region` using a lookup tabel of country-names. Other ggplot goodies like colorign by a variable are all available as is a set of convenience funtions that allows you to jitter points that are overlapping at the scale you are interested in. Two examples showing how these feautures can be used to zoom into a region, sepearte samples and look at the distribution of a variable ("PH") in the phyloseq `sample_data` table.
+```{r}
+#high level world map
+map_phyloseq(batfecal)
+#zoomed in map, coloed by pH and jittered in order to see the points better
+#map_phyloseq(batfecal, region="china", jitter=T, jitter.x=2,jitter.y=2, color="PH")
+```
+
+### map_network
+The goal of the *map_network* function is to visualize the relatedness of ecological samples. It does this using the same technique in phyloseq's *plot_net* and *plot_network* functions, namely, it will calculate an ecological distance between samples. Instead of using a network layout algorithm, however, phylogeo will place points by their geographic location. If the points are crowded, they can be jittered to space them apart. A number of configuration options are available to control the appearance of the points and lines.
+```{r}
+#simple network map without lines 
+map_network(batmicrobiome)
+#connect samples and visualize connections
+map_network(batmicrobiome, lines=TRUE, color="SCIENTIFIC_NAME", jitter=TRUE)
+#play with the jitter and cutoff to get a better view
+map_network(batmicrobiome, color="SCIENTIFIC_NAME", jitter=T, jitter.x=20,jitter.y=1, lines=T, line_weight = 0.2)
+```
+One current downside to the current mapping setup is that the `region` keyword only works on country names and cannot zoom to, say "the western hemisphere". In this example the result is a lot of dead space. For figures you woudl want to ggsave a PDF/SVG and zoom to your region of interest. Down the line a more nuanced mapping systme might be considered.
+
+### map_tree
+The goal of *map_tree* is to provide access to both phylogenetic and geographic information in one ploe. To be useful, the data may need to be pared back to relatively small number of OTUs/samples. 
+```{r}
+#simple map + tree
+map_tree(epoxamicin_KS)
+#color the map to see locations
+map_tree(epoxamicin_KS, color="Geotype", jitter=TRUE)
+```
+
+```{r}
+#trim samples and locations
+#x <- prune_samples()
+#y <- subset_taxa()
+# map_tree(y, color="Geotype", jitter=TRUE)
+```
+
+### map_tree_kmans
+The goal of *map_tree* is to provide access to both phylogenetic and geographic information in one ploe. To be useful, the data may need to be pared back to relatively small number of OTUs/samples. 
+```{r}
+#simple map + tree
+library(gridExtra)
+map_tree_kmeans(physeq=epoxamicin_KS, clusternum=5)
+```
+
+## phyloseq plotting functions
+
+### plot_greatcircle_distance
+This function creates a scatterplot of distances comparing the geographic great-circle distance to the the ecological distance (default:jaccard).
+```{r}
+plot_greatcircle_distance(batfecal)
+```
+
+
