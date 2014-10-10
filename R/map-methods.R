@@ -385,7 +385,7 @@ map_tree <- function(physeq,  region=NULL, color = NULL,size=4, alpha=0.8,
 #' @param physeq (Required). 
 #'  The name of the phyloseq object. This must have sample data with Latitude and Longitude Columns.
 #'  
-#' @param clusters (Optional). Default \code{3}.
+#' @param clusternum (Optional). Default \code{3}.
 #'  Number of kmeans clusters to divide your phylogenetic tree into
 #'  
 #' @import ggplot2
