@@ -21,6 +21,7 @@ Depends:
     R (>= 3.1.1)
 Suggests:
     testthat,
-    dplyr
+    dplyr,
+    knitr
 VignetteBuilder: knitr
 BugReports: https://github.com/zachcp/phylogeo/issues
