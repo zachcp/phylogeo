@@ -66,7 +66,7 @@ map_phyloseq <- function(physeq, size=4, region=NULL, color=NULL, shape=NULL, al
   
   #check plot options. "Abundance" is a special method for plotting by size
   phylogeo:::.check_names(color,data)
-  if(!size == "Reads"){
+  if(!size == "Abundance"){
     phylogeo:::.check_names(size,data, allownumeric=T)
     print(size)
   }
@@ -336,7 +336,6 @@ map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard", co
 #' \href{http://docs.ggplot2.org/current/}{ggplot2 for `map_data` command}.
 #'
 #' @import ggplot2
-#' @import gridExtra
 #' @export
 #' @examples
 #' data(epoxamicin_KS)
@@ -372,9 +371,9 @@ map_tree <- function(physeq,  region=NULL, color = NULL,size=4, alpha=0.8,
     # treeplot <- treeplot + xlim( min(xvals), max(xvals))
     
     if(map_on_left){
-        combinedplot <- gridExtra::grid.arrange(mapplot + theme(legend.position="none") ,treeplot, ncol=2, widths=c(width_ratio,1))
+        combinedplot <- gridExtra::arrangeGrob(mapplot + theme(legend.position="none") ,treeplot, ncol=2, widths=c(width_ratio,1))
     } else{
-        combinedplot <- gridExtra::grid.arrange(treeplot + theme(legend.position="none"),mapplot, ncol=2, widths=c(1,width_ratio))    
+        combinedplot <- gridExtra::arrangeGrob(treeplot + theme(legend.position="none"),mapplot, ncol=2, widths=c(1,width_ratio))    
     }
     return(combinedplot)
 }
@@ -440,7 +439,7 @@ map_tree_kmeans <- function(physeq, clusternum=3){
     physeq2 <- add_cluster_to_taxtree(physeq, otulist)
     physeq2 <- subset_taxa(physeq2, Cluster=="1")
     physeq2 <- prune_samples(sample_sums(physeq2)>0, physeq2)
-    p <-  map_phyloseq(physeq2, size="Reads")
+    p <-  map_phyloseq(physeq2, size="Abundance")
     return(p)
 
   }
