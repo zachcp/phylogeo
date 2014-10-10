@@ -55,6 +55,11 @@ plot_greatcircle_distance <- function(physeq, distancemethod="jaccard"){
     df <- merge(geodistances, ecodistance, by="pairs")
     
     #make the plot
-    p <- ggplot(df, aes(y = ecodist,x=geodist)) + geom_point() 
+    p <- ggplot(df, aes(y = ecodist,x=geodist)) + 
+         geom_point() +
+         xlab("Km") + 
+         ylab(distancemethod) +
+         ggtitle(paste("Pairwise Sample Distance:", "Km vs.", distancemethod,"Distance.", sep=" "))
+    
     return(p)
 }
