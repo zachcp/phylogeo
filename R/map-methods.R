@@ -166,6 +166,7 @@ map_phyloseq <- function(physeq, size=4, region=NULL, color=NULL, shape=NULL, al
 #' \href{https://joey711.github.io/phyloseq/distance}{phyloseq's distance command}.
 #' 
 #' @import ggplot2
+#' @importFrom phyloseq make_network  
 #' @importFrom igraph get.data.frame
 #' @importFrom igraph get.vertex.attribute
 #' @importFrom igraph clusters  
