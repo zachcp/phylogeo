@@ -16,6 +16,7 @@
 #'  
 #' @import phyloseq
 #' @importFrom reshape2 melt
+#' @importFrom sp spDists
 #' @export
 #' @examples
 #' data(batfecal)

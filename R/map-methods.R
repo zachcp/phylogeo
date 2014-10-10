@@ -387,6 +387,8 @@ map_tree <- function(physeq,  region=NULL, color = NULL,size=4, alpha=0.8,
 #' @param clusters (Optional). Default \code{3}.
 #'  Number of kmeans clusters to divide your phylogenetic tree into
 #'  
+#' @import gridExtra
+#' @export
 map_tree_kmeans <- function(physeq, clusternum=3){
   # check for the existence of a tree: lifted from phyloseq's plot_tree
   if(!"phy_tree" %in% phyloseq:::getslots.phyloseq(physeq)){
@@ -460,7 +462,7 @@ map_tree_kmeans <- function(physeq, clusternum=3){
   
   # plot everthing out
   plots <- lapply(1:clusternum, make_diplot, physeq=physeq)
-  combinedplot <- do.call(arrangeGrob,plots)
+  combinedplot <- do.call(gridExtra::arrangeGrob,plots)
   
   return(combinedplot)
 }
