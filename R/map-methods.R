@@ -393,14 +393,12 @@ map_tree_kmeans <- function(physeq, clusternum=3){
     stop("tree missing or invalid. map-tree requires a phylogenetic tree")
   }
   
-  # get kmeans data from the phylogenetic tree
-  distances <- ape::cophenetic.phylo( phy_tree(physeq))
-  kmeans_out <- kmeans(distances, centers=clusternum)
-  clusters <- data.frame(kmeans_out$cluster)
-  names(clusters) <- "cluster"
-  clusters$clusterOTU <- row.names(clusters)
   
-  # get a list of outs in a cluster
+  ################################################
+  # Helper Functions
+  ################################################
+  
+  # get a list of otus in a cluster
   otus_in_a_cluster <- function(clusternum, clusterdf=clusters){
     df <- clusterdf[clusterdf$cluster == clusternum, ]
     return(rownames(df))
@@ -435,8 +433,6 @@ map_tree_kmeans <- function(physeq, clusternum=3){
   make_map_of_cluster <- function(physeq, clusternum){
     otulist <- otus_in_a_cluster(clusternum)
     physeq2 <- add_cluster_to_taxtree(physeq, otulist)
-    #print(tax_table(physeq2))
-    #print(names(tax_table(physeq2)))
     physeq2 <- subset_taxa(physeq2, Cluster=="1")
     physeq2 <- prune_samples(sample_sums(physeq2)>0, physeq2)
     p <-  map_phyloseq(physeq2, size="Reads")
@@ -448,21 +444,23 @@ map_tree_kmeans <- function(physeq, clusternum=3){
   make_diplot <- function(clusternum, physeq=physeq){
      p1 <- make_cluster_tree(physeq, clusternum)
      p2 <- make_map_of_cluster(physeq, clusternum)
-     #combinedplot <- gridExtra::grid.arrange(p1,p2, ncol=2, widths=c(1,2))
      combinedplot <- gridExtra::arrangeGrob(p1,p2, ncol=2, widths=c(1,2))
   }
 
+  ################################################
+  # Do the work
+  ################################################
+  
+  # get kmeans data from the phylogenetic tree
+  distances <- ape::cophenetic.phylo( phy_tree(physeq))
+  kmeans_out <- kmeans(distances, centers=clusternum)
+  clusters <- data.frame(kmeans_out$cluster)
+  names(clusters) <- "cluster"
+  clusters$clusterOTU <- row.names(clusters)
+  
   # plot everthing out
   plots <- lapply(1:clusternum, make_diplot, physeq=physeq)
-  #combinedplot <- gridExtra::grid.arrange(plots)
   combinedplot <- do.call(arrangeGrob,plots)
   
   return(combinedplot)
-
-  
-  ## create a list of plots one for each cluster
-  # on the tree highlight OTUs in the cluster with a bright color
-  # on the map subset by OTUs and dsiplay them wither as is or using map_phyloseq'a abundance
-  # use gridExtra to layout a single figure with all of the spots connected
-
 }
