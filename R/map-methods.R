@@ -15,7 +15,7 @@
 #'  The name of the phyloseq object. This must have sample data with Latitude and Longitude Columns.
 #'  
 #' @param size (Optional). Default \code{4}. 
-#'  The size of the vertex points."Reads" is a special code that will scale points by the number of reads in a sample
+#'  The size of the vertex points."Abundance" is a special code that will scale points by the number of reads in a sample
 #'  
 #' @param region (Optional). Default \code{NULL}.
 #'  The name of geographic region that can be used to zoom.
@@ -64,7 +64,7 @@ map_phyloseq <- function(physeq, size=4, region=NULL, color=NULL, shape=NULL, al
   names  <- names(data)
   
   
-  #check plot options. "Reads" is a special method for plotting by size
+  #check plot options. "Abundance" is a special method for plotting by size
   phylogeo:::.check_names(color,data)
   if(!size == "Reads"){
     phylogeo:::.check_names(size,data, allownumeric=T)
@@ -83,10 +83,10 @@ map_phyloseq <- function(physeq, size=4, region=NULL, color=NULL, shape=NULL, al
   if(is.numeric(size)){
     worldmap <- worldmap + geom_point(data=data, aes_string( x=loncol, y=latcol, group=NULL, color=color), 
                                       size = size, alpha= alpha) 
-  }else if(size == "Reads"){
-    reads <- data.frame(sample_sums(physeq)); names(reads)<- "Reads"
+  }else if(size == "Abundance"){
+    reads <- data.frame(sample_sums(physeq)); names(reads)<- "Abundance"
     data2 <- merge(data,reads,by="row.names")
-    worldmap <- worldmap + geom_point(data=data2, aes_string( x=loncol, y=latcol, group=NULL, color=color, size = "Reads"),
+    worldmap <- worldmap + geom_point(data=data2, aes_string( x=loncol, y=latcol, group=NULL, color=color, size = "Abundance"),
                                       alpha= alpha) 
   }else{
     worldmap <- worldmap + geom_point(data=data, aes_string( x=loncol, y=latcol, group=NULL, color=color, size = size),
@@ -336,6 +336,7 @@ map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard", co
 #' \href{http://docs.ggplot2.org/current/}{ggplot2 for `map_data` command}.
 #'
 #' @import ggplot2
+#' @import gridExtra
 #' @export
 #' @examples
 #' data(epoxamicin_KS)
@@ -388,6 +389,7 @@ map_tree <- function(physeq,  region=NULL, color = NULL,size=4, alpha=0.8,
 #' @param clusters (Optional). Default \code{3}.
 #'  Number of kmeans clusters to divide your phylogenetic tree into
 #'  
+#' @import ggplot2
 #' @import gridExtra
 #' @export
 map_tree_kmeans <- function(physeq, clusternum=3){
