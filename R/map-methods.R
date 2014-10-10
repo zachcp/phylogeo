@@ -190,7 +190,7 @@ map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard", co
   ######################################################################################################
   get_clusters <- function(num, graph=igraph){
     #get cluster membership info from igraph object from cluster with clusterid of 'num'
-    clusts  <- clusters(graph)
+    clusts  <- igraph::clusters(graph)
     members <- which(clusts$membership == num) #get membership
     names   <- get.vertex.attribute(graph, 'name', members)
     df = data.frame(names)
@@ -243,7 +243,7 @@ map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard", co
     if( !"igraph" %in% class(igraph) ){
       stop("igraph must be an igraph network object")} 
   }
-  clusts <- seq(clusters(igraph)$no)
+  clusts <- seq( igraph::clusters(igraph)$no )
   clustdf <- Reduce( rbind, Map(get_clusters, clusts))
   mdf <- merge(clustdf, data.frame(data), by="row.names", all.x=T)
   rownames(mdf) <- mdf$Row.names
