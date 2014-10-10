@@ -29,9 +29,10 @@ phylogeo has three datasets.
 These datasets have geographic coordinates and are suitable for illustrating the features of the phylogeo package, and they can be loaded using the `data()` command.
   
 ```{r}
-library(phyloseq)
-library(phylogeo)
 library(ggplot2)
+library(gridExtra)
+library(phylogeo)
+
 data(batfecal)
 data(batmicrobiome)
 data(epoxamicin_KS)
@@ -53,8 +54,6 @@ The goal of the *map_network* function is to visualize the relatedness of ecolog
 ```{r}
 #simple network map without lines 
 map_network(batmicrobiome)
-#connect samples and visualize connections
-map_network(batmicrobiome, lines=TRUE, color="SCIENTIFIC_NAME", jitter=TRUE)
 #play with the jitter and cutoff to get a better view
 map_network(batmicrobiome, color="SCIENTIFIC_NAME", jitter=T, jitter.x=20,jitter.y=1, lines=T, line_weight = 0.2)
 ```
@@ -76,12 +75,11 @@ map_tree(epoxamicin_KS, color="Geotype", jitter=TRUE)
 # map_tree(y, color="Geotype", jitter=TRUE)
 ```
 
-### map_tree_kmans
-The goal of *map_tree* is to provide access to both phylogenetic and geographic information in one ploe. To be useful, the data may need to be pared back to relatively small number of OTUs/samples. 
+### map_tree_kmeans
+*map_tree_kmenas* provides a way to explore the spatial distribution of subsets of your data. From your phylogentic tree (required), a distance matrix is used to make a kmenas calculation which will cluster your tree into *k* number of clusters. The members of these clusters will then be displayed on the map.
 ```{r}
-#simple map + tree
-library(gridExtra)
-map_tree_kmeans(physeq=epoxamicin_KS, clusternum=5)
+#clustered trees plus maps
+map_tree_kmeans(epoxamicin_KS, clusters=6)
 ```
 
 ## phyloseq plotting functions
