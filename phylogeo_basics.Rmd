@@ -4,7 +4,7 @@ output:
     toc: yes
 ---
 `r library("knitr")`
-`r opts_chunk$set(cache=FALSE, fig.width=12, message=FALSE, warning=FALSE)`
+`r opts_chunk$set(cache=FALSE, fig.width=15, message=FALSE, warning=FALSE)`
 <link href="http://joey711.github.com/phyloseq/markdown.css" rel="stylesheet"></link>
 
 # phylogeo basics.
@@ -79,7 +79,7 @@ map_tree(epoxamicin_KS, color="Geotype", jitter=TRUE)
 *map_tree_kmenas* provides a way to explore the spatial distribution of subsets of your data. From your phylogentic tree (required), a distance matrix is used to make a kmenas calculation which will cluster your tree into *k* number of clusters. The members of these clusters will then be displayed on the map.
 ```{r}
 #clustered trees plus maps
-map_tree_kmeans(epoxamicin_KS, clusters=6)
+map_tree_kmeans(epoxamicin_KS, clusternum=6)
 ```
 
 ## phyloseq plotting functions
