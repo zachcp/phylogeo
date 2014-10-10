@@ -4,7 +4,7 @@ output:
     toc: yes
 ---
 `r library("knitr")`
-`r opts_chunk$set(cache=FALSE, fig.width=15, message=FALSE, warning=FALSE)`
+`r opts_chunk$set(cache=FALSE, fig.width=12, message=FALSE, warning=FALSE)`
 <link href="http://joey711.github.com/phyloseq/markdown.css" rel="stylesheet"></link>
 
 # phylogeo basics.
