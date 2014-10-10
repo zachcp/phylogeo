@@ -448,12 +448,15 @@ map_tree_kmeans <- function(physeq, clusternum=3){
   make_diplot <- function(clusternum, physeq=physeq){
      p1 <- make_cluster_tree(physeq, clusternum)
      p2 <- make_map_of_cluster(physeq, clusternum)
-     combinedplot <- gridExtra::grid.arrange(p1,p2, ncol=2, widths=c(1,2))
+     #combinedplot <- gridExtra::grid.arrange(p1,p2, ncol=2, widths=c(1,2))
+     combinedplot <- gridExtra::arrangeGrob(p1,p2, ncol=2, widths=c(1,2))
   }
 
   # plot everthing out
   plots <- lapply(1:clusternum, make_diplot, physeq=physeq)
-  combinedplot <- gridExtra::grid.arrange(plots)
+  #combinedplot <- gridExtra::grid.arrange(plots)
+  combinedplot <- do.call(arrangeGrob,plots)
+  
   return(combinedplot)
 
   
