@@ -74,14 +74,6 @@ map_tree(epoxamicin_KS)
 map_tree(epoxamicin_KS, color="Geotype", jitter=TRUE)
 ```
 
-```{r}
-#trim samples and locations
-#x <- prune_samples()
-#y <- subset_taxa()
-# map_tree(y, color="Geotype", jitter=TRUE)
-```
-
-
 ### plot_distance
 This function creates a scatterplot of distances comparing the geographic great-circle distance to the the ecological distance (default:jaccard).
 ```{r}
