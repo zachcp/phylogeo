@@ -179,7 +179,7 @@ map_phyloseq <- function(physeq, size=4, region=NULL, color=NULL,
 #' @importFrom igraph clusters  
 #' @export
 #' @examples
-#' #' library(phyloseq)
+#' library(phyloseq)
 #' data(batfecal)
 #' map_network(batfecal)
 #' map_network(batfecal, region="china", jitter=TRUE, lines=TRUE)
