@@ -39,3 +39,5 @@ R/.Rhistory
 *.Rproj
 
 *.Rdata
+
+*.Rout
