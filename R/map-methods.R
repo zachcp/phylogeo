@@ -1,7 +1,7 @@
 #
 # methods for drawing maps of phyloseq objects
 #
-###########################################################################################################
+################################################################################
 #' Draw A Map from a Phyloseq Object
 #'
 #' In this case, edges in the network are created if the distance between
@@ -12,10 +12,12 @@
 #'   size=4, alpha=0.5 )
 #'
 #' @param physeq (Required). 
-#'  The name of the phyloseq object. This must have sample data with Latitude and Longitude Columns.
+#'  The name of the phyloseq object. This must have sample data with 
+#'  Latitude and Longitude Columns.
 #'  
 #' @param size (Optional). Default \code{4}. 
-#'  The size of the vertex points."Abundance" is a special code that will scale points by the number of reads in a sample
+#'  The size of the vertex points."Abundance" is a special code that will scale 
+#'  points by the number of reads in a sample
 #'  
 #' @param region (Optional). Default \code{NULL}.
 #'  The name of geographic region that can be used to zoom.
@@ -47,10 +49,11 @@
 #' @examples 
 #' 
 #' data(batfecal)
-#' map_phyloseq(batfecal, region="china", jitter=T, jitter.x=2,jitter.y=2, color="PH")
+#' map_phyloseq(batfecal, region="china", jitter=TRUE, jitter.x=2,jitter.y=2, color="PH")
 #' data(batmicrobiome)
 #' map_phyloseq(batmicrobiome, jitter=TRUE, color="SCIENTIFIC_NAME")
-map_phyloseq <- function(physeq, size=4, region=NULL, color=NULL, shape=NULL, alpha = 0.8, 
+map_phyloseq <- function(physeq, size=4, region=NULL, color=NULL, 
+                         shape=NULL, alpha = 0.8, 
                          jitter=FALSE, jitter.x=3, jitter.y=3){
   #check basic physeq and lat/lon
   latlon <- phylogeo:::.check_physeq(physeq)
@@ -72,30 +75,35 @@ map_phyloseq <- function(physeq, size=4, region=NULL, color=NULL, shape=NULL, al
   }
   
   #create map
-  ############################################################################################################
-  worldmap <- phylogeo:::.create_basemap(region=region, df=data, latcol=latcol,loncol=loncol)
+  ##############################################################################
+  worldmap <- phylogeo:::.create_basemap(region=region, df=data, 
+                                         latcol=latcol,loncol=loncol)
   
   if(jitter){
-    data <- phylogeo:::.jitter_df(df=data,xcol=loncol,ycol=latcol,jitter.x=jitter.x,jitter.y=jitter.y)
+    data <- phylogeo:::.jitter_df(df=data,xcol=loncol,ycol=latcol,
+                                  jitter.x=jitter.x,jitter.y=jitter.y)
   }
   
   #how to hande when size information can be either global (outside of aes), per-sample (inside of aes)
   if(is.numeric(size)){
-    worldmap <- worldmap + geom_point(data=data, aes_string( x=loncol, y=latcol, group=NULL, color=color), 
+    worldmap <- worldmap + geom_point(data=data, 
+                                      aes_string(x=loncol, y=latcol, group=NULL, color=color), 
                                       size = size, alpha= alpha) 
   }else if(size == "Abundance"){
     reads <- data.frame(sample_sums(physeq)); names(reads)<- "Abundance"
     data2 <- merge(data,reads,by="row.names")
-    worldmap <- worldmap + geom_point(data=data2, aes_string( x=loncol, y=latcol, group=NULL, color=color, size = "Abundance"),
+    worldmap <- worldmap + geom_point(data=data2, 
+                                      aes_string( x=loncol, y=latcol, group=NULL, color=color, size = "Abundance"),
                                       alpha= alpha) 
   }else{
-    worldmap <- worldmap + geom_point(data=data, aes_string( x=loncol, y=latcol, group=NULL, color=color, size = size),
+    worldmap <- worldmap + geom_point(data=data, 
+                                      aes_string( x=loncol, y=latcol, group=NULL, color=color, size = size),
                                       alpha= alpha) 
   }
   
   return(worldmap)
 }
-###########################################################################################################
+################################################################################
 #' Create a Network from the Phyloseq Objects and Draw A Map of the Clusters
 #'
 #' In this case, edges in the network are created if the distance between
@@ -182,12 +190,14 @@ map_phyloseq <- function(physeq, size=4, region=NULL, color=NULL, shape=NULL, al
 #' map_network(batmicrobiome, igraph= ig, lines=TRUE)
 #' map_network(batmicrobiome, igraph= ig, lines=TRUE, color="SCIENTIFIC_NAME")
 #' map_network(batmicrobiome, igraph= ig, lines=TRUE, color="SCIENTIFIC_NAME", jitter=TRUE)
-map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard", color=NULL, region=NULL, 
-                        size=4, alpha = 0.8, jitter=FALSE, jitter.x=3, jitter.y=3, shape=NULL, 
-                        lines=FALSE, line_weight=1, line_color ="Black" ,line_alpha=0.4 , base_data=FALSE, base_data_color="grey"){
+map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard", 
+                        color=NULL, region=NULL, size=4, alpha = 0.8, 
+                        jitter=FALSE, jitter.x=3, jitter.y=3, shape=NULL, 
+                        lines=FALSE, line_weight=1, line_color ="Black",
+                        line_alpha=0.4 , base_data=FALSE, base_data_color="grey"){
 
   #helper functions to calculate membership in clusters or lines
-  ######################################################################################################
+  ##############################################################################
   get_clusters <- function(num, graph=igraph){
     #get cluster membership info from igraph object from cluster with clusterid of 'num'
     clusts  <- igraph::clusters(graph)
@@ -221,7 +231,8 @@ map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard", co
   #add lines to ggplot object
   draw_lines <- function(plt, df2){
     df2 <- data.frame(df2) #to ensure list returns a df object
-    plt <- plt + geom_line(data=df2,  aes_string( x=loncol, y=latcol, group=names(df2)[1]))
+    plt <- plt + geom_line(data=df2,  
+                           aes_string( x=loncol, y=latcol, group=names(df2)[1]))
   }
   #####################################
   
@@ -250,55 +261,59 @@ map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard", co
   
   #check plot options
   phylogeo:::.check_names(color,mdf)
-  phylogeo:::.check_names(size,mdf, allownumeric=T)
+  phylogeo:::.check_names(size,mdf, allownumeric=TRUE)
   
   #create map
   ############################################
-  
-  #basemap
-  worldmap <- phylogeo:::.create_basemap(region=region, df=mdf, latcol=latcol, loncol=loncol)
+  worldmap <- phylogeo:::.create_basemap(region=region, df=mdf, 
+                                         latcol=latcol, loncol=loncol)
   
   #modify points if using jitter
   if(jitter){
-    mdf <- phylogeo:::.jitter_df( df=mdf, xcol=loncol, ycol=latcol, jitter.x=jitter.x, jitter.y=jitter.y)
+    mdf <- phylogeo:::.jitter_df( df=mdf, xcol=loncol, ycol=latcol, 
+                                  jitter.x=jitter.x, jitter.y=jitter.y)
   }
   
   #add points that aren't part of a network
   if(base_data){
     network_points <- rownames(mdf)
     nonetworkdf <- data[!rownames(data) %in% network_points, ] 
-    worldmap <- worldmap + geom_point(data = nonetworkdf, aes_string(x=loncol,y=latcol, group=NULL), color=base_data_color, size=size)
+    worldmap <- worldmap + geom_point(data = nonetworkdf, 
+                                      aes_string(x=loncol,y=latcol, group=NULL), 
+                                      color=base_data_color, size=size)
   }
   
   #addlines
   if(lines){
     linedf <- get_lines(df=mdf) 
-    worldmap <- worldmap + geom_line(data=linedf,aes_string(x=loncol,y=latcol, group="link"), size=line_weight, alpha=line_alpha, color=line_color)
+    worldmap <- worldmap + 
+                  geom_line(data=linedf,
+                            aes_string(x=loncol,y=latcol, group="link"), 
+                            size=line_weight, alpha=line_alpha, color=line_color)
   }
  
   #add points
   #how to hande when point_size information can be either global (outside of aes), orper-sample (inseide of aes)
   if(is.numeric(size)){
-   points <- geom_point(data=mdf, aes_string( x=loncol, y=latcol, group=NULL, color=color, shape=shape), 
-                                      size = size, alpha= alpha) 
+   points <- geom_point(data=mdf, size = size, alpha= alpha,
+                        aes_string( x=loncol, y=latcol, group=NULL, color=color, shape=shape)) 
   }else{
-    points <- geom_point(data=mdf, aes_string( x=loncol, y=latcol, group=NULL, color=color, size = size, shape=shape), 
-                                      alpha= alpha) 
+    points <- geom_point(data=mdf, alpha= alpha,
+                         aes_string( x=loncol, y=latcol, group=NULL, color=color, size = size, shape=shape)) 
   } 
   worldmap <- worldmap + points
   
-
-
-  points <- geom_point(data=mdf, aes_string( x=loncol, y=latcol, group=NULL, color=NULL, shape=NULL),  size = size, alpha= alpha) 
+  points <- geom_point(data=mdf, size = size, alpha= alpha,
+                       aes_string( x=loncol, y=latcol, group=NULL, color=NULL, shape=NULL)) 
   ###########################
   
   return(worldmap)
 }
-###########################################################################################################
+################################################################################
 #' Map a Phyloseq Object while also drawing a phlogenetic tree of the taxa
 #'
-#' @usage map_tree(physeq, region=NULL, color = NULL, size= NULL, point_size=4, alpha=0.8,jitter= FALSE,
-#'                jitter.x=3, jitter.y=3)
+#' @usage map_tree(physeq, region=NULL, color = NULL, size= NULL, point_size=4, 
+#'                 alpha=0.8,jitter= FALSE, jitter.x=3, jitter.y=3)
 #'   
 #' @param physeq (Required). 
 #'  The name of the phyloseq object. This must have sample data with Latitude and Longitude Columns.
@@ -344,8 +359,9 @@ map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard", co
 map_tree <- function(physeq,  region=NULL, color = NULL,size=4, alpha=0.8,
                     jitter= FALSE, jitter.x=3, jitter.y=3, method = "sampledodge", 
                     nodelabf =nodeplotblank, treesize = NULL, min.abundance = Inf, 
-                    label.tips = NULL, text.size = NULL, sizebase = 5, base.spacing = 0.02, ladderize = TRUE,
-                    plot.margin = 0.2, title = NULL, treetheme = NULL, justify = "jagged",
+                    label.tips = NULL, text.size = NULL, sizebase = 5, 
+                    base.spacing = 0.02, ladderize = TRUE,plot.margin = 0.2, 
+                    title = NULL, treetheme = NULL, justify = "jagged",
                     width_ratio = 2, map_on_left = FALSE) {
     #check for the existence of a tree: lifted from phyloseq's plot_tree
     if(!"phy_tree" %in% phyloseq:::getslots.phyloseq(physeq)){
@@ -354,13 +370,14 @@ map_tree <- function(physeq,  region=NULL, color = NULL,size=4, alpha=0.8,
     #trim samples that are not in the tree
     physeq2 <- phyloseq::prune_samples(phyloseq::sample_sums(physeq) > 0, physeq)
     
-    mapplot  <- map_phyloseq(physeq2, region=region, color= color, size=size, alpha = alpha, jitter=jitter, 
-                              jitter.x=jitter.x, jitter.y=jitter.y)  + 
-                              theme(legend.position="none") 
-    treeplot <- phyloseq::plot_tree(physeq2, color=color, label.tips=label.tips, text.size=text.size, 
-                          sizebase=sizebase, base.spacing = base.spacing, ladderize = ladderize,
-                          plot.margin = plot.margin, title = title, treetheme=treetheme, justify = justify, nodelab =nodelabf ) +
-                          theme(legend.key = element_rect(fill = "white")) +
+    mapplot  <- map_phyloseq(physeq2, region=region, color= color, size=size, alpha = alpha, 
+                             jitter=jitter, jitter.x=jitter.x, jitter.y=jitter.y)  + 
+                             theme(legend.position="none") 
+    treeplot <- phyloseq::plot_tree(physeq2, color=color, label.tips=label.tips, 
+                                    text.size=text.size, sizebase=sizebase, base.spacing = base.spacing, 
+                                    ladderize = ladderize, plot.margin = plot.margin, title = title, 
+                                    treetheme=treetheme, justify = justify, nodelab =nodelabf) +
+      theme(legend.key = element_rect(fill = "white")) +
       scale_y_continuous(expand = c(0,0)) + 
       scale_x_continuous(expand = c(0,0))
     # # trim space by setting xlims
@@ -371,13 +388,15 @@ map_tree <- function(physeq,  region=NULL, color = NULL,size=4, alpha=0.8,
     # treeplot <- treeplot + xlim( min(xvals), max(xvals))
     
     if(map_on_left){
-        combinedplot <- gridExtra::arrangeGrob(mapplot + theme(legend.position="none") ,treeplot, ncol=2, widths=c(width_ratio,1))
+        combinedplot <- gridExtra::arrangeGrob(mapplot + theme(legend.position="none"),
+                                               treeplot, ncol=2, widths=c(width_ratio,1))
     } else{
-        combinedplot <- gridExtra::arrangeGrob(treeplot + theme(legend.position="none"),mapplot, ncol=2, widths=c(1,width_ratio))    
+        combinedplot <- gridExtra::arrangeGrob(treeplot + theme(legend.position="none"),
+                                               mapplot, ncol=2, widths=c(1,width_ratio))    
     }
     return(combinedplot)
 }
-###########################################################################################################
+################################################################################
 #' Explore the spatial distribution of subsets of your sequence data 
 #'
 #' @usage map_clusters(physeq, clusters=3)
@@ -391,6 +410,9 @@ map_tree <- function(physeq,  region=NULL, color = NULL,size=4, alpha=0.8,
 #' @import ggplot2
 #' @import gridExtra
 #' @export
+#' @examples
+#' data(epoxamicin_KS)
+#' map_clusters(epoxamicin_KS, clusternum=6)
 map_clusters <- function(physeq, clusternum=3){
   # check for the existence of a tree: lifted from phyloseq's plot_tree
   if(!"phy_tree" %in% phyloseq:::getslots.phyloseq(physeq)){

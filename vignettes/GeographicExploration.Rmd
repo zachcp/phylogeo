@@ -61,7 +61,7 @@ map_network(batmicrobiome)
 #connect samples and visualize connections
 map_network(batmicrobiome, lines=TRUE, color="SCIENTIFIC_NAME", jitter=TRUE)
 #play with the jitter and cutoff to get a better view
-map_network(batmicrobiome, color="SCIENTIFIC_NAME", jitter=T, jitter.x=20,jitter.y=1, lines=T, line_weight = 0.2)
+map_network(batmicrobiome, color="SCIENTIFIC_NAME", jitter=TRUE, jitter.x=20,jitter.y=1, lines=T, line_weight = 0.2)
 ```
 One current downside to the current mapping setup is that the `region` keyword only works on country names and cannot zoom to, say "the western hemisphere". In this example the result is a lot of dead space. For figures you woudl want to ggsave a PDF/SVG and zoom to your region of interest. Down the line a more nuanced mapping systme might be considered.
 

@@ -1,7 +1,7 @@
 #
-# A set of funcitons used by map and plot functions to test for validity of data
+# A set of functions used by map and plot functions to test for validity of data
 #
-###########################################################################################################
+################################################################################
 #' Check for Latitude and Longitude Columns in a Dataframe and return the column values
 .check_physeq <- function(physeq){
   #check phyloseq objects for Lat/Lon
@@ -97,7 +97,7 @@
   colvals <- df[col]
   colvals[ colvals == "None"] <- NA  #some data has "None" so be sure to replace with NA
   truth    <- lapply(colvals, is.na)
-  if( any(as.character(truth) == T)){
+  if( any(as.character(truth) == TRUE)){
     warning(paste("Null Values in ",col, sep=""))
     df <- df[ !is.na(df[col,]), ]
   }
