@@ -430,7 +430,7 @@ map_tree <- function(physeq,  region=NULL, color = NULL,size=4, alpha=0.8,
 #' map_clusters(epoxamicin_KS, clusternum=6)
 map_clusters <- function(physeq, clusternum=3){
   # check for the existence of a tree: lifted from phyloseq's plot_tree
-  if(!"phy_tree" %in% phyloseq:::getslots.phyloseq(physeq)){
+  if(!"phy_tree" %in% phyloseq::getslots.phyloseq(physeq)){
     stop("tree missing or invalid. map-tree requires a phylogenetic tree")
   }
   
