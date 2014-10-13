@@ -9,6 +9,7 @@ To install, phyloseq must be first be installed. phylogeo can then be installed 
 ```
 install.packages("devtools")
 library("devtools")
+install_github("phyloseq", "joey711")
 install_github("phylogeo", "zachcp")
 ```
 
