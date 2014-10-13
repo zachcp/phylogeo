@@ -61,7 +61,7 @@ map_network(batmicrobiome, color="SCIENTIFIC_NAME", jitter=T, jitter.x=20,jitter
 One current downside to the current mapping setup is that the `region` keyword only works on country names and cannot zoom to, say "the western hemisphere". In this example the result is a lot of dead space. For figures you woudl want to ggsave a PDF/SVG and zoom to your region of interest. Down the line a more nuanced mapping systme might be considered.
 
 ### map_tree
-The goal of *map_tree* is to provide access to both phylogenetic and geographic information in one ploe. To be useful, the data may need to be pared back to relatively small number of OTUs/samples. 
+The goal of *map_tree* is to provide access to both phylogenetic and geographic information in one place. To be useful, the data may need to be pared back to relatively small number of OTUs/samples. 
 ```{r}
 #simple map + tree
 map_tree(epoxamicin_KS)
