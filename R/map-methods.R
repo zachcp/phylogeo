@@ -54,31 +54,31 @@ map_phyloseq <- function(physeq, size=4, region=NULL, color=NULL,
                          shape=NULL, alpha = 0.8, 
                          jitter=FALSE, jitter.x=3, jitter.y=3){
   #check basic physeq and lat/lon
-  latlon <- phylogeo:::.check_physeq(physeq)
+  latlon <- .check_physeq(physeq)
   latcol <- as.character( latlon[1] )
   loncol <- as.character( latlon[2] )
   data   <- data.frame( sample_data(physeq) )
-  data   <- phylogeo:::.check_NA(data, latcol)
-  data   <- phylogeo:::.coerce_numeric(data,latcol)
-  data   <- phylogeo:::.check_NA(data, loncol)
-  data   <- phylogeo:::.coerce_numeric(data,loncol)
+  data   <- .check_NA(data, latcol)
+  data   <- .coerce_numeric(data,latcol)
+  data   <- .check_NA(data, loncol)
+  data   <- .coerce_numeric(data,loncol)
   names  <- names(data)
   
   
   #check plot options. "Abundance" is a special method for plotting by size
-  phylogeo:::.check_names(color,data)
+  .check_names(color,data)
   if(!size == "Abundance"){
-    phylogeo:::.check_names(size,data, allownumeric=T)
+    .check_names(size,data, allownumeric=T)
     print(size)
   }
   
   #create map
   ##############################################################################
-  worldmap <- phylogeo:::.create_basemap(region=region, df=data, 
+  worldmap <- .create_basemap(region=region, df=data, 
                                          latcol=latcol,loncol=loncol)
   
   if(jitter){
-    data <- phylogeo:::.jitter_df(df=data,xcol=loncol,ycol=latcol,
+    data <- .jitter_df(df=data,xcol=loncol,ycol=latcol,
                                   jitter.x=jitter.x,jitter.y=jitter.y)
   }
   
@@ -235,14 +235,14 @@ map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard",
   #####################################
   
   #check basic physeq and lat/lon
-  latlon <- phylogeo:::.check_physeq(physeq)
+  latlon <- .check_physeq(physeq)
   latcol <- as.character( latlon[1] )
   loncol <- as.character( latlon[2] )
   data <- data.frame( sample_data(physeq) )
-  data <- phylogeo:::.check_NA(data, latcol)
-  data <- phylogeo:::.coerce_numeric(data,latcol)
-  data <- phylogeo:::.check_NA(data, loncol)
-  data <- phylogeo:::.coerce_numeric(data,loncol)
+  data <- .check_NA(data, latcol)
+  data <- .coerce_numeric(data,latcol)
+  data <- .check_NA(data, loncol)
+  data <- .coerce_numeric(data,loncol)
   names <- names(data)
   
   #make network, get cluster information, and add thamesat to the  original dataframe. 
@@ -258,17 +258,17 @@ map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard",
   rownames(mdf) <- mdf$Row.names
   
   #check plot options
-  phylogeo:::.check_names(color,mdf)
-  phylogeo:::.check_names(size,mdf, allownumeric=TRUE)
+  .check_names(color,mdf)
+  .check_names(size,mdf, allownumeric=TRUE)
   
   #create map
   ############################################
-  worldmap <- phylogeo:::.create_basemap(region=region, df=mdf, 
+  worldmap <- .create_basemap(region=region, df=mdf, 
                                          latcol=latcol, loncol=loncol)
   
   #modify points if using jitter
   if(jitter){
-    mdf <- phylogeo:::.jitter_df( df=mdf, xcol=loncol, ycol=latcol, 
+    mdf <- .jitter_df( df=mdf, xcol=loncol, ycol=latcol, 
                                   jitter.x=jitter.x, jitter.y=jitter.y)
   }
   
