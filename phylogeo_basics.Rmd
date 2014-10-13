@@ -15,7 +15,8 @@ phylogeo provides a series of functions that allow investigators to explore the 
   - `map_phyloseq()` can visualize your sample locations on a map
   - `map_network()` will connect samples based on a specified ecological distance
   - `map_tree()` will draw a paired plot of a phylogenetic tree and the location of those samples
-  - `plot_greatcircle_distance()` will plot the pairwise distacnes between samples using ecological and greatcircle distance
+  - `map_clusters()` will draw a paired plot of a phylogenetic tree and the location of those samples
+  - `plot_distance()` will plot the pairwise distacnes between samples using ecological and greatcircle distance
 
 The use and utility of these functions are explained bewow, after a description of the datasets included in phylogeo.
 
@@ -79,15 +80,15 @@ map_tree(epoxamicin_KS, color="Geotype", jitter=TRUE)
 *map_tree_kmenas* provides a way to explore the spatial distribution of subsets of your data. From your phylogentic tree (required), a distance matrix is used to make a kmenas calculation which will cluster your tree into *k* number of clusters. The members of these clusters will then be displayed on the map.
 ```{r}
 #clustered trees plus maps
-map_tree_kmeans(epoxamicin_KS, clusternum=6)
+map_clusters(epoxamicin_KS, clusternum=6)
 ```
 
 ## phyloseq plotting functions
 
-### plot_greatcircle_distance
+### plot_distance
 This function creates a scatterplot of distances comparing the geographic great-circle distance to the the ecological distance (default:jaccard).
 ```{r}
-plot_greatcircle_distance(batfecal)
+plot_distance(batfecal)
 ```
 
 

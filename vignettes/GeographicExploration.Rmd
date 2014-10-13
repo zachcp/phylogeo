@@ -82,8 +82,8 @@ map_tree(epoxamicin_KS, color="Geotype", jitter=TRUE)
 ```
 
 
-### plot_greatcircle_distance
+### plot_distance
 This function creates a scatterplot of distances comparing the geographic great-circle distance to the the ecological distance (default:jaccard).
 ```{r}
-plot_greatcircle_distance(batfecal)
+plot_distance(batfecal)
 ```

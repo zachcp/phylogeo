@@ -380,7 +380,7 @@ map_tree <- function(physeq,  region=NULL, color = NULL,size=4, alpha=0.8,
 ###########################################################################################################
 #' Explore the spatial distribution of subsets of your sequence data 
 #'
-#' @usage map_tree_kmeans(physeq, clusters=2)
+#' @usage map_clusters(physeq, clusters=3)
 #'   
 #' @param physeq (Required). 
 #'  The name of the phyloseq object. This must have sample data with Latitude and Longitude Columns.
@@ -391,7 +391,7 @@ map_tree <- function(physeq,  region=NULL, color = NULL,size=4, alpha=0.8,
 #' @import ggplot2
 #' @import gridExtra
 #' @export
-map_tree_kmeans <- function(physeq, clusternum=3){
+map_clusters <- function(physeq, clusternum=3){
   # check for the existence of a tree: lifted from phyloseq's plot_tree
   if(!"phy_tree" %in% phyloseq:::getslots.phyloseq(physeq)){
     stop("tree missing or invalid. map-tree requires a phylogenetic tree")

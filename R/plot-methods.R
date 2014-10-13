@@ -6,7 +6,7 @@
 #'
 #' Scatterplot generation of samples using geogrpahic and eoclogical distances
 #'
-#' @usage plot_greatcircle_distance(physeq, distancemethod="jaccard")
+#' @usage plot_distance(physeq, distancemethod="jaccard")
 #'
 #' @param physeq (Required). 
 #'  The name of the phyloseq object. This must have sample data with Latitude and Longitude Columns.
@@ -20,8 +20,8 @@
 #' @export
 #' @examples
 #' data(batfecal)
-#' plot_greatcircle_distance(batfecal)
-plot_greatcircle_distance <- function(physeq, distancemethod="jaccard"){
+#' plot_distance(batfecal)
+plot_distance <- function(physeq, distancemethod="jaccard"){
     latlon <- phylogeo:::.check_physeq(physeq)
     latcol <- as.character( latlon[1] )
     loncol <- as.character( latlon[2] )
