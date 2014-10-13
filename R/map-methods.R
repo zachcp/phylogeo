@@ -110,8 +110,7 @@ map_phyloseq <- function(physeq, size=4, region=NULL, color=NULL,
 #' nodes is below a potentially arbitrary threshold,
 #' and special care should be given to considering the choice of this threshold.
 #'
-#' @usage map_network(physeq,maxdist=0.9, distance="bray", size=6, alpha=0.5, lines=TRUE,
-#'  line_color= "Red", line_alpha=0.4, title="Awesome Netwrok Graph")
+#' @usage map_network(physeq, maxdist=0.9,title="Awesome Network Graph")
 #'   
 #' @param physeq (Required). 
 #'  The name of the phyloseq object. This must have sample data with Latitude and Longitude Columns.
@@ -180,6 +179,7 @@ map_phyloseq <- function(physeq, size=4, region=NULL, color=NULL,
 #' @importFrom igraph clusters  
 #' @export
 #' @examples
+#' #' library(phyloseq)
 #' data(batfecal)
 #' map_network(batfecal)
 #' map_network(batfecal, region="china", jitter=TRUE, lines=TRUE)
@@ -399,7 +399,7 @@ map_tree <- function(physeq,  region=NULL, color = NULL,size=4, alpha=0.8,
 ################################################################################
 #' Explore the spatial distribution of subsets of your sequence data 
 #'
-#' @usage map_clusters(physeq, clusters=3)
+#' @usage map_clusters(physeq, clusternum=3)
 #'   
 #' @param physeq (Required). 
 #'  The name of the phyloseq object. This must have sample data with Latitude and Longitude Columns.
@@ -412,6 +412,8 @@ map_tree <- function(physeq,  region=NULL, color = NULL,size=4, alpha=0.8,
 #' @export
 #' @examples
 #' data(epoxamicin_KS)
+#' library(ggplot2)
+#' library(gridExtra)
 #' map_clusters(epoxamicin_KS, clusternum=6)
 map_clusters <- function(physeq, clusternum=3){
   # check for the existence of a tree: lifted from phyloseq's plot_tree
