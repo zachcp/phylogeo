@@ -37,6 +37,7 @@ These datasets have geographic coordinates and are suitable for illustrating the
 ```{r}
 library(phylogeo)
 library(ggplot2)
+library(gridExtra)
 data(batfecal)
 data(batmicrobiome)
 data(epoxamicin_KS)
