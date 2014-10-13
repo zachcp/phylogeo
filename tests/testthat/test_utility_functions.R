@@ -40,4 +40,3 @@ test_that("phyloseq objects have latitude and longitude columns", {
   sample_data(bat_lon) <- dflon
   expect_error(.check_physeq(bat_lon))
 })
-
