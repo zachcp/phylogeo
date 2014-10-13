@@ -8,9 +8,7 @@
 #' nodes is below a potentially arbitrary threshold,
 #' and special care should be given to considering the choice of this threshold.
 #'
-#' @usage map_phyloseq(physeq, region=NULL, color=NULL, shape=NULL,
-#'   size=4, alpha=0.5 )
-#'
+#' @return a ggplot object
 #' @param physeq (Required). 
 #'  The name of the phyloseq object. This must have sample data with 
 #'  Latitude and Longitude Columns.
@@ -109,9 +107,8 @@ map_phyloseq <- function(physeq, size=4, region=NULL, color=NULL,
 #' In this case, edges in the network are created if the distance between
 #' nodes is below a potentially arbitrary threshold,
 #' and special care should be given to considering the choice of this threshold.
-#'
-#' @usage map_network(physeq, maxdist=0.9,title="Awesome Network Graph")
 #'   
+#' @return a ggplot object
 #' @param physeq (Required). 
 #'  The name of the phyloseq object. This must have sample data with Latitude and Longitude Columns.
 #'  
@@ -180,6 +177,7 @@ map_phyloseq <- function(physeq, size=4, region=NULL, color=NULL,
 #' @export
 #' @examples
 #' library(phyloseq)
+#' library(ggplot2)
 #' data(batfecal)
 #' map_network(batfecal)
 #' map_network(batfecal, region="china", jitter=TRUE, lines=TRUE)
@@ -312,21 +310,20 @@ map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard",
 ################################################################################
 #' Map a Phyloseq Object while also drawing a phlogenetic tree of the taxa
 #'
-#' @usage map_tree(physeq, region=NULL, color = NULL, size= NULL, point_size=4, 
-#'                 alpha=0.8,jitter= FALSE, jitter.x=3, jitter.y=3)
-#'   
+#' @return a ggplot object
+#' 
 #' @param physeq (Required). 
 #'  The name of the phyloseq object. This must have sample data with Latitude and Longitude Columns.
+#'  
+#'  @param region (Optional). Default \code{NULL}.
+#'  The name of geographic region that can be used to zoom.
+#'  The default worldmap cuts out Antartica. To get it back use region="world"
 #'  
 #' @param color (Optional). Default \code{NULL}.
 #'  The name of the sample variable in \code{physeq} to use for color mapping
 #'  of points (graph vertices).
 #'  
-#' @param size (Optional). Default \code{NULL}.
-#'  The name of the sample variable in \code{physeq} to use for size mapping.
-#'  of points (graph vertices).
-#'  
-#' @param point_size (Optional). Default \code{4}. 
+#' @param size (Optional). Default \code{4}. 
 #'  The size of the vertex points.
 #'  
 #' @param alpha (Optional). Default \code{0.8}. 
@@ -340,6 +337,8 @@ map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard",
 #'
 #' @param jitter.y (Optional). Default \code{3}. 
 #'  Value for Y jitter
+#'  
+#'  @param method (Optional). Degault \code{"sampledodge"}
 
 #'  @param width_ratio (Optional). Default \code{2}.
 #'  relative widths of tree and map
@@ -347,18 +346,34 @@ map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard",
 #'  @param map_on_left (Optional). Default \code{TRUE}.
 #'  determine whether the map is on the left
 #'  
-#' @seealso 
-#' \href{http://docs.ggplot2.org/current/}{ggplot2 for `map_data` command}.
+#' @param nodelabf (Optional) Default \code{nodeplotblank}
+#' @param treesize (Optional) Default \code{NULL}
+#' @param min.abundance (Optional) Default \code{Inf}
+#' @param label.tips (Optional) Default \code{NULL}
+#' @param text.size (Optional) Default \code{NULL}
+#' @param sizebase (Optional) Default \code{5}
+#' @param base.spacing (Optional) Default \code{0.02}
+#' @param ladderize (Optional) Default \code{TRUE}
+#' @param plot.margin (Optional) Default \code{0.2}
+#' @param title (Optional) Default \code{NULL}
+#' @param treetheme (Optional) Default \code{NULL}
+#' @param justify (Optional) Default \code{"jagged"}
+#' whether to place the map or the tree on the left.
+#' @seealso \code{\link[phyloseq]{plot_tree}}
+#' @seealso \code{\link[ggplot2]{map_data}}
 #'
 #' @import ggplot2
 #' @export
 #' @examples
+#' library(ggplot2)
+#' library(phyloseq)
+#' library(gridExtra)
 #' data(epoxamicin_KS)
 #' map_tree(epoxamicin_KS)
 #' map_tree(epoxamicin_KS, color="Geotype", jitter=TRUE)
 map_tree <- function(physeq,  region=NULL, color = NULL,size=4, alpha=0.8,
                     jitter= FALSE, jitter.x=3, jitter.y=3, method = "sampledodge", 
-                    nodelabf =nodeplotblank, treesize = NULL, min.abundance = Inf, 
+                    nodelabf = nodeplotblank, treesize = NULL, min.abundance = Inf, 
                     label.tips = NULL, text.size = NULL, sizebase = 5, 
                     base.spacing = 0.02, ladderize = TRUE,plot.margin = 0.2, 
                     title = NULL, treetheme = NULL, justify = "jagged",
@@ -398,8 +413,6 @@ map_tree <- function(physeq,  region=NULL, color = NULL,size=4, alpha=0.8,
 }
 ################################################################################
 #' Explore the spatial distribution of subsets of your sequence data 
-#'
-#' @usage map_clusters(physeq, clusternum=3)
 #'   
 #' @param physeq (Required). 
 #'  The name of the phyloseq object. This must have sample data with Latitude and Longitude Columns.

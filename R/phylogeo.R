@@ -5,7 +5,10 @@
 #' @author Zach Charlop-Powers \email{zcharlop@@rockefeller.edu}
 #' @docType package
 #' @import phyloseq
+#' @import ggplot2
+#' @import gridExtra
 #' @keywords package
+#' @description a package for mapping microbiome data
 
 #' Phyloseq Object for Bat Guano
 #'
@@ -14,7 +17,7 @@
 #' @docType data
 #' @keywords datasets
 #' @name batfecal
-#' @usage data()
+#' @description this is the Earth Microbiome Data study 1702 about bat guano from Chine
 #' @format this is the Earth Microbiome Data study 1702 about bat guano from Chine
 NULL
 
@@ -25,7 +28,6 @@ NULL
 #' @docType data
 #' @keywords datasets
 #' @name batmicrobiome
-#' @usage data()
 #' @format this is the Earth Microbiome Data study 1734 about bat guano from the US, Ecuador and Costa Rica
 NULL
 
@@ -37,6 +39,5 @@ NULL
 #' @docType data
 #' @keywords datasets
 #' @name epoxamicin_KS
-#' @usage data()
 #' @format Epoxamicin 95% OTUs from global eDNA
 NULL
