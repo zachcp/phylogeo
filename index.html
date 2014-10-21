@@ -39,11 +39,25 @@
 <h3>
 <a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h3>
 
-<p>phylogeo is dependent on phyloseq and a few other packages. Please see the <a href="http://joey711.github.com/phyloseq/install">phyloseq installation instructions</a> for help installing phyloseq.After that phylogeo should be easily installed via the devtools package :</p>
+<p>phylogeo is dependent on phyloseq and a few other packages. Please see the <a href="http://joey711.github.com/phyloseq/install">phyloseq installation instructions</a> for help installing phyloseq. We recommedn using the devtools-based installation. After that phylogeo should be easily installed via the devtools package :</p>
 
 <pre><code>library("devtools")
 install_github("phyloseq", "joey711")
 install_github("phylogeo","zachcp")
+</code></pre>
+
+<h3>
+<a name="installation" class="anchor" href="#docker"><span class="octicon octicon-link"></span></a>Docker-Based Installation</h3>
+
+<p> A docker image proving and rstudio interface with phylogeo and all of its dependencies prelaoded is available on the  <a href="https://registry.hub.docker.com/">Docker Hub</a> at <a href="https://registry.hub.docker.com/u/zachcp/phylogeo/">zachcp/phylogeo</a>. This image is installable using docker and is based on the <a href="https://registry.hub.docker.com/repos/rocker/">rocker</a> images :
+
+<pre><code># download and run the phylogeo image (takes awhile the first time)
+sudo docker run -d -p 8787:8787 zachcp/phylogeo
+# visit the ipaddress at the default port
+http://[ipaddress; probably: 192.168.59.103]:8787
+# login with username/password
+username: rstudio
+password: rstudio
 </code></pre>
 
 <h3>
