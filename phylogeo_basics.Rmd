@@ -13,8 +13,8 @@ Analysis of data generated using sequencing of microbial genes has provided a fe
 ## Datasets in Phylogeo
 phylogeo has three datasets. 
 
-  - `batfecal` is the biomdata and associated sample information from the microbio.me/qiime [experiment 1702](microbio.me/qiime/1702)
-  - `batmicrobiome` is the biomdata and associated sample information from yet another bat-related experiment, microbio.me/qiime [experiment 1734](microbio.me/qiime/1734)
+  - `batfecal` is the biom data and associated sample information from the microbio.me/qiime [experiment 1702](microbio.me/qiime/1702)
+  - `batmicrobiome` is the biom data and associated sample information from yet another bat-related experiment, microbio.me/qiime [experiment 1734](microbio.me/qiime/1734)
   - `epoxamicin_KS` is the data from the Brady Lab containing OTU and sequence data for ketosynthase domain amplicons from environmental DNA
   
 These datasets have geographic coordinates and are suitable for illustrating the features of the phylogeo package, and they can be loaded using the `data()` command.
@@ -35,19 +35,19 @@ phylogeo provides a series of functions that allow investigators to explore the 
   - `map_phyloseq()` can visualize your sample locations on a map
   - `map_network()` will connect samples based on a specified ecological distance
   - `map_tree()` will draw a paired plot of a phylogenetic tree and the location of those samples
-  - `map_clusters()` will cluster your sequecnes into *k* clusters and facet-map each cluster
-  - `plot_distance()` will plot the pairwise distacnes between samples using ecological and greatcircle distance
+  - `map_clusters()` will cluster your sequences into *k* clusters and facet-map each cluster
+  - `plot_distance()` will plot the pairwise distances between samples using ecological and great circle distance
 
-The use and utility of these functions are explained bewow, after a description of the datasets included in phylogeo.
+The use and utility of these functions are explained below, after a description of the datasets included in phylogeo.
 
 
 ### map_phyloseq
-*map_phyloseq* provides a way to quickly look at your data by mapping it. Because no calcultations are done to the underlying data, drawing a map using this command is quite quick. The mapping in this command (and all commands) is handled by the `map_data` function of ggplot. This style of mapping allows zooming in by `region` using a lookup tabel of country-names. Other ggplot goodies like colorign by a variable are all available as is a set of convenience funtions that allows you to jitter points that are overlapping at the scale you are interested in. Two examples showing how these feautures can be used to zoom into a region, sepearte samples and look at the distribution of a variable ("PH") in the phyloseq `sample_data` table.
+*map_phyloseq* provides a way to quickly look at your data by mapping it. Because no calculations are done to the underlying data, drawing a map using this command is quite quick. The mapping in this command (and all commands) is handled by the `map_data` function of ggplot. This style of mapping allows zooming in by `region` using a lookup table of country-names. Other ggplot goodies like coloring by a variable are all available as is a set of convenience functions that allows you to jitter points that are overlapping at the scale you are interested in. Two examples showing how these features can be used to zoom into a region, separate samples and look at the distribution of a variable ("PH") in the phyloseq `sample_data` table.
 ```{r}
 #high level world map
 map_phyloseq(batfecal)
 #zoomed in map, coloed by pH and jittered in order to see the points better
-#map_phyloseq(batfecal, region="china", jitter=T, jitter.x=2,jitter.y=2, color="PH")
+map_phyloseq(batfecal, region="china", jitter=T, jitter.x=2,jitter.y=2, color="PH")
 ```
 
 ### map_network
@@ -58,7 +58,7 @@ map_network(batmicrobiome)
 #play with the jitter and cutoff to get a better view
 map_network(batmicrobiome, color="SCIENTIFIC_NAME", jitter=T, jitter.x=20,jitter.y=1, lines=T, line_weight = 0.2)
 ```
-One current downside to the current mapping setup is that the `region` keyword only works on country names and cannot zoom to, say "the western hemisphere". In this example the result is a lot of dead space. For figures you woudl want to ggsave a PDF/SVG and zoom to your region of interest. Down the line a more nuanced mapping systme might be considered.
+One current downside to the current mapping setup is that the `region` keyword only works on country names and cannot zoom to, say "the western hemisphere". In this example the result is a lot of dead space. For figures you would want to ggsave a PDF/SVG and zoom to your region of interest. Down the line a more nuanced mapping system might be considered.
 
 ### map_tree
 The goal of *map_tree* is to provide access to both phylogenetic and geographic information in one place. To be useful, the data may need to be pared back to relatively small number of OTUs/samples. 
@@ -77,7 +77,7 @@ map_tree(epoxamicin_KS, color="Geotype", jitter=TRUE)
 ```
 
 ### map_clusters
-*map_clusters* provides a way to explore the spatial distribution of subsets of your data. From your phylogentic tree (required), a distance matrix is used to make a kmenas calculation which will cluster your tree into *k* number of clusters. The members of these clusters will then be displayed on the map.
+*map_clusters* provides a way to explore the spatial distribution of subsets of your data. From your phylogentic tree (required), a distance matrix is used to make a kmeans calculation which will cluster your tree into *k* number of clusters. The members of these clusters will then be displayed on the map.
 ```{r}
 #clustered trees plus maps
 map_clusters(epoxamicin_KS, clusternum=6)
