@@ -57,6 +57,8 @@ The goal of the *map_network* function is to visualize the relatedness of ecolog
 map_network(batmicrobiome)
 #play with the jitter and cutoff to get a better view
 map_network(batmicrobiome, color="SCIENTIFIC_NAME", jitter=T, jitter.x=20,jitter.y=1, lines=T, line_weight = 0.2)
+#map-network with a different dataset
+map_network(epoxamicin_KS, color="Region", jitter=T, lines=T, line_weight = 2)
 ```
 One current downside to the current mapping setup is that the `region` keyword only works on country names and cannot zoom to, say "the western hemisphere". In this example the result is a lot of dead space. For figures you would want to ggsave a PDF/SVG and zoom to your region of interest. Down the line a more nuanced mapping system might be considered.
 
