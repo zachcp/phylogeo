@@ -463,7 +463,7 @@ map_clusters <- function(physeq, clusternum=3){
   make_cluster_tree <- function(physeq, clusternum){
     otulist <- otus_in_a_cluster(clusternum)
     physeq2 <- add_cluster_to_taxtree(physeq, otulist)
-    p <-  plot_tree(physeq2, color="Cluster") +
+    p <-  plot_tree(physeq2, color="Cluster", ladderize=TRUE) +
       scale_color_manual(values = c("black","red")) +
       theme(legend.position="none") +
       scale_y_continuous(expand = c(0,0)) + 
