@@ -9,16 +9,16 @@ Maintainer: Zach Charlop-Powers <zcharlop@rockefeller.edu>
 License: AGPL-3
 Imports:
     phyloseq (>= 1.9.13),
-    ggplot2 (>= 1.0.0),
     maps (>= 2.3),
     mapproj (>= 1.2),
-    gridExtra (>= 0.9.1),
     igraph (>= 0.7.0),
     reshape2 (>= 1.2.2),
     sp (>= 1.0-15),
     ape
 Depends:
-    R (>= 3.1.1)
+    R (>= 3.0),
+    ggplot2 (>= 1.0.0),
+    gridExtra (>= 0.9.1)
 Suggests:
     testthat,
     dplyr,
