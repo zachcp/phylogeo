@@ -9,8 +9,8 @@ vignettes/cache/*
 vignettes/figure/*
 vignettes/*.html
 vignettes/*.md
-*.Rapp.history
 
+*.Rapp.history
 tests/.Rapp.history
 inst/tests/.Rapp.history
 
