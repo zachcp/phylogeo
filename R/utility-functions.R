@@ -62,7 +62,7 @@
            axis.line = element_blank(), 
            axis.title=element_blank())
   
-  worldmap
+  worldmap + coord_map("mollweide")
 }
 #' utility function to check the validity of arguments
 .check_names <- function(member, df, allownumeric=FALSE){
