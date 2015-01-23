@@ -48,8 +48,10 @@ projlist <- c("aitoff", "albers", "azequalarea", "azequidist",
 #' Create a basemap from the maps() worldmap focusing on a region
 #' projection defaults to mercator, but others can be selected 
 #' http://www.inside-r.org/packages/cran/mapproj/docs/mapproject
-.create_basemap <-function(region, df, latcol, loncol, proj=NULL, parameter=NULL, orientation=NULL){
-  #check that the projection is null or is in the projectionlist
+.create_basemap <-function(region, df, latcol, loncol, proj, parameter, orientation){
+  
+  # check that the projection is null or is in the projectionlist
+  # print out a warning about projections
   if(!is.null(proj)){
     if(!(proj %in% projlist)){
       stop("The projection is not valid. Please use null or one of the following: aitoff, albers, 
@@ -57,14 +59,15 @@ projlist <- c("aitoff", "albers", "azequalarea", "azequidist",
          elliptic, fisheye, gall, gilbert, guyou, harrison, hex, homing, lagrange, lambert, laue, lune,
          mercator, mollweide, newyorker, orthographic, perspective, polyconic, rectangular,
          simpleconic, sinusoidal, tetra, trapezoidal")
-    }
+    }else{print("You are using a non-default projection that may require additional parameters. 
+                See http://www.inside-r.org/packages/cran/mapproj/docs/mapproject for more information")}
   }
-
+  
   
   if(is.null(region)){
     #default worldmap cuts out Antarctica by filtering everythign below -59 Latitude
     world <- ggplot2::map_data("world")
-    world <- world[world$lat > -59,]
+    #world <- world[world$lat > -59,]
     #ToDO: allow subsetting of samples by region. Is there a point-in-polygon library?
     #this is a quick filter based on latitude and longitude not point-in-polygon
     maxlat  = max(world$lat)
@@ -90,12 +93,15 @@ projlist <- c("aitoff", "albers", "azequalarea", "azequidist",
            axis.ticks = element_blank(), 
            axis.line = element_blank(), 
            axis.title=element_blank())
-  if(is.null(proj)) {
-    worldmap
+  
+  if(is.null(proj)) { 
+      return(worldmap)
   } else if(is.numeric(parameter)) {
-    worldmap + coord_map( proj, parameter=parameter )
+      return(worldmap + coord_map( projection=proj, parameter=parameter ))
   } else if(is.numeric(orientation)) {
-    worldmap + coord_map( proj, parameter=parameter, orientation=orientation )
+      return(worldmap + coord_map( projection=proj, parameter=parameter, orientation=orientation))
+  } else {
+      return(worldmap + coord_map(projection=proj))
   }
 }
 #' utility function to check the validity of arguments
