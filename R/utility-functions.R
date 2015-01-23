@@ -4,14 +4,20 @@
 ################################################################################
 #' Check for Latitude and Longitude Columns in a Dataframe and return the column values
 
-.projlist <- c("aitoff", "albers", "azequalarea", "azequidist",
-"bicentric", "bonne", "conic", "cylequalarea", "cylindrical",
-"eisenlohr", "elliptic", "fisheye", "gall", "gilbert", "guyou",
-"harrison", "hex", "homing", "lagrange", "lambert", "laue", "lune",
-"mercator", "mollweide", "newyorker", "orthographic", "perspective",
-"polyconic", "rectangular", "simpleconic", "sinusoidal", "tetra",
-"trapezoidal")
 
+################################################################################
+#' Data: Projectionlist
+projlist <- c("aitoff", "albers", "azequalarea", "azequidist",
+              "bicentric", "bonne", "conic", "cylequalarea", "cylindrical",
+              "eisenlohr", "elliptic", "fisheye", "gall", "gilbert", "guyou",
+              "harrison", "hex", "homing", "lagrange", "lambert", "laue", "lune",
+              "mercator", "mollweide", "newyorker", "orthographic", "perspective",
+              "polyconic", "rectangular", "simpleconic", "sinusoidal", "tetra",
+              "trapezoidal")
+
+
+################################################################################
+#' Helper Functions
 .check_physeq <- function(physeq){
   #check phyloseq objects for Lat/Lon
   if (!"sam_data" %in% phyloseq::getslots.phyloseq(physeq)){
@@ -43,6 +49,18 @@
 #' projection defaults to mercator, but others can be selected 
 #' http://www.inside-r.org/packages/cran/mapproj/docs/mapproject
 .create_basemap <-function(region, df, latcol, loncol, proj=NULL, parameter=NULL, orientation=NULL){
+  #check that the projection is null or is in the projectionlist
+  if(!is.null(proj)){
+    if(!(proj %in% projlist)){
+      stop("The projection is not valid. Please use null or one of the following: aitoff, albers, 
+        azequalarea, azequidist, bicentric, bonne, conic, cylequalarea, cylindrical, eisenlohr, 
+         elliptic, fisheye, gall, gilbert, guyou, harrison, hex, homing, lagrange, lambert, laue, lune,
+         mercator, mollweide, newyorker, orthographic, perspective, polyconic, rectangular,
+         simpleconic, sinusoidal, tetra, trapezoidal")
+    }
+  }
+
+  
   if(is.null(region)){
     #default worldmap cuts out Antarctica by filtering everythign below -59 Latitude
     world <- ggplot2::map_data("world")
