@@ -52,7 +52,7 @@
 #' map_phyloseq(batmicrobiome, jitter=TRUE, color="SCIENTIFIC_NAME")
 map_phyloseq <- function(physeq, size=4, region=NULL, color=NULL, 
                          shape=NULL, alpha = 0.8, 
-                         jitter=FALSE, jitter.x=3, jitter.y=3
+                         jitter=FALSE, jitter.x=3, jitter.y=3,
                          proj=NULL, parameter=NULL, orientation=NUL){
   #check basic physeq and lat/lon
   latlon <- .check_physeq(physeq)
@@ -75,7 +75,7 @@ map_phyloseq <- function(physeq, size=4, region=NULL, color=NULL,
   
   #create map
   ##############################################################################
-  worldmap <- .create_basemap(region=region, df=data, latcol=latcol,loncol=loncol
+  worldmap <- .create_basemap(region=region, df=data, latcol=latcol,loncol=loncol,
                               proj=proj, parameter=parameter, orientation=orientation)
   
   if(jitter){
@@ -193,7 +193,7 @@ map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard",
                         color=NULL, region=NULL, size=4, alpha = 0.8, 
                         jitter=FALSE, jitter.x=3, jitter.y=3, shape=NULL, 
                         lines=FALSE, line_weight=1, line_color ="Black",
-                        line_alpha=0.4 , base_data=FALSE, base_data_color="grey"
+                        line_alpha=0.4 , base_data=FALSE, base_data_color="grey",
                         proj=NULL, parameter=NULL, orientation=NUL){
 
   #helper functions to calculate membership in clusters or lines
@@ -265,7 +265,7 @@ map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard",
   
   #create map
   ############################################
-  worldmap <- .create_basemap(region=region, df=mdf,latcol=latcol, loncol=loncol
+  worldmap <- .create_basemap(region=region, df=mdf,latcol=latcol, loncol=loncol,
                               proj=proj, parameter=parameter, orientation=orientation)
   
   #modify points if using jitter
