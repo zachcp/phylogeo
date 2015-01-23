@@ -3,6 +3,15 @@
 #
 ################################################################################
 #' Check for Latitude and Longitude Columns in a Dataframe and return the column values
+
+.projlist <- c("aitoff", "albers", "azequalarea", "azequidist",
+"bicentric", "bonne", "conic", "cylequalarea", "cylindrical",
+"eisenlohr", "elliptic", "fisheye", "gall", "gilbert", "guyou",
+"harrison", "hex", "homing", "lagrange", "lambert", "laue", "lune",
+"mercator", "mollweide", "newyorker", "orthographic", "perspective",
+"polyconic", "rectangular", "simpleconic", "sinusoidal", "tetra",
+"trapezoidal")
+
 .check_physeq <- function(physeq){
   #check phyloseq objects for Lat/Lon
   if (!"sam_data" %in% phyloseq::getslots.phyloseq(physeq)){
@@ -31,7 +40,9 @@
   list(latcol, loncol)
 }
 #' Create a basemap from the maps() worldmap focusing on a region
-.create_basemap <-function(region, df, latcol, loncol){
+#' projection defaults to mercator, but others can be selected 
+#' http://www.inside-r.org/packages/cran/mapproj/docs/mapproject
+.create_basemap <-function(region, df, latcol, loncol, proj=NULL, parameter=NULL, orientation=NULL){
   if(is.null(region)){
     #default worldmap cuts out Antarctica by filtering everythign below -59 Latitude
     world <- ggplot2::map_data("world")
@@ -61,8 +72,13 @@
            axis.ticks = element_blank(), 
            axis.line = element_blank(), 
            axis.title=element_blank())
-  
-  worldmap + coord_map("mollweide")
+  if(is.null(proj)) {
+    worldmap
+  } else if(is.numeric(parameter)) {
+    worldmap + coord_map( proj, parameter=parameter )
+  } else if(is.numeric(orientation)) {
+    worldmap + coord_map( proj, parameter=parameter, orientation=orientation )
+  }
 }
 #' utility function to check the validity of arguments
 .check_names <- function(member, df, allownumeric=FALSE){
