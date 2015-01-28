@@ -57,6 +57,7 @@
 #' @examples 
 #' data(batfecal)
 #' map_phyloseq(batfecal, region="china", jitter=TRUE, jitter.x=2,jitter.y=2, color="PH")
+#' map_phyloseq(batfecal, proj="mollweide")
 #' data(batmicrobiome)
 #' map_phyloseq(batmicrobiome, jitter=TRUE, color="SCIENTIFIC_NAME")
 map_phyloseq <- function(physeq, size=4, region=NULL, color=NULL, 
@@ -220,6 +221,7 @@ map_phyloseq <- function(physeq, size=4, region=NULL, color=NULL,
 #' map_network(batmicrobiome, igraph= ig, lines=TRUE)
 #' map_network(batmicrobiome, igraph= ig, lines=TRUE, color="SCIENTIFIC_NAME")
 #' map_network(batmicrobiome, igraph= ig, lines=TRUE, color="SCIENTIFIC_NAME", jitter=TRUE)
+#' map_network(batmicrobiome, proj="albers", igraph= ig, lines=TRUE, color="SCIENTIFIC_NAME", jitter=TRUE)
 map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard", 
                         color=NULL, region=NULL, size=4, alpha = 0.8, 
                         jitter=FALSE, jitter.x=3, jitter.y=3, shape=NULL, 
@@ -429,6 +431,7 @@ map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard",
 #' data(epoxamicin_KS)
 #' map_tree(epoxamicin_KS)
 #' map_tree(epoxamicin_KS, color="Geotype", jitter=TRUE)
+#' map_tree(epoxamicin_KS, proj="gilbert", color="Geotype", jitter=TRUE)
 map_tree <- function(physeq,  region=NULL, color = NULL,size=4, alpha=0.8,
                     jitter= FALSE, jitter.x=3, jitter.y=3, 
                     method = "sampledodge", nodelabf = nodeplotblank, 
@@ -503,6 +506,7 @@ map_tree <- function(physeq,  region=NULL, color = NULL,size=4, alpha=0.8,
 #' library(ggplot2)
 #' library(gridExtra)
 #' map_clusters(epoxamicin_KS, clusternum=6)
+#' map_clusters(epoxamicin_KS, clusternum=10)
 map_clusters <- function(physeq, clusternum=3){
   # check for the existence of a tree: lifted from phyloseq's plot_tree
   if(!"phy_tree" %in% phyloseq::getslots.phyloseq(physeq)){
