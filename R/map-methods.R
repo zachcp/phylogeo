@@ -52,11 +52,9 @@
 #' @param orientation (Optional). Default \code{NULL}. 
 #'  Additional arguments for the map projection.
 #'
-#'  
 #' @import ggplot2  
 #' @export
 #' @examples 
-#' 
 #' data(batfecal)
 #' map_phyloseq(batfecal, region="china", jitter=TRUE, jitter.x=2,jitter.y=2, color="PH")
 #' data(batmicrobiome)
