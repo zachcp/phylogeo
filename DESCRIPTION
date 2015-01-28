@@ -26,3 +26,4 @@ Suggests:
 VignetteBuilder: knitr
 BugReports: https://github.com/zachcp/phylogeo/issues
 biocViews: Sequencing, Microbiome, Metagenomics, Biogeography
+LazyData: true
