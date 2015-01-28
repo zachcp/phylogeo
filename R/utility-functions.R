@@ -1,8 +1,9 @@
 #
 # A set of functions used by map and plot functions to test for validity of data
 #
-################################################################################
-#' Check for Latitude and Longitude Columns in a Dataframe and return the column values
+###############################################################################
+#' Check for Latitude and Longitude Columns in a Dataframe 
+#' and return the column values
 
 
 ################################################################################
@@ -10,10 +11,10 @@
 projlist <- c("aitoff", "albers", "azequalarea", "azequidist",
               "bicentric", "bonne", "conic", "cylequalarea", "cylindrical",
               "eisenlohr", "elliptic", "fisheye", "gall", "gilbert", "guyou",
-              "harrison", "hex", "homing", "lagrange", "lambert", "laue", "lune",
-              "mercator", "mollweide", "newyorker", "orthographic", "perspective",
-              "polyconic", "rectangular", "simpleconic", "sinusoidal", "tetra",
-              "trapezoidal")
+              "harrison", "hex", "homing", "lagrange", "lambert", "laue", 
+              "lune","mercator", "mollweide", "newyorker", "orthographic", 
+              "perspective","polyconic", "rectangular", "simpleconic", 
+              "sinusoidal", "tetra","trapezoidal")
 
 
 ################################################################################
@@ -54,11 +55,12 @@ projlist <- c("aitoff", "albers", "azequalarea", "azequidist",
   # print out a warning about projections
   if(!is.null(proj)){
     if(!(proj %in% projlist)){
-      stop("The projection is not valid. Please use null or one of the following: aitoff, albers, 
-        azequalarea, azequidist, bicentric, bonne, conic, cylequalarea, cylindrical, eisenlohr, 
-         elliptic, fisheye, gall, gilbert, guyou, harrison, hex, homing, lagrange, lambert, laue, lune,
-         mercator, mollweide, newyorker, orthographic, perspective, polyconic, rectangular,
-         simpleconic, sinusoidal, tetra, trapezoidal")
+      stop("The projection is not valid. Please use null or one of the following:
+           aitoff, albers, azequalarea, azequidist, bicentric, bonne, conic, 
+           cylequalarea, cylindrical, eisenlohr, elliptic, fisheye, gall, 
+           gilbert, guyou, harrison, hex, homing, lagrange, lambert, laue, 
+           lune, mercator, mollweide, newyorker, orthographic, perspective, 
+           polyconic, rectangular,simpleconic, sinusoidal, tetra, trapezoidal")
     }else{print("You are using a non-default projection that may require additional parameters. 
                 See http://www.inside-r.org/packages/cran/mapproj/docs/mapproject for more information")}
   }
@@ -149,7 +151,8 @@ projlist <- c("aitoff", "albers", "azequalarea", "azequidist",
 }
 #' Utility Function for Converting Distance Matrices to 
 #' three column distances while removing all of the duplicates
-#' lifted/modified from here: https://github.com/joey711/phyloseq/blob/master/R/plot-methods.R
+#' lifted/modified from here: 
+#' https://github.com/joey711/phyloseq/blob/master/R/plot-methods.R
 .dist_to_edge_table = function(Dist, dname = "dist"){
   dmat <- as.matrix(Dist)
   # Set duplicate entries and self-links to Inf

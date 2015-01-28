@@ -1,7 +1,7 @@
 #
 # methods for plotting geographic-distance plots
 #
-###########################################################################################
+###############################################################################
 #' Calculate and Plot Sample Distances by Geography/Ecological Distance
 #'
 #' Scatterplot generation of samples using geogrpahic and eoclogical distances
@@ -9,10 +9,12 @@
 #' @usage plot_distance(physeq, distancemethod="jaccard")
 #'
 #' @param physeq (Required). 
-#'  The name of the phyloseq object. This must have sample data with Latitude and Longitude Columns.
+#'  The name of the phyloseq object. This must have sample data with 
+#'  Latitude and Longitude Columns.
 #'  
 #' @param distancemethod (Optional). Default \code{"jaccard"}.
-#'  The name of an ecological distance method. See ?distance for more information
+#'  The name of an ecological distance method. 
+#'  See ?distance for more information
 #'  
 #' @import phyloseq
 #' @importFrom reshape2 melt
@@ -59,7 +61,8 @@ plot_distance <- function(physeq, distancemethod="jaccard"){
          geom_point() +
          xlab("Km") + 
          ylab(distancemethod) +
-         ggtitle(paste("Pairwise Sample Distance:", "Km vs.", distancemethod,"Distance.", sep=" "))
+         ggtitle( paste("Pairwise Sample Distance:", 
+                        "Km vs.", distancemethod,"Distance.", sep=" "))
     
     return(p)
 }
