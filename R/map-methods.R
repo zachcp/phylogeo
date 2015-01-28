@@ -40,6 +40,17 @@
 #'
 #' @param jitter.y (Optional). Default \code{3}. 
 #'  Value for Y jitter
+#'  
+#' @param proj (Optional). Default \code{NULL}. 
+#'  Projection. Default of NULL will result in meractor projection. Non-default
+#'  projection can be specified here but may require additional arguments specified 
+#'  by the `parameter` and `orientation` arguments
+#'
+#' @param parameter (Optional). Default \code{NULL}. 
+#'  Additional arguments for the map projection.
+#'
+#' @param orientation (Optional). Default \code{NULL}. 
+#'  Additional arguments for the map projection.
 #'
 #'  
 #' @import ggplot2  
@@ -163,8 +174,20 @@ map_phyloseq <- function(physeq, size=4, region=NULL, color=NULL,
 #' @param base_data (Optional). Default \code{FALSE}.
 #'  Boolean to determine whether to include dat points that aren't in a network.
 #' 
-#'  @param base_data_color (Optional). Default \code{grey}.
-#'  named color to determine base data coloe
+#' @param base_data_color (Optional). Default \code{grey}.
+#'  named color to determine base data color
+#'  
+#' @param proj (Optional). Default \code{NULL}. 
+#'  Projection. Default of NULL will result in meractor projection. Non-default
+#'  projection can be specified here but may require additional arguments specified 
+#'  by the `parameter` and `orientation` arguments
+#'
+#' @param parameter (Optional). Default \code{NULL}. 
+#'  Additional arguments for the map projection.
+#'
+#' @param orientation (Optional). Default \code{NULL}. 
+#'  Additional arguments for the map projection.
+#'  
 #'
 #' @seealso
 #' \href{https://joey711.github.io/phyloseq/distance}{phyloseq's distance command}.
@@ -193,7 +216,7 @@ map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard",
                         jitter=FALSE, jitter.x=3, jitter.y=3, shape=NULL, 
                         lines=FALSE, line_weight=1, line_color ="Black",
                         line_alpha=0.4 , base_data=FALSE, base_data_color="grey",
-                        proj=NULL, parameter=NULL, orientation=NUL){
+                        proj=NULL, parameter=NULL, orientation=NULL){
 
   #helper functions to calculate membership in clusters or lines
   ##############################################################################
@@ -360,6 +383,16 @@ map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard",
 #' @param treetheme (Optional) Default \code{NULL}
 #' @param justify (Optional) Default \code{"jagged"}
 #' whether to place the map or the tree on the left.
+#' @param proj (Optional). Default \code{NULL}. 
+#'  Projection. Default of NULL will result in meractor projection. Non-default
+#'  projection can be specified here but may require additional arguments specified 
+#'  by the `parameter` and `orientation` arguments
+#'
+#' @param parameter (Optional). Default \code{NULL}. 
+#'  Additional arguments for the map projection.
+#'
+#' @param orientation (Optional). Default \code{NULL}. 
+#'  Additional arguments for the map projection.
 #' @seealso \code{\link[phyloseq]{plot_tree}}
 #' @seealso \code{\link[ggplot2]{map_data}}
 #'
@@ -378,7 +411,7 @@ map_tree <- function(physeq,  region=NULL, color = NULL,size=4, alpha=0.8,
                     label.tips = NULL, text.size = NULL, sizebase = 5, 
                     base.spacing = 0.02, ladderize = TRUE,plot.margin = 0.2, 
                     title = NULL, treetheme = NULL, justify = "jagged",
-                    width_ratio = 2, map_on_left = FALSE, proj=NULL, parameter=NULL, orientation=NUL) {
+                    width_ratio = 2, map_on_left = FALSE, proj=NULL, parameter=NULL, orientation=NULL) {
     #check for the existence of a tree: lifted from phyloseq's plot_tree
     if(!"phy_tree" %in% phyloseq:::getslots.phyloseq(physeq)){
       stop("tree missing or invalid. map-tree requires a phylogenetic tree")

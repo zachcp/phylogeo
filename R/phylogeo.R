@@ -40,4 +40,5 @@ NULL
 #' @keywords datasets
 #' @name epoxamicin_KS
 #' @format Epoxamicin 95% OTUs from global eDNA
+#' @description KS amplicon data mapping to Epoxamicin
 NULL
