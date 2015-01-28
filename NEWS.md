@@ -1,3 +1,6 @@
+#0.99.0
+bump version for submission to bioconductor. cleaned up docs, Rmd files, etc.
+
 # 0.0.16
 add projections to the mapping funtions by explosing map_proj() code.
 Idea an initial coding courtest of @ryneches.
