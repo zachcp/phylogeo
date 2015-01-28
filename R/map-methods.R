@@ -391,6 +391,7 @@ map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard",
 #'
 #' @param orientation (Optional). Default \code{NULL}. 
 #'  Additional arguments for the map projection.
+#'  
 #' @seealso \code{\link[phyloseq]{plot_tree}}
 #' @seealso \code{\link[ggplot2]{map_data}}
 #'
