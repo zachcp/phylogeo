@@ -9,6 +9,7 @@
 #' @import gridExtra
 #' @keywords package
 #' @description a package for mapping microbiome data
+NULL
 
 #' Phyloseq Object for Bat Guano
 #'
@@ -28,6 +29,7 @@ NULL
 #' @docType data
 #' @keywords datasets
 #' @name batmicrobiome
+#' @description this is the Earth Microbiome Data study 1734 about bat guano from the US, Ecuador and Costa Rica
 #' @format this is the Earth Microbiome Data study 1734 about bat guano from the US, Ecuador and Costa Rica
 NULL
 
