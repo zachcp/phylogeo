@@ -51,7 +51,7 @@ data(epoxamicin_KS)
 #high level world map
 map_phyloseq(batfecal)
 #zoomed in map, coloed by pH and jittered in order to see the points better
-map_phyloseq(batfecal, region="china", jitter=T, jitter.x=2,jitter.y=2, color="PH")
+map_phyloseq(batfecal, region="china", jitter=TRUE, jitter.x=2,jitter.y=2, color="PH")
 ```
 
 ### map_network
