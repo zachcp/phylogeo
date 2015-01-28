@@ -8,7 +8,7 @@
 
 ################################################################################
 #' Data: Projectionlist
-projlist <- c("aitoff", "albers", "azequalarea", "azequidist",
+.projlist <- c("aitoff", "albers", "azequalarea", "azequidist",
               "bicentric", "bonne", "conic", "cylequalarea", "cylindrical",
               "eisenlohr", "elliptic", "fisheye", "gall", "gilbert", "guyou",
               "harrison", "hex", "homing", "lagrange", "lambert", "laue", 
@@ -54,7 +54,7 @@ projlist <- c("aitoff", "albers", "azequalarea", "azequidist",
   # check that the projection is null or is in the projectionlist
   # print out a warning about projections
   if(!is.null(proj)){
-    if(!(proj %in% projlist)){
+    if(!(proj %in% .projlist)){
       stop("The projection is not valid. Please use null or one of the following:
            aitoff, albers, azequalarea, azequidist, bicentric, bonne, conic, 
            cylequalarea, cylindrical, eisenlohr, elliptic, fisheye, gall, 
