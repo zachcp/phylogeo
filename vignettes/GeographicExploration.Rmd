@@ -34,7 +34,7 @@ available to you:
   - `map_network()` will connect samples based on a specified ecological distance
   - `map_tree()` will draw a paired plot of a phylogenetic tree and the location of those samples
   - `map_clusters()` will draw a paired plot of a phylogenetic tree and the location of those samples
-  - `plot_greatcircle_distance()` will plot the pairwise distances between samples using ecological and greatcircle distance
+  - `plot_distance()` will plot the pairwise distances between samples using ecological and greatcircle distance
 
 The use and utility of these functions are explained below, after a 
 description of the datasets included in phylogeo.
