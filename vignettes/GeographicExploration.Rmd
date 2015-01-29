@@ -1,6 +1,6 @@
 <!--
 %\VignetteEngine{knitr::knitr}
-%\VignetteIndexEntry{geographic exploration vignette}
+%\VignetteIndexEntry{geographic exploration of phyloseq objects vignette}
 -->
 `r library("knitr")`
 `r opts_chunk$set(cache=FALSE, fig.width=9, message=FALSE, warning=FALSE)`
@@ -10,7 +10,9 @@
 title: "vignette for phylogeo: geographic exploration of biom data"
 author: "zachcp"
 date: "September 24, 2014"
-output: html_document
+output:
+  html_document:
+    toc: yes
 ---
 
 ## About this vignette
@@ -31,6 +33,7 @@ available to you:
   - `map_phyloseq()` can visualize your sample locations on a map
   - `map_network()` will connect samples based on a specified ecological distance
   - `map_tree()` will draw a paired plot of a phylogenetic tree and the location of those samples
+  - `map_clusters()` will draw a paired plot of a phylogenetic tree and the location of those samples
   - `plot_greatcircle_distance()` will plot the pairwise distances between samples using ecological and greatcircle distance
 
 The use and utility of these functions are explained below, after a 
@@ -49,8 +52,6 @@ the `data()` command.
   
 ```{r}
 library(phylogeo)
-library(ggplot2)
-library(gridExtra)
 data(batfecal)
 data(batmicrobiome)
 data(epoxamicin_KS)
@@ -104,10 +105,7 @@ to `ggsave` a PDF/SVG and zoom to your region of interest. Down the line a more
 nuanced mapping system might be considered.
 
 ### map_tree
-The goal of *map_tree* is to provide access to both phylogenetic and geographic
-information in one place. To be useful, the data may need to be pared back to 
-relatively small number of OTUs/samples. 
-
+The goal of *map_tree* is to provide access to both phylogenetic and geographic information in one place. To be useful, the data may need to be pared back to relatively small number of OTUs/samples. 
 ```{r}
 #simple map + tree
 map_tree(epoxamicin_KS)
@@ -115,10 +113,26 @@ map_tree(epoxamicin_KS)
 map_tree(epoxamicin_KS, color="Geotype", jitter=TRUE)
 ```
 
-### plot_distance
-This function creates a scatterplot of distances comparing the geographic 
-great-circle distance to the the ecological distance (default:jaccard).
+```{r}
+#trim samples and locations
+#x <- prune_samples()
+#y <- subset_taxa()
+# map_tree(y, color="Geotype", jitter=TRUE)
+```
 
+### map_clusters
+*map_clusters* provides a way to explore the spatial distribution of subsets of your data. From your phylogentic tree (required), a distance matrix is used to make a kmeans calculation which will cluster your tree into *k* number of clusters. The members of these clusters will then be displayed on the map.
+```{r}
+#clustered trees plus maps
+map_clusters(epoxamicin_KS, clusternum=6)
+```
+
+## phyloseq plotting functions
+
+### plot_distance
+This function creates a scatterplot of distances comparing the geographic great-circle distance to the the ecological distance (default:jaccard).
 ```{r}
 plot_distance(batfecal)
 ```
+
+
