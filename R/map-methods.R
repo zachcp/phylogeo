@@ -221,7 +221,7 @@ map_phyloseq <- function(physeq, size=4, region=NULL, color=NULL,
 #' map_network(batmicrobiome, igraph= ig, lines=TRUE)
 #' map_network(batmicrobiome, igraph= ig, lines=TRUE, color="SCIENTIFIC_NAME")
 #' map_network(batmicrobiome, igraph= ig, lines=TRUE, color="SCIENTIFIC_NAME", jitter=TRUE)
-#' map_network(batmicrobiome, proj="albers", igraph= ig, lines=TRUE, color="SCIENTIFIC_NAME", jitter=TRUE)
+#' map_network(batmicrobiome, proj="mollweide", igraph= ig, lines=TRUE, color="SCIENTIFIC_NAME", jitter=TRUE)
 map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard", 
                         color=NULL, region=NULL, size=4, alpha = 0.8, 
                         jitter=FALSE, jitter.x=3, jitter.y=3, shape=NULL, 

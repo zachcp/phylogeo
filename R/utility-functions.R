@@ -16,7 +16,6 @@
               "perspective","polyconic", "rectangular", "simpleconic", 
               "sinusoidal", "tetra","trapezoidal")
 
-
 ################################################################################
 #' Helper Functions
 .check_physeq <- function(physeq){
