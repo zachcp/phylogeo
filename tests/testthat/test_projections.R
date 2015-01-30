@@ -21,6 +21,12 @@ test_that("basic projections (that don't need extra values) work", {
   expect_is(map_phyloseq(batfecal, proj="tetra") , "ggplot")
 })
 
+test_that("Albers Projection works", {
+  data(batfecal)
+  p1 <- map_phyloseq(batfecal, proj="albers", paramaters = c(10,50))
+  expect_is(p1, "ggplot")
+})
+
 #other projections
 
 #expect_is(map_phyloseq(batfecal, proj="albers") , "ggplot")
