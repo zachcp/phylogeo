@@ -41,7 +41,7 @@
 #' @param jitter.y (Optional). Default \code{3}. 
 #'  Value for Y jitter
 #'  
-#' @param proj (Optional). Default \code{NULL}. 
+#' @param projection (Optional). Default \code{NULL}. 
 #'  Projection. Default of NULL will result in meractor projection. Non-default
 #'  projection can be specified here but may require additional arguments 
 #'  specified by the `parameter` and `orientation` arguments
@@ -57,13 +57,13 @@
 #' @examples 
 #' data(batfecal)
 #' map_phyloseq(batfecal, region="china", jitter=TRUE, jitter.x=2,jitter.y=2, color="PH")
-#' map_phyloseq(batfecal, proj="mollweide")
+#' map_phyloseq(batfecal, projection="mollweide")
 #' data(batmicrobiome)
 #' map_phyloseq(batmicrobiome, jitter=TRUE, color="SCIENTIFIC_NAME")
 map_phyloseq <- function(physeq, size=4, region=NULL, color=NULL, 
                          shape=NULL, alpha = 0.8, 
                          jitter=FALSE, jitter.x=3, jitter.y=3,
-                         proj=NULL, parameter=NULL, orientation=NULL){
+                         projection=NULL, parameter=NULL, orientation=NULL){
   #check basic physeq and lat/lon
   latlon <- .check_physeq(physeq)
   latcol <- as.character( latlon[1] )
@@ -86,7 +86,7 @@ map_phyloseq <- function(physeq, size=4, region=NULL, color=NULL,
   #############################################################################
   worldmap <- .create_basemap(region=region, df=data, 
                               latcol=latcol,loncol=loncol,
-                              proj=proj, parameter=parameter, 
+                              proj=projection, parameter=parameter, 
                               orientation=orientation)
   
   if(jitter){
@@ -187,7 +187,7 @@ map_phyloseq <- function(physeq, size=4, region=NULL, color=NULL,
 #' @param base_data_color (Optional). Default \code{grey}.
 #'  named color to determine base data color
 #'  
-#' @param proj (Optional). Default \code{NULL}. 
+#' @param projection (Optional). Default \code{NULL}. 
 #'  Projection. Default of NULL will result in meractor projection. Non-default
 #'  projection can be specified here but may require additional arguments 
 #'  specified by the `parameter` and `orientation` arguments
@@ -221,13 +221,13 @@ map_phyloseq <- function(physeq, size=4, region=NULL, color=NULL,
 #' map_network(batmicrobiome, igraph= ig, lines=TRUE)
 #' map_network(batmicrobiome, igraph= ig, lines=TRUE, color="SCIENTIFIC_NAME")
 #' map_network(batmicrobiome, igraph= ig, lines=TRUE, color="SCIENTIFIC_NAME", jitter=TRUE)
-#' map_network(batmicrobiome, proj="mollweide", igraph= ig, lines=TRUE, color="SCIENTIFIC_NAME", jitter=TRUE)
+#' map_network(batmicrobiome, projection="mollweide", igraph= ig, lines=TRUE, color="SCIENTIFIC_NAME", jitter=TRUE)
 map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard", 
                         color=NULL, region=NULL, size=4, alpha = 0.8, 
                         jitter=FALSE, jitter.x=3, jitter.y=3, shape=NULL, 
                         lines=FALSE, line_weight=1, line_color ="Black",
                         line_alpha=0.4 , base_data=FALSE, 
-                        base_data_color="grey",proj=NULL, parameter=NULL, 
+                        base_data_color="grey",projection=NULL, parameter=NULL, 
                         orientation=NULL){
 
   #helper functions to calculate membership in clusters or lines
@@ -302,7 +302,7 @@ map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard",
   #create map
   ############################################
   worldmap <- .create_basemap(region=region, df=mdf,latcol=latcol, 
-                              loncol=loncol, proj=proj, parameter=parameter,
+                              loncol=loncol, proj=projection, parameter=parameter,
                               orientation=orientation)
   
   #modify points if using jitter
@@ -408,7 +408,7 @@ map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard",
 #' @param treetheme (Optional) Default \code{NULL}
 #' @param justify (Optional) Default \code{"jagged"}
 #' whether to place the map or the tree on the left.
-#' @param proj (Optional). Default \code{NULL}. 
+#' @param projection (Optional). Default \code{NULL}. 
 #'  Projection. Default of NULL will result in meractor projection. Non-default
 #'  projection can be specified here but may require additional arguments
 #'  specified by the `parameter` and `orientation` arguments
@@ -431,7 +431,7 @@ map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard",
 #' data(epoxamicin_KS)
 #' map_tree(epoxamicin_KS)
 #' map_tree(epoxamicin_KS, color="Geotype", jitter=TRUE)
-#' map_tree(epoxamicin_KS, proj="gilbert", color="Geotype", jitter=TRUE)
+#' map_tree(epoxamicin_KS, projection="gilbert", color="Geotype", jitter=TRUE)
 map_tree <- function(physeq,  region=NULL, color = NULL,size=4, alpha=0.8,
                     jitter= FALSE, jitter.x=3, jitter.y=3, 
                     method = "sampledodge", nodelabf = nodeplotblank, 
@@ -439,7 +439,7 @@ map_tree <- function(physeq,  region=NULL, color = NULL,size=4, alpha=0.8,
                     text.size = NULL, sizebase = 5, base.spacing = 0.02, 
                     ladderize = TRUE,plot.margin = 0.2, title = NULL, 
                     treetheme = NULL, justify = "jagged",width_ratio = 2, 
-                    map_on_left = FALSE, proj=NULL, parameter=NULL, 
+                    map_on_left = FALSE, projection=NULL, parameter=NULL, 
                     orientation=NULL) {
     #check for the existence of a tree: lifted from phyloseq's plot_tree
     if(!"phy_tree" %in% phyloseq:::getslots.phyloseq(physeq)){
@@ -450,7 +450,7 @@ map_tree <- function(physeq,  region=NULL, color = NULL,size=4, alpha=0.8,
     
     mapplot  <- map_phyloseq(physeq2, region=region, color= color, size=size, 
                              alpha = alpha, jitter=jitter, jitter.x=jitter.x, 
-                             jitter.y=jitter.y,proj=proj, parameter=parameter, 
+                             jitter.y=jitter.y,proj=projection, parameter=parameter, 
                              orientation=orientation)  + 
                     theme(legend.position="none") 
     
