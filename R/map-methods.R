@@ -46,11 +46,20 @@
 #'  projection can be specified here but may require additional arguments 
 #'  specified by the `parameter` and `orientation` arguments
 #'
-#' @param parameter (Optional). Default \code{NULL}. 
-#'  Additional arguments for the map projection.
-#'
 #' @param orientation (Optional). Default \code{NULL}. 
 #'  Additional arguments for the map projection.
+#'  
+#' @param lat0 (Optional). Default \code{NULL}. 
+#'  Additional arguments for nonstandard map projection.
+#'  
+#' @param lat1 (Optional). Default \code{NULL}. 
+#'  Additional arguments for nonstandard map projection.
+#'  
+#' @param n (Optional). Default \code{NULL}. 
+#'  Additional arguments for nonstandard map projection.
+#'  
+#' @param r (Optional). Default \code{NULL}. 
+#'  Additional arguments for nonstandard map projection.
 #'
 #' @import ggplot2  
 #' @export
@@ -63,7 +72,8 @@
 map_phyloseq <- function(physeq, size=4, region=NULL, color=NULL, 
                          shape=NULL, alpha = 0.8, 
                          jitter=FALSE, jitter.x=3, jitter.y=3,
-                         projection=NULL, parameter=NULL, orientation=NULL){
+                         projection=NULL,orientation=NULL,
+                         lat0=NULL, lat1=NULL, lon0=NULL,n=NULL, r=NULL){
   #check basic physeq and lat/lon
   latlon <- .check_physeq(physeq)
   latcol <- as.character( latlon[1] )
@@ -192,11 +202,20 @@ map_phyloseq <- function(physeq, size=4, region=NULL, color=NULL,
 #'  projection can be specified here but may require additional arguments 
 #'  specified by the `parameter` and `orientation` arguments
 #'
-#' @param parameter (Optional). Default \code{NULL}. 
-#'  Additional arguments for the map projection.
-#'
 #' @param orientation (Optional). Default \code{NULL}. 
 #'  Additional arguments for the map projection.
+#'  
+#' @param lat0 (Optional). Default \code{NULL}. 
+#'  Additional arguments for nonstandard map projection.
+#'  
+#' @param lat1 (Optional). Default \code{NULL}. 
+#'  Additional arguments for nonstandard map projection.
+#'  
+#' @param n (Optional). Default \code{NULL}. 
+#'  Additional arguments for nonstandard map projection.
+#'  
+#' @param r (Optional). Default \code{NULL}. 
+#'  Additional arguments for nonstandard map projection.
 #'  
 #'
 #' @seealso
@@ -227,8 +246,9 @@ map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard",
                         jitter=FALSE, jitter.x=3, jitter.y=3, shape=NULL, 
                         lines=FALSE, line_weight=1, line_color ="Black",
                         line_alpha=0.4 , base_data=FALSE, 
-                        base_data_color="grey",projection=NULL, parameter=NULL, 
-                        orientation=NULL){
+                        base_data_color="grey",projection=NULL, 
+                        orientation=NULL,
+                        lat0=NULL, lat1=NULL, lon0=NULL,n=NULL, r=NULL){
 
   #helper functions to calculate membership in clusters or lines
   ##############################################################################
@@ -413,11 +433,20 @@ map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard",
 #'  projection can be specified here but may require additional arguments
 #'  specified by the `parameter` and `orientation` arguments
 #'
-#' @param parameter (Optional). Default \code{NULL}. 
-#'  Additional arguments for the map projection.
-#'
 #' @param orientation (Optional). Default \code{NULL}. 
 #'  Additional arguments for the map projection.
+#'  
+#' @param lat0 (Optional). Default \code{NULL}. 
+#'  Additional arguments for nonstandard map projection.
+#'  
+#' @param lat1 (Optional). Default \code{NULL}. 
+#'  Additional arguments for nonstandard map projection.
+#'  
+#' @param n (Optional). Default \code{NULL}. 
+#'  Additional arguments for nonstandard map projection.
+#'  
+#' @param r (Optional). Default \code{NULL}. 
+#'  Additional arguments for nonstandard map projection.
 #'  
 #' @seealso \code{\link[phyloseq]{plot_tree}}
 #' @seealso \code{\link[ggplot2]{map_data}}
@@ -439,8 +468,8 @@ map_tree <- function(physeq,  region=NULL, color = NULL,size=4, alpha=0.8,
                     text.size = NULL, sizebase = 5, base.spacing = 0.02, 
                     ladderize = TRUE,plot.margin = 0.2, title = NULL, 
                     treetheme = NULL, justify = "jagged",width_ratio = 2, 
-                    map_on_left = FALSE, projection=NULL, parameter=NULL, 
-                    orientation=NULL) {
+                    map_on_left = FALSE, projection=NULL, orientation=NULL,
+                    lat0=NULL, lat1=NULL, lon0=NULL,n=NULL, r=NULL) {
     #check for the existence of a tree: lifted from phyloseq's plot_tree
     if(!"phy_tree" %in% phyloseq:::getslots.phyloseq(physeq)){
       stop("tree missing or invalid. map-tree requires a phylogenetic tree")

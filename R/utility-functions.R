@@ -111,9 +111,8 @@
 #' Create a basemap from the maps() worldmap focusing on a region
 #' projection defaults to mercator, but others can be selected 
 #' http://www.inside-r.org/packages/cran/mapproj/docs/mapproject
-.create_basemap <-function(region, df, latcol, loncol, proj, parameter,
-                            orientation,lat0=NULL, lat1=NULL, lon0=NULL,
-                            n=NULL, r=NULL){
+.create_basemap <-function(region, df, latcol, loncol, proj, orientation,
+                           lat0, lat1, lon0,n, r){
   
   # check that the projection is null or is in the projectionlist
   # print out a warning about projections
