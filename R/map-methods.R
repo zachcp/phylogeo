@@ -60,6 +60,9 @@
 #'  
 #' @param r (Optional). Default \code{NULL}. 
 #'  Additional arguments for nonstandard map projection.
+#'  
+#' @param lon0 (Optional). Default \code{NULL}. 
+#'  Additional arguments for nonstandard map projection.
 #'
 #' @import ggplot2  
 #' @export
@@ -101,7 +104,7 @@ map_phyloseq <- function(physeq, size=4, region=NULL, color=NULL,
   #############################################################################
   worldmap <- .create_basemap(region=region, df=data, 
                               latcol=latcol,loncol=loncol,
-                              proj=projection,orientation=orientation,
+                              projection=projection,orientation=orientation,
                               lat0=lat0, lat1=lat1, lon0=lon0,n=n, r=r)
   
   if(jitter){
@@ -130,75 +133,6 @@ map_phyloseq <- function(physeq, size=4, region=NULL, color=NULL,
                              alpha= alpha) 
   }
   
-  return(worldmap)
-}
-################################################################################
-#' Draw An Interactive Leaflet Map from a Phyloseq Object
-#'
-#' In this case, edges in the network are created if the distance between
-#' nodes is below a potentially arbitrary threshold,
-#' and special care should be given to considering the choice of this threshold.
-#'
-#' @return an HTML/JS Leaflet Map
-#' @seealso http://rstudio.github.io/leaflet/
-#' @param physeq (Required). 
-#'  The name of the phyloseq object. This must have sample data with 
-#'  Latitude and Longitude Columns.
-#'  
-#' @param size (Optional). Default \code{4}. 
-#'  The size of the vertex points."Abundance" is a special code that will scale 
-#'  points by the number of reads in a sample
-#' 
-#' @import leaflet  
-#' @export
-#' @examples 
-#' 
-#' data(batfecal)
-#' htmlmap_phyloseq(batfecal, size=3)
-#' data(batmicrobiome)
-#' htmlmap_phyloseq(batmicrobiome, jitter=TRUE, color="SCIENTIFIC_NAME")
-htmlmap_phyloseq <- function(physeq, size=4, region=NULL, color=NULL, 
-                         shape=NULL, alpha = 0.8, 
-                         jitter=FALSE, jitter.x=3, jitter.y=3){
-  #check basic physeq and lat/lon
-  latlon <- .check_physeq(physeq)
-  latcol <- as.character( latlon[1] )
-  loncol <- as.character( latlon[2] )
-  data   <- data.frame( sample_data(physeq) )
-  data   <- .check_NA(data, latcol)
-  data   <- .coerce_numeric(data,latcol)
-  data   <- .check_NA(data, loncol)
-  data   <- .coerce_numeric(data,loncol)
-  names  <- names(data)
-  
-  #check plot options. "Abundance" is a special method for plotting by size
-  .check_names(color,data)
-  if(!size == "Abundance"){
-    .check_names(size,data, allownumeric=T)
-    print(size)
-  }
-  
-  #create map
-  ##############################################################################
-  worldmap <- leaflet(data) %>% addTiles()
-  
-  #how to hande when size information can be either global (outside of aes), per-sample (inside of aes)
-  if(is.numeric(size)){
-    worldmap <- worldmap  %>% addCircles(radius= ~ size *1000 )
-      
-  }else if(size == "Abundance"){
-    reads <- data.frame(sample_sums(physeq)); names(reads)<- "Abundance"
-    worldmap <- worldmap  %>% addCircles(radius=reads)
-    #data2 <- merge(data,reads,by="row.names")
-    #worldmap <- worldmap + geom_point(data=data2, 
-    #                                  aes_string( x=loncol, y=latcol, group=NULL, color=color, size = "Abundance"),
-    #                                  alpha= alpha) 
-  }else{
-    worldmap <- worldmap  %>% addCircles()
-    #worldmap <- worldmap + geom_point(data=data, 
-    #                                  aes_string( x=loncol, y=latcol, group=NULL, color=color, size = size),
-    #                                  alpha= alpha) 
-  }
   return(worldmap)
 }
 ################################################################################
@@ -289,6 +223,9 @@ htmlmap_phyloseq <- function(physeq, size=4, region=NULL, color=NULL,
 #'  Additional arguments for nonstandard map projection.
 #'  
 #' @param r (Optional). Default \code{NULL}. 
+#'  Additional arguments for nonstandard map projection.
+#'  
+#' @param lon0 (Optional). Default \code{NULL}. 
 #'  Additional arguments for nonstandard map projection.
 #'  
 #'
@@ -396,7 +333,7 @@ map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard",
   #create map
   ############################################
   worldmap <- .create_basemap(region=region, df=mdf,latcol=latcol, 
-                              loncol=loncol, proj=projection, orientation=orientation,
+                              loncol=loncol, projection=projection, orientation=orientation,
                               lat0=lat0, lat1=lat1, lon0=lon0,n=n, r=r)
   
   #modify points if using jitter
@@ -522,6 +459,9 @@ map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard",
 #' @param r (Optional). Default \code{NULL}. 
 #'  Additional arguments for nonstandard map projection.
 #'  
+#' @param lon0 (Optional). Default \code{NULL}. 
+#'  Additional arguments for nonstandard map projection.
+#'  
 #' @seealso \code{\link[phyloseq]{plot_tree}}
 #' @seealso \code{\link[ggplot2]{map_data}}
 #'
@@ -553,7 +493,7 @@ map_tree <- function(physeq,  region=NULL, color = NULL,size=4, alpha=0.8,
     
     mapplot  <- map_phyloseq(physeq2, region=region, color= color, size=size, 
                              alpha = alpha, jitter=jitter, jitter.x=jitter.x, 
-                             jitter.y=jitter.y,proj=projection,orientation=orientation,
+                             jitter.y=jitter.y,projection=projection,orientation=orientation,
                              lat0=lat0, lat1=lat1, lon0=lon0,n=n, r=r)  + 
                     theme(legend.position="none") 
     

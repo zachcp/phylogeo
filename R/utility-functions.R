@@ -51,12 +51,12 @@
 #' Create a basemap from the maps() worldmap focusing on a region
 #' projection defaults to mercator, but others can be selected 
 #' http://www.inside-r.org/packages/cran/mapproj/docs/mapproject
-.create_basemap <-function(region, df, latcol, loncol, proj, 
+.create_basemap <-function(region, df, latcol, loncol, projection, 
                            orientation,lat0, lat1, lon0,n, r){
   # check that the projection is null or is in the projectionlist
   # print out a warning about projections
-  if(!is.null(proj)){
-    if(!(proj %in% .projlist)){
+  if(!is.null(projection)){
+    if(!(projection %in% .projlist)){
       stop("The projection is not valid. Please use null or one of the following:
            aitoff, albers, azequalarea, azequidist, bicentric, bonne, conic, 
            cylequalarea, cylindrical, eisenlohr, elliptic, fisheye, gall, 
@@ -100,50 +100,50 @@
            axis.title=element_blank())
   
   #check all of the projections and return the projected ggplot
-  if(is.null(proj)) { 
+  if(is.null(projection)) { 
     return(worldmap)
-  } else if(proj %in% c("aitoff","azequalarea","bonne","cylindrical","gilbert",
+  } else if(projection %in% c("aitoff","azequalarea","bonne","cylindrical","gilbert",
                         "eisenlohr","globular","guyou","hex","laue",
                         "lagrange","mercator","mollweide","orthographic",
                         "polyconic","sinusoidal","square","tetra",
                         "vandergrinten")){
-          return(worldmap + coord_map(projection=proj, orientation=orientation))
-  } else if(proj %in% c("cylequalarea","rectangular","conic","mecca","homing")){
+          return(worldmap + coord_map(projection=projection, orientation=orientation))
+  } else if(projection %in% c("cylequalarea","rectangular","conic","mecca","homing")){
             if(is.null(lat0)){
                stop("The bonne,conic,cylequalarea, homing, mecca, and 
                     rectangular projections require the lat0 argument")
             }
-         return(worldmap + coord_map(projection=proj, orientation=orientation, lat0=lat0))
-  } else if(proj == "fisheye"){
+         return(worldmap + coord_map(projection=projection, orientation=orientation, lat0=lat0))
+  } else if(projection == "fisheye"){
              if(is.null(n)){
               stop("The fisheye projection requires a refractive index, n")
              }
-         return(worldmap + coord_map(projection=proj, orientation=orientation, n=n))
-  }else if(proj == "newyorker"){
+         return(worldmap + coord_map(projection=projection, orientation=orientation, n=n))
+  }else if(projection == "newyorker"){
           if(is.null(r)){
             stop("The newyorker projection requires a pedestalheight, r")
           }
-        return(worldmap + coord_map(projection=proj, orientation=orientation, r=r))
-  }else if(proj %in% c("simpleconic","lambert","albers","trapezoidal")){
+        return(worldmap + coord_map(projection=projection, orientation=orientation, r=r))
+  }else if(projection %in% c("simpleconic","lambert","albers","trapezoidal")){
         if(is.null(lat0) || is.null(lat1)){
           stop("The albers,lambert, ,and simpleconic projections require a lat0 and lat1 value")
         }
-    return(worldmap + coord_map( projection=proj, orientation=orientation, lat0=lat0,lat1=lat1))
-  }else if(proj %in% c("bicentric","elliptic")){
+    return(worldmap + coord_map( projection=projection, orientation=orientation, lat0=lat0,lat1=lat1))
+  }else if(projection %in% c("bicentric","elliptic")){
           if(is.null(lon0) ){
             stop("The bicentric and elliptic projection require a lon0 value")
           }
-      return(worldmap + coord_map(projection=proj, orientation=orientation, lon0=lon0))
-  }else if(proj %in% c("harrison")){
+      return(worldmap + coord_map(projection=projection, orientation=orientation, lon0=lon0))
+  }else if(projection %in% c("harrison")){
           if(is.null(dist) || is.null(angle) ){
             stop("The harrison projection require a dist and angle value")
           }
-      return(worldmap + coord_map(projection=proj, orientation=orientation, dist=dist,angle=angle))
-  }else if(proj  %in% c("lune")){
+      return(worldmap + coord_map(projection=projection, orientation=orientation, dist=dist,angle=angle))
+  }else if(projection  %in% c("lune")){
         if(is.null(lat) || is.null(angle) ){
           stop("The lune projection require a lat and angle value")
         }
-    return(worldmap + coord_map(projection=proj, orientation=orientation, lat=lat,angle=angle))
+    return(worldmap + coord_map(projection=projection, orientation=orientation, lat=lat,angle=angle))
   }
 }
 ################################################################################

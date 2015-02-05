@@ -14,8 +14,7 @@ Imports:
     igraph (>= 0.7.0),
     reshape2 (>= 1.2.2),
     sp (>= 1.0-15),
-    ape,
-    htmlwidgets
+    ape
 Depends:
     R (>= 3.0),
     ggplot2 (>= 1.0.0),
