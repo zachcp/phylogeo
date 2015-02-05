@@ -1,16 +1,28 @@
 ################################################################################
 # Use testthat to test phyloseq data objects plotting functions
 ################################################################################
-library("phylogeo"); library("testthat"); library(ggplot2); library(igraph)
-# # # # TESTS!;
+library("phylogeo") 
+library("testthat") 
+library("ggplot2")
+library("igraph")
+# # # # TESTS!
 
 test_that("map_phyloseq: results in a ggplot", {
   data(batfecal)
 	p1 <- map_phyloseq(batfecal)
 	# ggplot-class tests
 	expect_is(p1, "ggplot")
-	expect_is(print(p1), "list")
 	})
+
+test_that("map_clusters: returns a ggplot", {
+  data(batfecal) #no tree shoud fail 
+  data(epoxamicin_KS) #has tree should work
+  p1 <- map_clusters(epoxamicin_KS)
+  # ggplot-class tests
+  expect_error(map_clusters(batfecal))
+  expect_is(p1, "ggplot")
+})
+
 
 test_that("map_tree: tree_objects are present when mapping a phylogenetic tree", {
   data(batfecal)
@@ -19,7 +31,6 @@ test_that("map_tree: tree_objects are present when mapping a phylogenetic tree",
 	# ggplot-class tests
   expect_error(map_tree(batfecal))
 	expect_is(p1, "ggplot")
-	expect_is(print(p1), "list")
 	})
     
 test_that("map_network: can use a precalculated network", {
@@ -31,8 +42,6 @@ test_that("map_network: can use a precalculated network", {
   expect_is(p1, "ggplot")
   expect_is(p2, "ggplot")
   expect_is(ig, "igraph")
-  expect_is(print(p1), "list")
-  expect_is(print(p2), "list")
 	})
 
 # Test the following functions

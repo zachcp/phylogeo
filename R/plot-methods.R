@@ -1,7 +1,7 @@
 #
 # methods for plotting geographic-distance plots
 #
-###########################################################################################
+###############################################################################
 #' Calculate and Plot Sample Distances by Geography/Ecological Distance
 #'
 #' Scatterplot generation of samples using geogrpahic and eoclogical distances
@@ -9,10 +9,12 @@
 #' @usage plot_distance(physeq, distancemethod="jaccard")
 #'
 #' @param physeq (Required). 
-#'  The name of the phyloseq object. This must have sample data with Latitude and Longitude Columns.
+#'  The name of the phyloseq object. This must have sample data with 
+#'  Latitude and Longitude Columns.
 #'  
 #' @param distancemethod (Optional). Default \code{"jaccard"}.
-#'  The name of an ecological distance method. See ?distance for more information
+#'  The name of an ecological distance method. 
+#'  See ?distance for more information
 #'  
 #' @import phyloseq
 #' @importFrom reshape2 melt
@@ -22,14 +24,14 @@
 #' data(batfecal)
 #' plot_distance(batfecal)
 plot_distance <- function(physeq, distancemethod="jaccard"){
-    latlon <- .check_physeq(physeq)
+    latlon <-  .check_physeq(physeq)
     latcol <- as.character( latlon[1] )
     loncol <- as.character( latlon[2] )
     data   <- data.frame( sample_data(physeq) )
-    data   <- .check_NA(data, latcol)
-    data   <- .coerce_numeric(data,latcol)
-    data   <- .check_NA(data, loncol)
-    data   <- .coerce_numeric(data,loncol)
+    data   <-  .check_NA(data, latcol)
+    data   <-  .coerce_numeric(data,latcol)
+    data   <-  .check_NA(data, loncol)
+    data   <-  .coerce_numeric(data,loncol)
     names  <- names(data)
     
     #get bigcircle distances using spDists
@@ -42,7 +44,7 @@ plot_distance <- function(physeq, distancemethod="jaccard"){
     geodistances <- sp::spDists(df2, longlat=TRUE)
     colnames(geodistances) <- row.names(df2)
     row.names(geodistances) <- row.names(df2)
-    geodistances <- .dist_to_edge_table(geodistances, dname = "geodist")
+    geodistances <-  .dist_to_edge_table(geodistances, dname = "geodist")
     
     #get ecologicaldistances
     ecodistance <- distance(physeq, method = distancemethod)
@@ -59,7 +61,8 @@ plot_distance <- function(physeq, distancemethod="jaccard"){
          geom_point() +
          xlab("Km") + 
          ylab(distancemethod) +
-         ggtitle(paste("Pairwise Sample Distance:", "Km vs.", distancemethod,"Distance.", sep=" "))
+         ggtitle( paste("Pairwise Sample Distance:", 
+                        "Km vs.", distancemethod,"Distance.", sep=" "))
     
     return(p)
 }

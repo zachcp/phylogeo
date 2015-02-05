@@ -1,8 +1,23 @@
 #
 # A set of functions used by map and plot functions to test for validity of data
 #
+###############################################################################
+#' Check for Latitude and Longitude Columns in a Dataframe 
+#' and return the column values
+
+
 ################################################################################
-#' Check for Latitude and Longitude Columns in a Dataframe and return the column values
+#' Data: Projectionlist
+.projlist <- c("aitoff", "albers", "azequalarea", "azequidist",
+              "bicentric", "bonne", "conic", "cylequalarea", "cylindrical",
+              "eisenlohr", "elliptic", "fisheye", "gall", "gilbert", "guyou",
+              "harrison", "hex", "homing", "lagrange", "lambert", "laue", 
+              "lune","mercator", "mollweide", "newyorker", "orthographic", 
+              "perspective","polyconic", "rectangular", "simpleconic", 
+              "sinusoidal", "tetra","trapezoidal")
+
+################################################################################
+#' Helper Functions
 .check_physeq <- function(physeq){
   #check phyloseq objects for Lat/Lon
   if (!"sam_data" %in% phyloseq::getslots.phyloseq(physeq)){
@@ -31,11 +46,93 @@
   list(latcol, loncol)
 }
 #' Create a basemap from the maps() worldmap focusing on a region
-.create_basemap <-function(region, df, latcol, loncol){
+#' projection defaults to mercator, but others can be selected 
+#' http://www.inside-r.org/packages/cran/mapproj/docs/mapproject
+# .create_basemap <-function(region, df, latcol, loncol, proj, parameter, orientation){
+#   
+#   # check that the projection is null or is in the projectionlist
+#   # print out a warning about projections
+#   if(!is.null(proj)){
+#     if(!(proj %in% .projlist)){
+#       stop("The projection is not valid. Please use null or one of the following:
+#            aitoff, albers, azequalarea, azequidist, bicentric, bonne, conic, 
+#            cylequalarea, cylindrical, eisenlohr, elliptic, fisheye, gall, 
+#            gilbert, guyou, harrison, hex, homing, lagrange, lambert, laue, 
+#            lune, mercator, mollweide, newyorker, orthographic, perspective, 
+#            polyconic, rectangular,simpleconic, sinusoidal, tetra, trapezoidal")
+#     }else{print("You are using a non-default projection that may require additional parameters. 
+#                 See http://www.inside-r.org/packages/cran/mapproj/docs/mapproject for more information")}
+#   }
+#   
+#   
+#   if(is.null(region)){
+#     #default worldmap cuts out Antarctica by filtering everythign below -59 Latitude
+#     world <- ggplot2::map_data("world")
+#     #world <- world[world$lat > -59,]
+#     #ToDO: allow subsetting of samples by region. Is there a point-in-polygon library?
+#     #this is a quick filter based on latitude and longitude not point-in-polygon
+#     maxlat  = max(world$lat)
+#     minlat  = min(world$lat)
+#     maxlong = max(world$long)
+#     minlong = min(world$long)
+#     df <- df[ df[, loncol] < maxlong, ]
+#     df <- df[ df[, loncol] > minlong, ]
+#     df <- df[ df[, latcol] < maxlat, ]
+#     df <- df[ df[, latcol] > minlat, ]
+#   }else if(region=="world"){
+#     world <- ggplot2::map_data("world")
+#   }else {
+#     world <- ggplot2::map_data("world", region = region)
+#   }
+#   
+#   worldmap <- ggplot(world, aes(x=long, y=lat, group=group)) +
+#     geom_polygon( fill="grey",alpha=0.6) +
+#     scale_y_continuous(breaks=(-2:2) * 30) +
+#     scale_x_continuous(breaks=(-4:4) * 45) +
+#     theme_classic() +
+#     theme( axis.text = element_blank(), 
+#            axis.ticks = element_blank(), 
+#            axis.line = element_blank(), 
+#            axis.title=element_blank())
+#   
+#   if(is.null(proj)) { 
+#       return(worldmap)
+#   } else if(is.numeric(parameter)) {
+#       return(worldmap + coord_map( projection=proj, parameter=parameter ))
+#   } else if(is.numeric(orientation)) {
+#       return(worldmap + coord_map( projection=proj, parameter=parameter, orientation=orientation))
+#   } else {
+#       return(worldmap + coord_map(projection=proj))
+#   }
+# }
+
+##################################################################################################
+
+#' Create a basemap from the maps() worldmap focusing on a region
+#' projection defaults to mercator, but others can be selected 
+#' http://www.inside-r.org/packages/cran/mapproj/docs/mapproject
+.create_basemap <-function(region, df, latcol, loncol, proj, 
+                           orientation,lat0, lat1, lon0,n, r){
+  # check that the projection is null or is in the projectionlist
+  # print out a warning about projections
+  if(!is.null(proj)){
+    if(!(proj %in% .projlist)){
+      stop("The projection is not valid. Please use null or one of the following:
+           aitoff, albers, azequalarea, azequidist, bicentric, bonne, conic, 
+           cylequalarea, cylindrical, eisenlohr, elliptic, fisheye, gall, 
+           gilbert, guyou, harrison, hex, homing, lagrange, lambert, laue, 
+           lune, mercator, mollweide, newyorker, orthographic, perspective, 
+           polyconic, rectangular,simpleconic, sinusoidal, tetra, trapezoidal")
+    }else{print("You are using a non-default projection that may require additional parameters. 
+                See http://www.inside-r.org/packages/cran/mapproj/docs/mapproject 
+                for more information")}
+  }
+  
+  
   if(is.null(region)){
     #default worldmap cuts out Antarctica by filtering everythign below -59 Latitude
     world <- ggplot2::map_data("world")
-    world <- world[world$lat > -59,]
+    #world <- world[world$lat > -59,]
     #ToDO: allow subsetting of samples by region. Is there a point-in-polygon library?
     #this is a quick filter based on latitude and longitude not point-in-polygon
     maxlat  = max(world$lat)
@@ -62,8 +159,108 @@
            axis.line = element_blank(), 
            axis.title=element_blank())
   
-  worldmap
+  #check all of the projections and return the projected ggplot
+  if(is.null(proj)) { 
+    return(worldmap)
+  } else if(proj %in% c("aitoff","azequalarea","bonne","cylindrical","gilbert",
+                        "eisenlohr","globular","guyou","hex","laue",
+                        "lagrange","mercator","orthographic","polyconic",
+                        "sinusoidal","square","tetra","vandergrinten")){
+          return(worldmap + coord_map(projection=proj, orientation=orientation))
+  } else if(proj %in% c("cylequalarea","rectangular","conic","mecca","homing")){
+            if(is.null(lat0)){
+               stop("The bonne,conic,cylequalarea, homing, mecca, and rectangular projections require the lat0 argument")
+            }
+         return(worldmap + coord_map(projection=proj, orientation=orientation, lat0=lat0))
+  } else if(proj == "fisheye"){
+             if(is.null(n)){
+              stop("The fisheye projection requires a refractive index, n")
+             }
+         return(worldmap + coord_map(projection=proj, orientation=orientation, n=n))
+  }else if(proj == "newyorker"){
+          if(is.null(r)){
+            stop("The newyorker projection requires a pedestalheight, r")
+          }
+        return(worldmap + coord_map(projection=proj, orientation=orientation, r=r))
+  }else if(proj %in% c("simpleconic","lambert","albers","trapezoidal")){
+        if(is.null(lat0) || is.null(lat1)){
+          stop("The albers,lambert, ,and simpleconic projections require a lat0 and lat1 value")
+        }
+    return(worldmap + coord_map( projection=proj, orientation=orientation, lat0=lat0,lat1=lat1))
+  }else if(proj %in% c("bicentric","elliptic")){
+          if(is.null(lon0) ){
+            stop("The bicentric and elliptic projection require a lon0 value")
+          }
+      return(worldmap + coord_map(projection=proj, orientation=orientation, lon0=lon0))
+  }else if(proj %in% c("harrison")){
+          if(is.null(dist) || is.null(angle) ){
+            stop("The harrison projection require a dist and angle value")
+          }
+      return(worldmap + coord_map(projection=proj, orientation=orientation, dist=dist,angle=angle))
+  }else if(proj  %in% c("lune")){
+        if(is.null(lat) || is.null(angle) ){
+          stop("The lune projection require a lat and angle value")
+        }
+    return(worldmap + coord_map(projection=proj, orientation=orientation, lat=lat,angle=angle))
+  }
 }
+################################################################################
+#Mapproj info from http://www.inside-r.org/packages/cran/mapproj/docs/mapproject
+#mercator() equally spaced straight meridians, conformal, straight compass courses
+#sinusoidal() equally spaced parallels, equal-area, same as bonne(0)
+#cylequalarea(lat0) equally spaced straight meridians, equal-area, true scale on lat0
+#cylindrical() central projection on tangent cylinder
+#rectangular(lat0) equally spaced parallels, equally spaced straight meridians, true scale on lat0
+#gall(lat0) parallels spaced stereographically on prime meridian, equally spaced straight meridians, true scale on lat0
+#mollweide() (homalographic) equal-area, hemisphere is a circle
+#gilbert() sphere conformally mapped on hemisphere and viewed orthographically
+
+#Azimuthal projections centered on the North Pole. Parallels are concentric circles. Meridians are equally spaced radial lines.
+#azequidistant() equally spaced parallels, true distances from pole
+#azequalarea() equal-area
+#gnomonic() central projection on tangent plane, straight great circles
+#perspective(dist) viewed along earth's axis dist earth radii from center of earth
+#orthographic() viewed from infinity
+#stereographic() conformal, projected from opposite pole
+#laue() radius = tan(2 * colatitude) used in xray crystallography
+#fisheye(n) stereographic seen through medium with refractive index n
+#newyorker(r) radius = log(colatitude/r) map from viewing pedestal of radius r degrees
+#Polar conic projections symmetric about the Prime Meridian. Parallels are segments of concentric circles. Except in the Bonne projection, meridians are equally spaced radial lines orthogonal to the parallels.
+#conic(lat0) central projection on cone tangent at lat0
+#simpleconic(lat0,lat1) equally spaced parallels, true scale on lat0 and lat1
+#lambert(lat0,lat1)conformal, true scale on lat0 and lat1
+#albers(lat0,lat1)equal-area, true scale on lat0 and lat1
+#bonne(lat0)equally spaced parallels, equal-area, parallel lat0 developed from tangent cone
+
+#Projections with bilateral symmetry about the Prime Meridian and the equator.
+#polyconic() parallels developed from tangent cones, equally spaced along Prime Meridian
+#aitoff() equal-area projection of globe onto 2-to-1 ellipse, based on azequalarea
+#lagrange() conformal, maps whole sphere into a circle
+#bicentric(lon0) points plotted at true azimuth from two centers on the equator at longitudes +lon0 and -lon0, great circles are straight lines (a stretched gnomonic projection)
+#elliptic(lon0) points are plotted at true distance from two centers on the equator at longitudes +lon0 and -lon0
+#globular() hemisphere is circle, circular arc meridians equally spaced on equator, circular arc parallels equally spaced on 0- and 90-degree meridians
+#vandergrinten() sphere is circle, meridians as in globular, circular arc parallels resemble mercator
+#eisenlohr() conformal with no singularities, shaped like polyconic
+
+#Doubly periodic conformal projections.
+#guyou W and E hemispheres are square
+#square world is square with Poles at diagonally opposite corners
+#tetra map on tetrahedron with edge tangent to Prime Meridian at S Pole, unfolded into equilateral triangle
+#hex world is hexagon centered on N Pole, N and S hemispheres are equilateral triangles
+
+#Miscellaneous projections.
+#harrison(dist,angle) oblique perspective from above the North Pole, dist earth radii from center of earth, looking along the Date Line angle degrees off vertical
+#trapezoidal(lat0,lat1) equally spaced parallels, straight meridians equally spaced along parallels, true scale at lat0 and lat1 on Prime Meridian
+#lune(lat,angle) conformal, polar cap above latitude lat maps to convex lune with given angle at 90E and 90W
+
+#Retroazimuthal projections. At every point the angle between vertical and a straight line to "Mecca", latitude lat0 on the prime meridian, is the true bearing of Mecca.
+#mecca(lat0) equally spaced vertical meridians
+#homing(lat0) distances to Mecca are true
+
+#Maps based on the spheroid. Of geodetic quality, these projections do not make sense for tilted orientations.
+#sp\_mercator() Mercator on the spheroid.
+#sp\_albers(lat0,lat1) Albers on the spheroid.
+
 #' utility function to check the validity of arguments
 .check_names <- function(member, df, allownumeric=FALSE){
   message <- paste(member, " variable must be a valid column name of a Phyloseq table",sep="")
@@ -109,7 +306,8 @@
 }
 #' Utility Function for Converting Distance Matrices to 
 #' three column distances while removing all of the duplicates
-#' lifted/modified from here: https://github.com/joey711/phyloseq/blob/master/R/plot-methods.R
+#' lifted/modified from here: 
+#' https://github.com/joey711/phyloseq/blob/master/R/plot-methods.R
 .dist_to_edge_table = function(Dist, dname = "dist"){
   dmat <- as.matrix(Dist)
   # Set duplicate entries and self-links to Inf

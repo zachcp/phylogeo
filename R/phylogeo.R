@@ -9,16 +9,15 @@
 #' @import gridExtra
 #' @keywords package
 #' @description a package for mapping microbiome data
+NULL
 
 #' Phyloseq Object for Bat Guano
 #'
 #' A phyloseq object with data collected from the bat guano experiments
 #' 
 #' @docType data
-#' @keywords datasets
 #' @name batfecal
-#' @description this is the Earth Microbiome Data study 1702 about bat guano from Chine
-#' @format this is the Earth Microbiome Data study 1702 about bat guano from Chine
+#' @format a \code{\link{phyloseq}} object
 NULL
 
 #' Phyloseq Object for Bat Microbiome Data 
@@ -26,9 +25,9 @@ NULL
 #' A phyloseq object with data collected from the bat guano experiments
 #' 
 #' @docType data
-#' @keywords datasets
 #' @name batmicrobiome
-#' @format this is the Earth Microbiome Data study 1734 about bat guano from the US, Ecuador and Costa Rica
+#' @description this is the Earth Microbiome Data study 1734 about bat guano from the US, Ecuador and Costa Rica
+#' @format a \code{\link{phyloseq}} object
 NULL
 
 #' Phyloseq Object for Epoxamicin KS Sequence Data 
@@ -37,7 +36,6 @@ NULL
 #' hits for Epoxamicin
 #' 
 #' @docType data
-#' @keywords datasets
 #' @name epoxamicin_KS
-#' @format Epoxamicin 95% OTUs from global eDNA
+#' @format a \code{\link{phyloseq}} object
 NULL

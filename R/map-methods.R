@@ -1,12 +1,12 @@
 #
 # methods for drawing maps of phyloseq objects
 #
-################################################################################
+###############################################################################
 #' Draw A Map from a Phyloseq Object
 #'
 #' In this case, edges in the network are created if the distance between
-#' nodes is below a potentially arbitrary threshold,
-#' and special care should be given to considering the choice of this threshold.
+#' nodes is below a potentially arbitrary threshold,and special care should 
+#' be given to considering the choice of this threshold.
 #'
 #' @return a ggplot object
 #' @param physeq (Required). 
@@ -40,19 +40,40 @@
 #'
 #' @param jitter.y (Optional). Default \code{3}. 
 #'  Value for Y jitter
-#'
 #'  
+#' @param projection (Optional). Default \code{NULL}. 
+#'  Projection. Default of NULL will result in meractor projection. Non-default
+#'  projection can be specified here but may require additional arguments 
+#'  specified by the `parameter` and `orientation` arguments
+#'
+#' @param orientation (Optional). Default \code{NULL}. 
+#'  Additional arguments for the map projection.
+#'  
+#' @param lat0 (Optional). Default \code{NULL}. 
+#'  Additional arguments for nonstandard map projection.
+#'  
+#' @param lat1 (Optional). Default \code{NULL}. 
+#'  Additional arguments for nonstandard map projection.
+#'  
+#' @param n (Optional). Default \code{NULL}. 
+#'  Additional arguments for nonstandard map projection.
+#'  
+#' @param r (Optional). Default \code{NULL}. 
+#'  Additional arguments for nonstandard map projection.
+#'
 #' @import ggplot2  
 #' @export
 #' @examples 
-#' 
 #' data(batfecal)
 #' map_phyloseq(batfecal, region="china", jitter=TRUE, jitter.x=2,jitter.y=2, color="PH")
+#' map_phyloseq(batfecal, projection="mollweide")
 #' data(batmicrobiome)
 #' map_phyloseq(batmicrobiome, jitter=TRUE, color="SCIENTIFIC_NAME")
 map_phyloseq <- function(physeq, size=4, region=NULL, color=NULL, 
                          shape=NULL, alpha = 0.8, 
-                         jitter=FALSE, jitter.x=3, jitter.y=3){
+                         jitter=FALSE, jitter.x=3, jitter.y=3,
+                         projection=NULL,orientation=NULL,
+                         lat0=NULL, lat1=NULL, lon0=NULL,n=NULL, r=NULL){
   #check basic physeq and lat/lon
   latlon <- .check_physeq(physeq)
   latcol <- as.character( latlon[1] )
@@ -64,7 +85,6 @@ map_phyloseq <- function(physeq, size=4, region=NULL, color=NULL,
   data   <- .coerce_numeric(data,loncol)
   names  <- names(data)
   
-  
   #check plot options. "Abundance" is a special method for plotting by size
   .check_names(color,data)
   if(!size == "Abundance"){
@@ -73,30 +93,36 @@ map_phyloseq <- function(physeq, size=4, region=NULL, color=NULL,
   }
   
   #create map
-  ##############################################################################
+  #############################################################################
   worldmap <- .create_basemap(region=region, df=data, 
-                                         latcol=latcol,loncol=loncol)
+                              latcol=latcol,loncol=loncol,
+                              proj=projection,orientation=orientation,
+                              lat0=lat0, lat1=lat1, lon0=lon0,n=n, r=r)
   
   if(jitter){
     data <- .jitter_df(df=data,xcol=loncol,ycol=latcol,
                                   jitter.x=jitter.x,jitter.y=jitter.y)
   }
   
-  #how to hande when size information can be either global (outside of aes), per-sample (inside of aes)
+  # how to hande when size information can be either global (outside of aes), 
+  # per-sample (inside of aes)
   if(is.numeric(size)){
     worldmap <- worldmap + geom_point(data=data, 
-                                      aes_string(x=loncol, y=latcol, group=NULL, color=color), 
+                                      aes_string(x=loncol, y=latcol, 
+                                                 group=NULL, color=color), 
                                       size = size, alpha= alpha) 
   }else if(size == "Abundance"){
     reads <- data.frame(sample_sums(physeq)); names(reads)<- "Abundance"
     data2 <- merge(data,reads,by="row.names")
     worldmap <- worldmap + geom_point(data=data2, 
-                                      aes_string( x=loncol, y=latcol, group=NULL, color=color, size = "Abundance"),
+                                      aes_string( x=loncol, y=latcol, group=NULL, 
+                                                  color=color, size = "Abundance"),
                                       alpha= alpha) 
   }else{
     worldmap <- worldmap + geom_point(data=data, 
-                                      aes_string( x=loncol, y=latcol, group=NULL, color=color, size = size),
-                                      alpha= alpha) 
+                             aes_string(x=loncol, y=latcol, group=NULL, 
+                                        color=color, size = size),
+                             alpha= alpha) 
   }
   
   return(worldmap)
@@ -179,21 +205,25 @@ htmlmap_phyloseq <- function(physeq, size=4, region=NULL, color=NULL,
 #'   
 #' @return a ggplot object
 #' @param physeq (Required). 
-#'  The name of the phyloseq object. This must have sample data with Latitude and Longitude Columns.
+#'  The name of the phyloseq object. This must have sample data with 
+#'  Latitude and Longitude Columns.
 #'  
 #' @param igraph  (Optional). Default \code{NULL}
-#'  An optional igraph object. Will reduce plotting time to use a precalculated network 
+#'  An optional igraph object. Will reduce plotting time to use 
+#'  a precalculated network 
 #'  
 #' @param region (Optional). Default \code{NULL}.
 #'  The name of geographic region that can be used to zoom.
 #' 
 #' @param color (Optional). Default \code{NULL}.
 #'  The name of the sample variable in \code{physeq} to use for color mapping
-#'  of points (graph vertices). Note: "cluster" can be used to show igraph clusters
+#'  of points (graph vertices). Note: "cluster" can be used to show igraph 
+#'  clusters
 #'  
 #' @param shape (Optional). Default \code{NULL}.
 #'  The name of the sample variable in \code{physeq} to use for shape mapping.
-#'  of points (graph vertices).  Note: "cluster" can be used to show igraph clusters
+#'  of points (graph vertices).  Note: "cluster" can be used to show igraph 
+#'  clusters
 #'  
 #' @param size (Optional). Default \code{4}. 
 #'  The size of the vertex points.
@@ -208,7 +238,8 @@ htmlmap_phyloseq <- function(physeq, size=4, region=NULL, color=NULL,
 #'  Distance metric used to calculate between-sample distances.
 #'  
 #' @param maxdist (Optional). Default \code{0.9}. 
-#'  Cutoff of the \code{distance} used to detmine whether a sample is included in the network.
+#'  Cutoff of the \code{distance} used to detmine whether a sample is 
+#'  included in the network.
 #'  
 #' @param jitter (Optional). Default \code{FALSE}. 
 #'  Boolean value. Determines whether to use geom_jitter() to reposition points.
@@ -232,8 +263,29 @@ htmlmap_phyloseq <- function(physeq, size=4, region=NULL, color=NULL,
 #' @param base_data (Optional). Default \code{FALSE}.
 #'  Boolean to determine whether to include dat points that aren't in a network.
 #' 
-#'  @param base_data_color (Optional). Default \code{grey}.
-#'  named color to determine base data coloe
+#' @param base_data_color (Optional). Default \code{grey}.
+#'  named color to determine base data color
+#'  
+#' @param projection (Optional). Default \code{NULL}. 
+#'  Projection. Default of NULL will result in meractor projection. Non-default
+#'  projection can be specified here but may require additional arguments 
+#'  specified by the `parameter` and `orientation` arguments
+#'
+#' @param orientation (Optional). Default \code{NULL}. 
+#'  Additional arguments for the map projection.
+#'  
+#' @param lat0 (Optional). Default \code{NULL}. 
+#'  Additional arguments for nonstandard map projection.
+#'  
+#' @param lat1 (Optional). Default \code{NULL}. 
+#'  Additional arguments for nonstandard map projection.
+#'  
+#' @param n (Optional). Default \code{NULL}. 
+#'  Additional arguments for nonstandard map projection.
+#'  
+#' @param r (Optional). Default \code{NULL}. 
+#'  Additional arguments for nonstandard map projection.
+#'  
 #'
 #' @seealso
 #' \href{https://joey711.github.io/phyloseq/distance}{phyloseq's distance command}.
@@ -257,11 +309,15 @@ htmlmap_phyloseq <- function(physeq, size=4, region=NULL, color=NULL,
 #' map_network(batmicrobiome, igraph= ig, lines=TRUE)
 #' map_network(batmicrobiome, igraph= ig, lines=TRUE, color="SCIENTIFIC_NAME")
 #' map_network(batmicrobiome, igraph= ig, lines=TRUE, color="SCIENTIFIC_NAME", jitter=TRUE)
+#' map_network(batmicrobiome, projection="mollweide", igraph= ig, lines=TRUE, color="SCIENTIFIC_NAME", jitter=TRUE)
 map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard", 
                         color=NULL, region=NULL, size=4, alpha = 0.8, 
                         jitter=FALSE, jitter.x=3, jitter.y=3, shape=NULL, 
                         lines=FALSE, line_weight=1, line_color ="Black",
-                        line_alpha=0.4 , base_data=FALSE, base_data_color="grey"){
+                        line_alpha=0.4 , base_data=FALSE, 
+                        base_data_color="grey",projection=NULL, 
+                        orientation=NULL,
+                        lat0=NULL, lat1=NULL, lon0=NULL,n=NULL, r=NULL){
 
   #helper functions to calculate membership in clusters or lines
   ##############################################################################
@@ -299,7 +355,9 @@ map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard",
   draw_lines <- function(plt, df2){
     df2 <- data.frame(df2) #to ensure list returns a df object
     plt <- plt + geom_line(data=df2,  
-                           aes_string( x=loncol, y=latcol, group=names(df2)[1]))
+                           aes_string( x=loncol, 
+                                       y=latcol, 
+                                       group=names(df2)[1]))
   }
   #####################################
   
@@ -323,7 +381,7 @@ map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard",
   }
   clusts <- seq( igraph::clusters(igraph)$no )
   clustdf <- Reduce( rbind, Map(get_clusters, clusts))
-  mdf <- merge(clustdf, data.frame(data), by="row.names", all.x=T)
+  mdf <- merge(clustdf, data.frame(data), by="row.names", all.x=TRUE)
   rownames(mdf) <- mdf$Row.names
   
   #check plot options
@@ -332,8 +390,9 @@ map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard",
   
   #create map
   ############################################
-  worldmap <- .create_basemap(region=region, df=mdf, 
-                                         latcol=latcol, loncol=loncol)
+  worldmap <- .create_basemap(region=region, df=mdf,latcol=latcol, 
+                              loncol=loncol, proj=projection, orientation=orientation,
+                              lat0=lat0, lat1=lat1, lon0=lon0,n=n, r=r)
   
   #modify points if using jitter
   if(jitter){
@@ -346,8 +405,11 @@ map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard",
     network_points <- rownames(mdf)
     nonetworkdf <- data[!rownames(data) %in% network_points, ] 
     worldmap <- worldmap + geom_point(data = nonetworkdf, 
-                                      aes_string(x=loncol,y=latcol, group=NULL), 
-                                      color=base_data_color, size=size)
+                                      aes_string(x=loncol,
+                                                 y=latcol, 
+                                                 group=NULL), 
+                                      color=base_data_color, 
+                                      size=size)
   }
   
   #addlines
@@ -356,22 +418,28 @@ map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard",
     worldmap <- worldmap + 
                   geom_line(data=linedf,
                             aes_string(x=loncol,y=latcol, group="link"), 
-                            size=line_weight, alpha=line_alpha, color=line_color)
+                            size=line_weight, 
+                            alpha=line_alpha, 
+                            color=line_color)
   }
  
-  #add points
-  #how to hande when point_size information can be either global (outside of aes), orper-sample (inseide of aes)
+  # add points
+  # how to hande when point_size information can be either global (outside of aes),
+  # or per-sample (inside of aes)
   if(is.numeric(size)){
    points <- geom_point(data=mdf, size = size, alpha= alpha,
-                        aes_string( x=loncol, y=latcol, group=NULL, color=color, shape=shape)) 
+                        aes_string( x=loncol, y=latcol, group=NULL, 
+                                    color=color, shape=shape)) 
   }else{
     points <- geom_point(data=mdf, alpha= alpha,
-                         aes_string( x=loncol, y=latcol, group=NULL, color=color, size = size, shape=shape)) 
+                         aes_string( x=loncol, y=latcol, group=NULL, 
+                                     color=color, size = size, shape=shape)) 
   } 
   worldmap <- worldmap + points
   
   points <- geom_point(data=mdf, size = size, alpha= alpha,
-                       aes_string( x=loncol, y=latcol, group=NULL, color=NULL, shape=NULL)) 
+                       aes_string(x=loncol, y=latcol, 
+                                  group=NULL, color=NULL, shape=NULL)) 
   ###########################
   
   return(worldmap)
@@ -382,7 +450,8 @@ map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard",
 #' @return a ggplot object
 #' 
 #' @param physeq (Required). 
-#'  The name of the phyloseq object. This must have sample data with Latitude and Longitude Columns.
+#'  The name of the phyloseq object. This must have sample data with 
+#'  Latitude and Longitude Columns.
 #'  
 #'  @param region (Optional). Default \code{NULL}.
 #'  The name of geographic region that can be used to zoom.
@@ -428,6 +497,26 @@ map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard",
 #' @param treetheme (Optional) Default \code{NULL}
 #' @param justify (Optional) Default \code{"jagged"}
 #' whether to place the map or the tree on the left.
+#' @param projection (Optional). Default \code{NULL}. 
+#'  Projection. Default of NULL will result in meractor projection. Non-default
+#'  projection can be specified here but may require additional arguments
+#'  specified by the `parameter` and `orientation` arguments
+#'
+#' @param orientation (Optional). Default \code{NULL}. 
+#'  Additional arguments for the map projection.
+#'  
+#' @param lat0 (Optional). Default \code{NULL}. 
+#'  Additional arguments for nonstandard map projection.
+#'  
+#' @param lat1 (Optional). Default \code{NULL}. 
+#'  Additional arguments for nonstandard map projection.
+#'  
+#' @param n (Optional). Default \code{NULL}. 
+#'  Additional arguments for nonstandard map projection.
+#'  
+#' @param r (Optional). Default \code{NULL}. 
+#'  Additional arguments for nonstandard map projection.
+#'  
 #' @seealso \code{\link[phyloseq]{plot_tree}}
 #' @seealso \code{\link[ggplot2]{map_data}}
 #'
@@ -440,13 +529,16 @@ map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard",
 #' data(epoxamicin_KS)
 #' map_tree(epoxamicin_KS)
 #' map_tree(epoxamicin_KS, color="Geotype", jitter=TRUE)
+#' map_tree(epoxamicin_KS, projection="gilbert", color="Geotype", jitter=TRUE)
 map_tree <- function(physeq,  region=NULL, color = NULL,size=4, alpha=0.8,
-                    jitter= FALSE, jitter.x=3, jitter.y=3, method = "sampledodge", 
-                    nodelabf = nodeplotblank, treesize = NULL, min.abundance = Inf, 
-                    label.tips = NULL, text.size = NULL, sizebase = 5, 
-                    base.spacing = 0.02, ladderize = TRUE,plot.margin = 0.2, 
-                    title = NULL, treetheme = NULL, justify = "jagged",
-                    width_ratio = 2, map_on_left = FALSE) {
+                    jitter= FALSE, jitter.x=3, jitter.y=3, 
+                    method = "sampledodge", nodelabf = nodeplotblank, 
+                    treesize = NULL, min.abundance = Inf, label.tips = NULL,
+                    text.size = NULL, sizebase = 5, base.spacing = 0.02, 
+                    ladderize = TRUE,plot.margin = 0.2, title = NULL, 
+                    treetheme = NULL, justify = "jagged",width_ratio = 2, 
+                    map_on_left = FALSE, projection=NULL, orientation=NULL,
+                    lat0=NULL, lat1=NULL, lon0=NULL,n=NULL, r=NULL) {
     #check for the existence of a tree: lifted from phyloseq's plot_tree
     if(!"phy_tree" %in% phyloseq:::getslots.phyloseq(physeq)){
       stop("tree missing or invalid. map-tree requires a phylogenetic tree")
@@ -454,13 +546,21 @@ map_tree <- function(physeq,  region=NULL, color = NULL,size=4, alpha=0.8,
     #trim samples that are not in the tree
     physeq2 <- phyloseq::prune_samples(phyloseq::sample_sums(physeq) > 0, physeq)
     
-    mapplot  <- map_phyloseq(physeq2, region=region, color= color, size=size, alpha = alpha, 
-                             jitter=jitter, jitter.x=jitter.x, jitter.y=jitter.y)  + 
-                             theme(legend.position="none") 
-    treeplot <- phyloseq::plot_tree(physeq2, color=color, label.tips=label.tips, 
-                                    text.size=text.size, sizebase=sizebase, base.spacing = base.spacing, 
-                                    ladderize = ladderize, plot.margin = plot.margin, title = title, 
-                                    treetheme=treetheme, justify = justify, nodelab =nodelabf) +
+    mapplot  <- map_phyloseq(physeq2, region=region, color= color, size=size, 
+                             alpha = alpha, jitter=jitter, jitter.x=jitter.x, 
+                             jitter.y=jitter.y,proj=projection,orientation=orientation,
+                             lat0=lat0, lat1=lat1, lon0=lon0,n=n, r=r)  + 
+                    theme(legend.position="none") 
+    
+    treeplot <- phyloseq::plot_tree(physeq2, color=color, label.tips=label.tips,
+                                    text.size=text.size, sizebase=sizebase, 
+                                    base.spacing = base.spacing, 
+                                    ladderize = ladderize, 
+                                    plot.margin = plot.margin, 
+                                    title = title, 
+                                    treetheme=treetheme, 
+                                    justify = justify, 
+                                    nodelab =nodelabf) +
       theme(legend.key = element_rect(fill = "white")) +
       scale_y_continuous(expand = c(0,0)) + 
       scale_x_continuous(expand = c(0,0))
@@ -472,11 +572,17 @@ map_tree <- function(physeq,  region=NULL, color = NULL,size=4, alpha=0.8,
     # treeplot <- treeplot + xlim( min(xvals), max(xvals))
     
     if(map_on_left){
-        combinedplot <- gridExtra::arrangeGrob(mapplot + theme(legend.position="none"),
-                                               treeplot, ncol=2, widths=c(width_ratio,1))
+        combinedplot <- gridExtra::arrangeGrob(mapplot + 
+                                               theme(legend.position="none"),
+                                               treeplot, 
+                                               ncol=2, 
+                                               widths=c(width_ratio,1))
     } else{
-        combinedplot <- gridExtra::arrangeGrob(treeplot + theme(legend.position="none"),
-                                               mapplot, ncol=2, widths=c(1,width_ratio))    
+        combinedplot <- gridExtra::arrangeGrob(treeplot + 
+                                                 theme(legend.position="none"),
+                                               mapplot, 
+                                               ncol=2, 
+                                               widths=c(1,width_ratio))    
     }
     return(combinedplot)
 }
@@ -484,7 +590,8 @@ map_tree <- function(physeq,  region=NULL, color = NULL,size=4, alpha=0.8,
 #' Explore the spatial distribution of subsets of your sequence data 
 #'   
 #' @param physeq (Required). 
-#'  The name of the phyloseq object. This must have sample data with Latitude and Longitude Columns.
+#'  The name of the phyloseq object. This must have sample data with 
+#'  Latitude and Longitude Columns.
 #'  
 #' @param clusternum (Optional). Default \code{3}.
 #'  Number of kmeans clusters to divide your phylogenetic tree into
@@ -497,6 +604,7 @@ map_tree <- function(physeq,  region=NULL, color = NULL,size=4, alpha=0.8,
 #' library(ggplot2)
 #' library(gridExtra)
 #' map_clusters(epoxamicin_KS, clusternum=6)
+#' map_clusters(epoxamicin_KS, clusternum=10)
 map_clusters <- function(physeq, clusternum=3){
   # check for the existence of a tree: lifted from phyloseq's plot_tree
   if(!"phy_tree" %in% phyloseq::getslots.phyloseq(physeq)){
