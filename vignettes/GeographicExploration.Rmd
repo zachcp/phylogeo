@@ -1,19 +1,22 @@
-<!--
-%\VignetteEngine{knitr::knitr}
-%\VignetteIndexEntry{geographic exploration of phyloseq objects vignette}
--->
-`r library("knitr")`
-`r opts_chunk$set(cache=FALSE, fig.width=9, message=FALSE, warning=FALSE)`
-<link href="http://joey711.github.com/phyloseq/markdown.css" rel="stylesheet"></link>
 
+<link href="http://joey711.github.com/phyloseq/markdown.css" rel="stylesheet"></link>
 ---
 title: "vignette for phylogeo: geographic exploration of biom data"
-author: "zachcp"
-date: "September 24, 2014"
-output:
+date: "`r Sys.Date()`"
+output: 
+  rmarkdown::html_vignette
   html_document:
     toc: yes
+  
+vignette: >
+  %\VignetteIndexEntry{Geographic Exploration}
+  %\VignetteEngine{knitr::rmarkdown}
 ---
+
+```{r, echo = FALSE, message = FALSE}
+library("knitr")
+opts_chunk$set(cache=FALSE, fig.width=9, message=FALSE, warning=FALSE, comment = "#>")
+```
 
 ## About this vignette
 Analysis of data generated using sequencing of microbial genes has provided a 

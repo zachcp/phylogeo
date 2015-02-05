@@ -485,7 +485,7 @@ map_tree <- function(physeq,  region=NULL, color = NULL,size=4, alpha=0.8,
                     map_on_left = FALSE, projection=NULL, orientation=NULL,
                     lat0=NULL, lat1=NULL, lon0=NULL,n=NULL, r=NULL) {
     #check for the existence of a tree: lifted from phyloseq's plot_tree
-    if(!"phy_tree" %in% phyloseq:::getslots.phyloseq(physeq)){
+    if(!"phy_tree" %in% phyloseq::getslots.phyloseq(physeq)){
       stop("tree missing or invalid. map-tree requires a phylogenetic tree")
     }
     #trim samples that are not in the tree

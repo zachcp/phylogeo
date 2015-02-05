@@ -8,13 +8,14 @@
 
 ################################################################################
 #' Data: Projectionlist
-.projlist <- c("aitoff", "albers", "azequalarea", "azequidist",
+.projlist <- c("aitoff", "albers", "azequalarea", "azequidistant",
               "bicentric", "bonne", "conic", "cylequalarea", "cylindrical",
-              "eisenlohr", "elliptic", "fisheye", "gall", "gilbert", "guyou",
-              "harrison", "hex", "homing", "lagrange", "lambert", "laue", 
-              "lune","mercator", "mecca","mollweide", "newyorker", "orthographic", 
-              "perspective","polyconic", "rectangular", "simpleconic", 
-              "sinusoidal", "tetra","trapezoidal")
+              "eisenlohr", "elliptic", "fisheye", "gall", "gilbert", "globular",
+              "gnomonic","guyou","harrison", "hex", "homing", "lagrange", 
+              "lambert", "laue", "lune","mercator", "mecca","mollweide", 
+              "newyorker", "orthographic", "perspective","polyconic", 
+              "rectangular", "simpleconic", "sinusoidal", "square","stereographic",
+              "tetra","trapezoidal")
 
 ################################################################################
 #' Helper Functions
@@ -53,16 +54,24 @@
 #' http://www.inside-r.org/packages/cran/mapproj/docs/mapproject
 .create_basemap <-function(region, df, latcol, loncol, projection, 
                            orientation,lat0, lat1, lon0,n, r){
+  
+  #temporary check for projections that are currently not working and will require work to include
+  if(projection %in% c("bonne","eisenlohr","gall","harrison",
+                       "lune","perspective","stereographic")){
+    stop("You are using a projection that is not yet supported by phylogeo")
+  }
+    
   # check that the projection is null or is in the projectionlist
   # print out a warning about projections
   if(!is.null(projection)){
     if(!(projection %in% .projlist)){
       stop("The projection is not valid. Please use null or one of the following:
-           aitoff, albers, azequalarea, azequidist, bicentric, bonne, conic, 
+           aitoff, albers, azequalarea, azequidistant, bicentric, bonne, conic, 
            cylequalarea, cylindrical, eisenlohr, elliptic, fisheye, gall, 
-           gilbert, guyou, harrison, hex, homing, lagrange, lambert, laue, 
+           gilbert, globular, gnomonic, guyou, harrison, hex, homing, lagrange, lambert, laue, 
            lune, mercator, mecca, mollweide, newyorker, orthographic, perspective, 
-           polyconic, rectangular,simpleconic, sinusoidal, tetra, trapezoidal")
+           polyconic, rectangular,simpleconic, square, sinusoidal, 
+           stereographic, tetra, trapezoidal")
     }else{ 
       print("you are using a non-standard projection that may require additional parameters")
     }
@@ -89,6 +98,8 @@
     world <- ggplot2::map_data("world", region = region)
   }
   
+  # values passed to this function are from the data itself and are
+  # not specified in the parent function.
   worldmap <- ggplot(world, aes(x=long, y=lat, group=group)) +
     geom_polygon( fill="grey",alpha=0.6) +
     scale_y_continuous(breaks=(-2:2) * 30) +
@@ -102,8 +113,9 @@
   #check all of the projections and return the projected ggplot
   if(is.null(projection)) { 
     return(worldmap)
-  } else if(projection %in% c("aitoff","azequalarea","bonne","cylindrical","gilbert",
-                        "eisenlohr","globular","guyou","hex","laue",
+  } else if(projection %in% c("aitoff", "azequidistant","azequalarea","bonne","
+                              cylindrical","gilbert",
+                        "eisenlohr","globular","gnomonic","guyou","hex","laue",
                         "lagrange","mercator","mollweide","orthographic",
                         "polyconic","sinusoidal","square","tetra",
                         "vandergrinten")){
@@ -134,16 +146,17 @@
             stop("The bicentric and elliptic projection require a lon0 value")
           }
       return(worldmap + coord_map(projection=projection, orientation=orientation, lon0=lon0))
-  }else if(projection %in% c("harrison")){
-          if(is.null(dist) || is.null(angle) ){
-            stop("The harrison projection require a dist and angle value")
-          }
-      return(worldmap + coord_map(projection=projection, orientation=orientation, dist=dist,angle=angle))
-  }else if(projection  %in% c("lune")){
-        if(is.null(lat) || is.null(angle) ){
-          stop("The lune projection require a lat and angle value")
-        }
-    return(worldmap + coord_map(projection=projection, orientation=orientation, lat=lat,angle=angle))
+#need to fix the harrison and lune projections
+#   }else if(projection %in% c("harrison")){
+#           if(is.null(dist) || is.null(angle) ){
+#             stop("The harrison projection require a dist and angle value")
+#           }
+#       return(worldmap + coord_map(projection=projection, orientation=orientation, dist=dist,angle=angle))
+#   }else if(projection  %in% c("lune")){
+#         if(is.null(lat) || is.null(angle) ){
+#           stop("The lune projection require a lat and angle value")
+#         }
+#     return(worldmap + coord_map(projection=projection, orientation=orientation, lat=lat, angle=angle))
   }
 }
 ################################################################################
