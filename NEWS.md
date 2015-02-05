@@ -1,3 +1,7 @@
+#0.99.1
+cleanup related to projections, added test for projections, 
+a vignette for projections, and an Rmd file documenting proecjtions intended for the web.
+
 #0.99.0
 bump version for submission to bioconductor. cleaned up docs, Rmd files, etc.
 
