@@ -67,6 +67,11 @@
 #' data(batfecal)
 #' map_phyloseq(batfecal, region="china", jitter=TRUE, jitter.x=2,jitter.y=2, color="PH")
 #' map_phyloseq(batfecal, projection="mollweide")
+#' map_phyloseq(batfecal, projection="conic", lat0=15)
+#' map_phyloseq(batfecal, projection="fisheye", n=0.5)
+#' map_phyloseq(batfecal, projection="newyorker", r=0.3)
+#' map_phyloseq(batfecal, projection="elliptic", lon0=10) 
+#' map_phyloseq(batfecal, projection="albers", lat0=-20 , lat1=50)
 #' data(batmicrobiome)
 #' map_phyloseq(batmicrobiome, jitter=TRUE, color="SCIENTIFIC_NAME")
 map_phyloseq <- function(physeq, size=4, region=NULL, color=NULL, 
