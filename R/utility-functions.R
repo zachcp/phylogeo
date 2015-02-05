@@ -12,7 +12,7 @@
               "bicentric", "bonne", "conic", "cylequalarea", "cylindrical",
               "eisenlohr", "elliptic", "fisheye", "gall", "gilbert", "guyou",
               "harrison", "hex", "homing", "lagrange", "lambert", "laue", 
-              "lune","mercator", "mollweide", "newyorker", "orthographic", 
+              "lune","mercator", "mecca","mollweide", "newyorker", "orthographic", 
               "perspective","polyconic", "rectangular", "simpleconic", 
               "sinusoidal", "tetra","trapezoidal")
 
@@ -21,8 +21,9 @@
 .check_physeq <- function(physeq){
   #check phyloseq objects for Lat/Lon
   if (!"sam_data" %in% phyloseq::getslots.phyloseq(physeq)){
-    stop("Mapping requires that phylos objects have Sample_Data with Latitude and Longitude")
-  } 
+    stop("Mapping requires that phyloseq objects have Sample_Data with Latitude and Longitude")
+  }
+  
   #check that sampledata has latitude and longitude columns
   lat <- c('latitude', 'lat', 'lattitude')
   lon <- c('longitude', 'lon', 'long')
@@ -45,67 +46,6 @@
   if (lon_present == FALSE) { stop("sampledata must have a valid longitude column")  }
   list(latcol, loncol)
 }
-#' Create a basemap from the maps() worldmap focusing on a region
-#' projection defaults to mercator, but others can be selected 
-#' http://www.inside-r.org/packages/cran/mapproj/docs/mapproject
-# .create_basemap <-function(region, df, latcol, loncol, proj, parameter, orientation){
-#   
-#   # check that the projection is null or is in the projectionlist
-#   # print out a warning about projections
-#   if(!is.null(proj)){
-#     if(!(proj %in% .projlist)){
-#       stop("The projection is not valid. Please use null or one of the following:
-#            aitoff, albers, azequalarea, azequidist, bicentric, bonne, conic, 
-#            cylequalarea, cylindrical, eisenlohr, elliptic, fisheye, gall, 
-#            gilbert, guyou, harrison, hex, homing, lagrange, lambert, laue, 
-#            lune, mercator, mollweide, newyorker, orthographic, perspective, 
-#            polyconic, rectangular,simpleconic, sinusoidal, tetra, trapezoidal")
-#     }else{print("You are using a non-default projection that may require additional parameters. 
-#                 See http://www.inside-r.org/packages/cran/mapproj/docs/mapproject for more information")}
-#   }
-#   
-#   
-#   if(is.null(region)){
-#     #default worldmap cuts out Antarctica by filtering everythign below -59 Latitude
-#     world <- ggplot2::map_data("world")
-#     #world <- world[world$lat > -59,]
-#     #ToDO: allow subsetting of samples by region. Is there a point-in-polygon library?
-#     #this is a quick filter based on latitude and longitude not point-in-polygon
-#     maxlat  = max(world$lat)
-#     minlat  = min(world$lat)
-#     maxlong = max(world$long)
-#     minlong = min(world$long)
-#     df <- df[ df[, loncol] < maxlong, ]
-#     df <- df[ df[, loncol] > minlong, ]
-#     df <- df[ df[, latcol] < maxlat, ]
-#     df <- df[ df[, latcol] > minlat, ]
-#   }else if(region=="world"){
-#     world <- ggplot2::map_data("world")
-#   }else {
-#     world <- ggplot2::map_data("world", region = region)
-#   }
-#   
-#   worldmap <- ggplot(world, aes(x=long, y=lat, group=group)) +
-#     geom_polygon( fill="grey",alpha=0.6) +
-#     scale_y_continuous(breaks=(-2:2) * 30) +
-#     scale_x_continuous(breaks=(-4:4) * 45) +
-#     theme_classic() +
-#     theme( axis.text = element_blank(), 
-#            axis.ticks = element_blank(), 
-#            axis.line = element_blank(), 
-#            axis.title=element_blank())
-#   
-#   if(is.null(proj)) { 
-#       return(worldmap)
-#   } else if(is.numeric(parameter)) {
-#       return(worldmap + coord_map( projection=proj, parameter=parameter ))
-#   } else if(is.numeric(orientation)) {
-#       return(worldmap + coord_map( projection=proj, parameter=parameter, orientation=orientation))
-#   } else {
-#       return(worldmap + coord_map(projection=proj))
-#   }
-# }
-
 ##################################################################################################
 
 #' Create a basemap from the maps() worldmap focusing on a region
@@ -121,11 +61,11 @@
            aitoff, albers, azequalarea, azequidist, bicentric, bonne, conic, 
            cylequalarea, cylindrical, eisenlohr, elliptic, fisheye, gall, 
            gilbert, guyou, harrison, hex, homing, lagrange, lambert, laue, 
-           lune, mercator, mollweide, newyorker, orthographic, perspective, 
+           lune, mercator, mecca, mollweide, newyorker, orthographic, perspective, 
            polyconic, rectangular,simpleconic, sinusoidal, tetra, trapezoidal")
-    }else{print("You are using a non-default projection that may require additional parameters. 
-                See http://www.inside-r.org/packages/cran/mapproj/docs/mapproject 
-                for more information")}
+    }else{ 
+      print("you are using a non-standard projection that may require additional parameters")
+    }
   }
   
   
@@ -135,14 +75,14 @@
     #world <- world[world$lat > -59,]
     #ToDO: allow subsetting of samples by region. Is there a point-in-polygon library?
     #this is a quick filter based on latitude and longitude not point-in-polygon
-    maxlat  = max(world$lat)
-    minlat  = min(world$lat)
-    maxlong = max(world$long)
-    minlong = min(world$long)
-    df <- df[ df[, loncol] < maxlong, ]
-    df <- df[ df[, loncol] > minlong, ]
-    df <- df[ df[, latcol] < maxlat, ]
-    df <- df[ df[, latcol] > minlat, ]
+    #maxlat  = max(world$lat)
+    #minlat  = min(world$lat)
+    #maxlong = max(world$long)
+    #minlong = min(world$long)
+    #df <- df[ df[, loncol] < maxlong, ]
+    #df <- df[ df[, loncol] > minlong, ]
+    #df <- df[ df[, latcol] < maxlat, ]
+    #df <- df[ df[, latcol] > minlat, ]
   }else if(region=="world"){
     world <- ggplot2::map_data("world")
   }else {
@@ -164,12 +104,14 @@
     return(worldmap)
   } else if(proj %in% c("aitoff","azequalarea","bonne","cylindrical","gilbert",
                         "eisenlohr","globular","guyou","hex","laue",
-                        "lagrange","mercator","orthographic","polyconic",
-                        "sinusoidal","square","tetra","vandergrinten")){
+                        "lagrange","mercator","mollweide","orthographic",
+                        "polyconic","sinusoidal","square","tetra",
+                        "vandergrinten")){
           return(worldmap + coord_map(projection=proj, orientation=orientation))
   } else if(proj %in% c("cylequalarea","rectangular","conic","mecca","homing")){
             if(is.null(lat0)){
-               stop("The bonne,conic,cylequalarea, homing, mecca, and rectangular projections require the lat0 argument")
+               stop("The bonne,conic,cylequalarea, homing, mecca, and 
+                    rectangular projections require the lat0 argument")
             }
          return(worldmap + coord_map(projection=proj, orientation=orientation, lat0=lat0))
   } else if(proj == "fisheye"){

@@ -1,5 +1,5 @@
 ################################################################################
-# Use testthat to test phyloseq data objects for the presence of Lat/Long
+# Use testthat to test phyloseq use of mapproj projections
 ################################################################################
 library("phylogeo")
 library("testthat")
@@ -7,45 +7,59 @@ context("Check Projections")
 
 test_that("basic projections (that don't need extra values) work", {
   data(batfecal)
-  expect_is(map_phyloseq(batfecal, proj="aitoff") , "ggplot")
-  expect_is(map_phyloseq(batfecal, proj="azequalarea") , "ggplot")
-  expect_is(map_phyloseq(batfecal, proj="cylindrical") , "ggplot")
-  expect_is(map_phyloseq(batfecal, proj="gilbert") , "ggplot")
-  expect_is(map_phyloseq(batfecal, proj="guyou") , "ggplot")
-  expect_is(map_phyloseq(batfecal, proj="laue") , "ggplot")
-  expect_is(map_phyloseq(batfecal, proj="mercator") , "ggplot")
-  expect_is(map_phyloseq(batfecal, proj="mollweide") , "ggplot")
-  expect_is(map_phyloseq(batfecal, proj="orthographic") , "ggplot")
-  expect_is(map_phyloseq(batfecal, proj="polyconic") , "ggplot")
-  expect_is(map_phyloseq(batfecal, proj="sinusoidal") , "ggplot")
-  expect_is(map_phyloseq(batfecal, proj="tetra") , "ggplot")
+  expect_is(map_phyloseq(batfecal, projection="aitoff") , "ggplot")
+  expect_is(map_phyloseq(batfecal, projection="azequalarea") , "ggplot")
+  expect_is(map_phyloseq(batfecal, projection="cylindrical") , "ggplot")
+  expect_is(map_phyloseq(batfecal, projection="gilbert") , "ggplot")
+  expect_is(map_phyloseq(batfecal, projection="guyou") , "ggplot")
+  expect_is(map_phyloseq(batfecal, projection="laue") , "ggplot")
+  expect_is(map_phyloseq(batfecal, projection="mercator") , "ggplot")
+  expect_is(map_phyloseq(batfecal, projection="mollweide") , "ggplot")
+  expect_is(map_phyloseq(batfecal, projection="orthographic") , "ggplot")
+  expect_is(map_phyloseq(batfecal, projection="polyconic") , "ggplot")
+  expect_is(map_phyloseq(batfecal, projection="sinusoidal") , "ggplot")
+  expect_is(map_phyloseq(batfecal, projection="tetra") , "ggplot")
 })
 
-test_that("Albers Projection works", {
+test_that("Projections with Lat0 work", {
   data(batfecal)
-  p1 <- map_phyloseq(batfecal, proj="albers", paramaters = c(10,50))
-  expect_is(p1, "ggplot")
+  expect_is(map_phyloseq(batfecal, projection="cylequalarea", lat0=15), "ggplot")
+  expect_is(map_phyloseq(batfecal, projection="rectangular", lat0=15), "ggplot")
+  expect_is(map_phyloseq(batfecal, projection="conic", lat0=15), "ggplot")
+  expect_is(map_phyloseq(batfecal, projection="mecca", lat0=15), "ggplot")
+  expect_is(map_phyloseq(batfecal, projection="homing", lat0=15) , "ggplot")
 })
 
-#other projections
+test_that("Fisheye projection works", {
+  data(batfecal)
+  expect_is(map_phyloseq(batfecal, projection="fisheye", n=0.5) , "ggplot")
+})
 
-#expect_is(map_phyloseq(batfecal, proj="albers") , "ggplot")
-#expect_is(map_phyloseq(batfecal, proj="bicentric") , "ggplot")
-#expect_is(map_phyloseq(batfecal, proj="bonne") , "ggplot")
-#expect_is(map_phyloseq(batfecal, proj="conic") , "ggplot")
-#map_phyloseq(batfecal, proj="cylequalarea")
-#expect_is(map_phyloseq(batfecal, proj="eisenlohr") , "ggplot")
-#expect_is(map_phyloseq(batfecal, proj="elliptic") , "ggplot")
-# expect_is(map_phyloseq(batfecal, proj="fisheye") , "ggplot")
-# expect_is(map_phyloseq(batfecal, proj="gall") , "ggplot")
-#expect_is(map_phyloseq(batfecal, proj="harrison") , "ggplot")
-#expect_is(map_phyloseq(batfecal, proj="hex") , "ggplot")
-#expect_is(map_phyloseq(batfecal, proj="homing") , "ggplot")
-#expect_is(map_phyloseq(batfecal, proj="lambert") , "ggplot")
-#expect_is(map_phyloseq(batfecal, proj="lagrange") , "ggplot")
-#expect_is(map_phyloseq(batfecal, proj="lune") , "ggplot")
-#expect_is(map_phyloseq(batfecal, proj="newyorker") , "ggplot")
-#  expect_is(map_phyloseq(batfecal, proj="perspective") , "ggplot")
-# expect_is(map_phyloseq(batfecal, proj="rectangular") , "ggplot")
-#  expect_is(map_phyloseq(batfecal, proj="simpleconic") , "ggplot")
-#  expect_is(map_phyloseq(batfecal, proj="trapezoidal") , "ggplot")
+test_that("NewYorker projection works", {
+  data(batfecal)
+  expect_is(map_phyloseq(batfecal, projection="newyorker", r=0.3) , "ggplot")
+})
+
+test_that("Projections with two latitude parameters work: ", {
+  data(batfecal)
+  expect_is(map_phyloseq(batfecal, projection="simpleconic", lat0=10, lat1=10) , "ggplot")
+  expect_is(map_phyloseq(batfecal, projection="lambert", lat0=10, lat1=10) , "ggplot")
+  expect_is(map_phyloseq(batfecal, projection="albers", lat0=10, lat1=10) , "ggplot")
+  expect_is(map_phyloseq(batfecal, projection="trapezoidal", lat0=10, lat1=10) , "ggplot")
+})
+
+test_that("Projections with longitude component work: ", {
+  data(batfecal)
+  expect_is(map_phyloseq(batfecal, projection="bicentric", lon0=10) , "ggplot")
+  expect_is(map_phyloseq(batfecal, projection="elliptic", lon0=10) , "ggplot")
+})
+
+# test_that("Test the Harrison Projection: ", {
+#   data(batfecal)
+#   expect_is(map_phyloseq(batfecal, projection="harrison", dist=10, angle=10) , "ggplot")
+# })
+# 
+# test_that("Test the Lune Projection: ", {
+#   data(batfecal)
+#   expect_is(map_phyloseq(batfecal, projection="harrison", lat=10, angle=10) , "ggplot")
+# })
