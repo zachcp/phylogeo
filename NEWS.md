@@ -1,3 +1,6 @@
+#0.99.2
+no new features. added email to biocdev and bumping so automated builds will pass
+
 #0.99.1
 cleanup related to projections, added test for projections, 
 a vignette for projections, and an Rmd file documenting proecjtions intended for the web.
