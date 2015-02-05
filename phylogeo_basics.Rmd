@@ -1,8 +1,10 @@
 ---
+title: "phylogeo basics"
 output:
   html_document:
     toc: yes
 ---
+
 `r library("knitr")`
 `r opts_chunk$set(cache=FALSE, fig.width=12, message=FALSE, warning=FALSE)`
 <link href="http://joey711.github.com/phyloseq/markdown.css" rel="stylesheet"></link>
@@ -47,7 +49,7 @@ The use and utility of these functions are explained below, after a description 
 #high level world map
 map_phyloseq(batfecal)
 #zoomed in map, coloed by pH and jittered in order to see the points better
-map_phyloseq(batfecal, region="china", jitter=T, jitter.x=2,jitter.y=2, color="PH")
+map_phyloseq(batfecal, region="china", jitter=TRUE, jitter.x=2,jitter.y=2, color="PH")
 ```
 
 ### map_network
@@ -56,9 +58,9 @@ The goal of the *map_network* function is to visualize the relatedness of ecolog
 #simple network map without lines 
 map_network(batmicrobiome)
 #play with the jitter and cutoff to get a better view
-map_network(batmicrobiome, color="SCIENTIFIC_NAME", jitter=T, jitter.x=20,jitter.y=1, lines=T, line_weight = 0.2)
+map_network(batmicrobiome, color="SCIENTIFIC_NAME", jitter=TRUE, jitter.x=20,jitter.y=1, lines=TRUE, line_weight = 0.2)
 #map-network with a different dataset
-map_network(epoxamicin_KS, color="Region", jitter=T, lines=T, line_weight = 2)
+map_network(epoxamicin_KS, color="Region", jitter=TRUE, lines=TRUE, line_weight = 2)
 ```
 One current downside to the current mapping setup is that the `region` keyword only works on country names and cannot zoom to, say "the western hemisphere". In this example the result is a lot of dead space. For figures you would want to ggsave a PDF/SVG and zoom to your region of interest. Down the line a more nuanced mapping system might be considered.
 
