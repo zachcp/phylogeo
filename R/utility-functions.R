@@ -111,9 +111,8 @@
 #' Create a basemap from the maps() worldmap focusing on a region
 #' projection defaults to mercator, but others can be selected 
 #' http://www.inside-r.org/packages/cran/mapproj/docs/mapproject
-.create_basemap <-function(region, df, latcol, loncol, proj, orientation,
-                           lat0, lat1, lon0,n, r){
-  
+.create_basemap <-function(region, df, latcol, loncol, proj, 
+                           orientation,lat0, lat1, lon0,n, r){
   # check that the projection is null or is in the projectionlist
   # print out a warning about projections
   if(!is.null(proj)){
@@ -163,7 +162,7 @@
   #check all of the projections and return the projected ggplot
   if(is.null(proj)) { 
     return(worldmap)
-  } else if(proj %in% c("aitoff","azequalarea","cylindrical","gilbert",
+  } else if(proj %in% c("aitoff","azequalarea","bonne","cylindrical","gilbert",
                         "eisenlohr","globular","guyou","hex","laue",
                         "lagrange","mercator","orthographic","polyconic",
                         "sinusoidal","square","tetra","vandergrinten")){

@@ -96,8 +96,8 @@ map_phyloseq <- function(physeq, size=4, region=NULL, color=NULL,
   #############################################################################
   worldmap <- .create_basemap(region=region, df=data, 
                               latcol=latcol,loncol=loncol,
-                              proj=projection, parameter=parameter, 
-                              orientation=orientation)
+                              proj=projection,orientation=orientation,
+                              lat0=lat0, lat1=lat1, lon0=lon0,n=n, r=r)
   
   if(jitter){
     data <- .jitter_df(df=data,xcol=loncol,ycol=latcol,
@@ -479,8 +479,8 @@ map_tree <- function(physeq,  region=NULL, color = NULL,size=4, alpha=0.8,
     
     mapplot  <- map_phyloseq(physeq2, region=region, color= color, size=size, 
                              alpha = alpha, jitter=jitter, jitter.x=jitter.x, 
-                             jitter.y=jitter.y,proj=projection, parameter=parameter, 
-                             orientation=orientation)  + 
+                             jitter.y=jitter.y,proj=projection,orientation=orientation,
+                             lat0=lat0, lat1=lat1, lon0=lon0,n=n, r=r)  + 
                     theme(legend.position="none") 
     
     treeplot <- phyloseq::plot_tree(physeq2, color=color, label.tips=label.tips,
