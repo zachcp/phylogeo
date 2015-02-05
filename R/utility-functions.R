@@ -55,12 +55,6 @@
 .create_basemap <-function(region, df, latcol, loncol, projection, 
                            orientation,lat0, lat1, lon0,n, r){
   
-  #temporary check for projections that are currently not working and will require work to include
-  if(projection %in% c("bonne","cylindrical","eisenlohr","gall","harrison",
-                       "lune","perspective","stereographic")){
-    stop("You are using a projection that is not yet supported by phylogeo")
-  }
-    
   # check that the projection is null or is in the projectionlist
   # print out a warning about projections
   if(!is.null(projection)){
@@ -72,12 +66,18 @@
            lune, mercator, mecca, mollweide, newyorker, orthographic, perspective, 
            polyconic, rectangular,simpleconic, square, sinusoidal, 
            stereographic, tetra, trapezoidal")
-    }else{ 
+    }else if(projection %in% c("bonne","cylindrical","eisenlohr",
+                               "gall","harrison","lune","perspective",
+                               "stereographic")){
+      #temporary check for projections that are currently not working and 
+      #will require work to include
+         stop("You are using a projection that is not yet supported by phylogeo")
+      
+    } else{
       print("you are using a non-standard projection that may require additional parameters")
     }
   }
-  
-  
+   
   if(is.null(region)){
     #default worldmap cuts out Antarctica by filtering everythign below -59 Latitude
     world <- ggplot2::map_data("world")
