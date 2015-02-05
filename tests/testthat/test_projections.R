@@ -41,7 +41,6 @@ test_that("Projections with Lat0 work", {
   expect_is(map_phyloseq(batfecal, projection="homing", lat0=15) , "ggplot")
   expect_is(map_phyloseq(batfecal, projection="mecca", lat0=15), "ggplot")
   expect_is(map_phyloseq(batfecal, projection="rectangular", lat0=15), "ggplot")
-  
 })
 
 test_that("Fisheye projection works", {
@@ -67,13 +66,3 @@ test_that("Projections with longitude component work: ", {
   expect_is(map_phyloseq(batfecal, projection="bicentric", lon0=10) , "ggplot")
   expect_is(map_phyloseq(batfecal, projection="elliptic", lon0=10) , "ggplot")
 })
-
-# test_that("Test the Harrison Projection: ", {
-#   data(batfecal)
-#   expect_is(map_phyloseq(batfecal, projection="harrison", dist=10, angle=10) , "ggplot")
-# })
-# 
-# test_that("Test the Lune Projection: ", {
-#   data(batfecal)
-#   expect_is(map_phyloseq(batfecal, projection="harrison", lat=10, angle=10) , "ggplot")
-# })
