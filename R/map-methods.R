@@ -322,8 +322,8 @@ map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard",
   #create map
   ############################################
   worldmap <- .create_basemap(region=region, df=mdf,latcol=latcol, 
-                              loncol=loncol, proj=projection, parameter=parameter,
-                              orientation=orientation)
+                              loncol=loncol, proj=projection, orientation=orientation,
+                              lat0=lat0, lat1=lat1, lon0=lon0,n=n, r=r)
   
   #modify points if using jitter
   if(jitter){
