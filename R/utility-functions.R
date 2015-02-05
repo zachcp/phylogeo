@@ -56,7 +56,7 @@
                            orientation,lat0, lat1, lon0,n, r){
   
   #temporary check for projections that are currently not working and will require work to include
-  if(projection %in% c("bonne","eisenlohr","gall","harrison",
+  if(projection %in% c("bonne","cylindrical","eisenlohr","gall","harrison",
                        "lune","perspective","stereographic")){
     stop("You are using a projection that is not yet supported by phylogeo")
   }
