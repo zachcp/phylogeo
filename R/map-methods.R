@@ -63,6 +63,9 @@
 #'  
 #' @param lon0 (Optional). Default \code{NULL}. 
 #'  Additional arguments for nonstandard map projection.
+#'  
+#' @param seed (Optional). Default \code{1234}. 
+#'  seed is used for repeatable randomness if you are using the jitter functions
 #'
 #' @import ggplot2  
 #' @export
@@ -81,7 +84,8 @@ map_phyloseq <- function(physeq, size=4, region=NULL, color=NULL,
                          shape=NULL, alpha = 0.8, 
                          jitter=FALSE, jitter.x=3, jitter.y=3,
                          projection=NULL,orientation=NULL,
-                         lat0=NULL, lat1=NULL, lon0=NULL,n=NULL, r=NULL){
+                         lat0=NULL, lat1=NULL, lon0=NULL,n=NULL, r=NULL,
+                         seed=1234){
   #check basic physeq and lat/lon
   latlon <- .check_physeq(physeq)
   latcol <- as.character( latlon[1] )
@@ -108,8 +112,9 @@ map_phyloseq <- function(physeq, size=4, region=NULL, color=NULL,
                               lat0=lat0, lat1=lat1, lon0=lon0,n=n, r=r)
   
   if(jitter){
-    data <- .jitter_df(df=data,xcol=loncol,ycol=latcol,
-                                  jitter.x=jitter.x,jitter.y=jitter.y)
+    setseed(seed)
+    data <- .jitter_df(df=data,xcol=loncol,ycol=latcol,jitter.x=jitter.x,
+                       jitter.y=jitter.y, seed=seed)
   }
   
   # how to hande when size information can be either global (outside of aes), 
@@ -228,6 +233,10 @@ map_phyloseq <- function(physeq, size=4, region=NULL, color=NULL,
 #' @param lon0 (Optional). Default \code{NULL}. 
 #'  Additional arguments for nonstandard map projection.
 #'  
+#' @param seed (Optional). Default \code{1234}. 
+#'  seed is used for repeatable randomness if you are using the jitter functions
+#'
+#'  
 #'
 #' @seealso
 #' \href{https://joey711.github.io/phyloseq/distance}{phyloseq's distance command}.
@@ -259,7 +268,8 @@ map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard",
                         line_alpha=0.4 , base_data=FALSE, 
                         base_data_color="grey",projection=NULL, 
                         orientation=NULL,
-                        lat0=NULL, lat1=NULL, lon0=NULL,n=NULL, r=NULL){
+                        lat0=NULL, lat1=NULL, lon0=NULL,n=NULL, r=NULL,
+                        seed=1234){
 
   #helper functions to calculate membership in clusters or lines
   ##############################################################################
@@ -338,8 +348,8 @@ map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard",
   
   #modify points if using jitter
   if(jitter){
-    mdf <- .jitter_df( df=mdf, xcol=loncol, ycol=latcol, 
-                                  jitter.x=jitter.x, jitter.y=jitter.y)
+    mdf <- .jitter_df(df=mdf, xcol=loncol, ycol=latcol, jitter.x=jitter.x,
+                      jitter.y=jitter.y, seed=seed)
   }
   
   #add points that aren't part of a network

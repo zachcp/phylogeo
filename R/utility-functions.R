@@ -235,7 +235,8 @@
   }
 }
 #' utility function to move the x and y positions of the dataset
-.jitter_df <- function(df, xcol, ycol, jitter.x, jitter.y){
+.jitter_df <- function(df, xcol, ycol, jitter.x, jitter.y, seed){
+  setseed(seed) # setting the seed allows you to repeat your randomness
   df <- data.frame(df)
   dflength <- length(df[,1])
   distx    <- runif(dflength, min= -jitter.x, max=jitter.x)
@@ -245,6 +246,7 @@
   df
 }
 
+#check for NAs.
 .check_NA <- function(df, col){
   colvals <- df[col]
   colvals[ colvals == "None"] <- NA  #some data has "None" so be sure to replace with NA
