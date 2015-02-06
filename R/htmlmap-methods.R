@@ -36,12 +36,15 @@ htmlmap_phyloseq <- function(physeq, size=NULL, color=NULL){
   data = phyloseq::sample_data(physeq)
   
   #customize circle size
-  if(size == "Abundance"){
-    data$circlesize <- phyloseq::sample_sums(physeq)
-  }else if(!is.null(size)) {
-    data$circlesize <- size
+  if(!is.null(size)){
+    if(size == "Abundance"){
+      data$circlesize <- phyloseq::sample_sums(physeq)
+    }else{
+      data$circlesize <- size
+    }
+    
   }
-  
+    
   #basemap
   map = leaflet(data) %>% addTiles()
   
