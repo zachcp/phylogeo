@@ -28,9 +28,3 @@ VignetteBuilder: knitr
 BugReports: https://github.com/zachcp/phylogeo/issues
 biocViews: Sequencing, Microbiome, Metagenomics
 LazyData: true
-Collate:
-    'htmlmap-methods.R'
-    'map-methods.R'
-    'phylogeo.R'
-    'plot-methods.R'
-    'utility-functions.R'
