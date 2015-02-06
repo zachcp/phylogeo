@@ -70,15 +70,16 @@
 #' @import ggplot2  
 #' @export
 #' @examples 
-#' data(batfecal)
 #' map_phyloseq(batfecal, region="china", jitter=TRUE, jitter.x=2,jitter.y=2, color="PH")
+#' map_phyloseq(batfecal, jitter=TRUE, seed=23454)
 #' map_phyloseq(batfecal, projection="mollweide")
+#' 
 #' map_phyloseq(batfecal, projection="conic", lat0=15)
 #' map_phyloseq(batfecal, projection="fisheye", n=0.5)
 #' map_phyloseq(batfecal, projection="newyorker", r=0.3)
 #' map_phyloseq(batfecal, projection="elliptic", lon0=10) 
 #' map_phyloseq(batfecal, projection="albers", lat0=-20 , lat1=50)
-#' data(batmicrobiome)
+
 #' map_phyloseq(batmicrobiome, jitter=TRUE, color="SCIENTIFIC_NAME")
 map_phyloseq <- function(physeq, size=4, region=NULL, color=NULL, 
                          shape=NULL, alpha = 0.8, 
@@ -250,12 +251,12 @@ map_phyloseq <- function(physeq, size=4, region=NULL, color=NULL,
 #' @examples
 #' library(phyloseq)
 #' library(ggplot2)
-#' data(batfecal)
 #' map_network(batfecal)
 #' map_network(batfecal, region="china", jitter=TRUE, lines=TRUE)
+#' map_network(batfecal, region="china", jitter=TRUE, seed=3453)
 #' map_network(batfecal, region="china", jitter=TRUE, lines=TRUE, maxdist=0.9)
-#' data(batmicrobiome)
 #' map_network(batmicrobiome, lines=TRUE)
+#' 
 #' ig <- make_network(batmicrobiome)
 #' map_network(batmicrobiome, igraph= ig, lines=TRUE)
 #' map_network(batmicrobiome, igraph= ig, lines=TRUE, color="SCIENTIFIC_NAME")
@@ -481,7 +482,6 @@ map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard",
 #' library(ggplot2)
 #' library(phyloseq)
 #' library(gridExtra)
-#' data(epoxamicin_KS)
 #' map_tree(epoxamicin_KS)
 #' map_tree(epoxamicin_KS, color="Geotype", jitter=TRUE)
 #' map_tree(epoxamicin_KS, projection="gilbert", color="Geotype", jitter=TRUE)
@@ -555,7 +555,6 @@ map_tree <- function(physeq,  region=NULL, color = NULL,size=4, alpha=0.8,
 #' @import gridExtra
 #' @export
 #' @examples
-#' data(epoxamicin_KS)
 #' library(ggplot2)
 #' library(gridExtra)
 #' map_clusters(epoxamicin_KS, clusternum=6)
