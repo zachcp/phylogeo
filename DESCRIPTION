@@ -20,6 +20,7 @@ Depends:
     ggplot2 (>= 1.0.0),
     gridExtra (>= 0.9.1)
 Suggests:
+    devtools,
     testthat,
     dplyr,
     knitr
