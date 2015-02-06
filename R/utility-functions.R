@@ -236,7 +236,7 @@
 }
 #' utility function to move the x and y positions of the dataset
 .jitter_df <- function(df, xcol, ycol, jitter.x, jitter.y, seed){
-  setseed(seed) # setting the seed allows you to repeat your randomness
+  set.seed(seed) # setting the seed allows you to repeat your randomness
   df <- data.frame(df)
   dflength <- length(df[,1])
   distx    <- runif(dflength, min= -jitter.x, max=jitter.x)
