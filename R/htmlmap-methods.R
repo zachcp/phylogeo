@@ -31,30 +31,21 @@ htmlmap_phyloseq <- function(physeq, size=NULL, color=NULL){
     devtools::install_github('rstudio/leaflet')
     library("leaflet")
   }
-  
   #get data
   data = phyloseq::sample_data(physeq)
   
   #customize circle size
   if(!is.null(size)){
-    if(size == "Abundance"){
-      data$circlesize <- phyloseq::sample_sums(physeq)
-    }else{
-      data$circlesize <- size
-    }
-    
+    if(size == "Abundance") data$circlesize <- phyloseq::sample_sums(physeq) else
+                            data$circlesize <- size
   }
-    
   #basemap
   map = leaflet(data) %>% addTiles()
   
   #add custom circles
-  if(!is.null(size)) {
-    map <- map %>% addCircleMarkers(radius=~circlesize)
-  }else{
-    map <- map %>% addCircles()
-  }
-
+  if(!is.null(size)) map <- map %>% addCircleMarkers(radius=~circlesize) else
+                     map <- map %>% addCircles()
+  
   return(map)
 }
 
@@ -73,17 +64,6 @@ htmlmap_phyloseq <- function(physeq, size=NULL, color=NULL){
 #' @param igraph  (Optional). Default \code{NULL}
 #'  An optional igraph object. Will reduce plotting time to use 
 #'  a precalculated network 
-#'   
-#' @param color (Optional). Default \code{NULL}.
-#'  The name of the sample variable in \code{physeq} to use for color mapping
-#'  of points (graph vertices). Note: "cluster" can be used to show igraph 
-#'  clusters
-#'  
-#' @param size (Optional). Default \code{4}. 
-#'  The size of the vertex points.
-#'  
-#' @param lines (Optional). Default \code{FALSE}. 
-#'  Boolean value. Determines whether lines are drawn between samples
 #'  
 #' @param distance (Optional). Default \code{"jaccard"}. 
 #'  Distance metric used to calculate between-sample distances.
@@ -91,22 +71,36 @@ htmlmap_phyloseq <- function(physeq, size=NULL, color=NULL){
 #' @param maxdist (Optional). Default \code{0.9}. 
 #'  Cutoff of the \code{distance} used to detmine whether a sample is 
 #'  included in the network.
-#'  
-#' @param line_weight (Optional). Default \code{0.3}.
-#'  The line thickness to use to label graph edges.
-#' 
-#' @param line_color (Optional). Default \code{Black}.
+#'   
+#' @param line_color (Optional). Default \code{black}.
 #'  The name of the sample variable in \code{physeq} to use for color mapping
 #'  of lines (graph edges).
 #' 
 #' @param line_alpha (Optional). Default \code{0.4}.
 #'  The transparency level for graph-edge lines.
 #'  
-#' @param base_data (Optional). Default \code{FALSE}.
-#'  Boolean to determine whether to include dat points that aren't in a network.
-#' 
-#' @param base_data_color (Optional). Default \code{grey}.
-#'  named color to determine base data color
+#' @param line_weight (Optional). Default \code{1}.
+#'  The line thickness to use to label graph edges.
+#'  
+#' @param color (Optional). Default \code{black}.
+#'   Color of the points
+#'  
+#' @param fill (Optional). Default \code{NULL}.
+#'  The name of the sample variable in \code{physeq} to use for color mapping
+#'  of points (graph vertices). Note: "cluster" can be used to show igraph 
+#'  clusters
+#'  
+#' @param fillOpacity (Optional). Default \code{NULL}.
+#'  The name of the sample variable in \code{physeq} to use for color mapping
+#'  of points (graph vertices). Note: "cluster" can be used to show igraph 
+#'  clusters
+#'  
+#' @param fillcolor (Optional). Default \code{color}.
+#'  Color to be used for filling in the circle
+#'  
+#' @param size (Optional). Default \code{1}. 
+#'  The size of the vertex points. If "Abundance" is supplied as the argument
+#'  the size will be scaled to the abundance of the OTUs in the sample.
 #'  
 #' \href{https://joey711.github.io/phyloseq/distance}{phyloseq's distance command}.
 #' 
@@ -117,33 +111,42 @@ htmlmap_phyloseq <- function(physeq, size=NULL, color=NULL){
 #' @export
 #' @examples
 #' library(phyloseq)
-#' data(batfecal)
-#' htmlmap_network(batfecal)
 #' htmlmap_network(batfecal)
 #' htmlmap_network(batfecal, maxdist=0.9)
-#' data(batmicrobiome)
-#' htmlmap_network(batmicrobiome, lines=TRUE)
+#' 
+#' htmlmap_network(batmicrobiome)
 #' ig <- make_network(batmicrobiome)
 #' htmlmap_network(batmicrobiome, igraph= ig )
-#' htmlmap_network(batmicrobiome, igraph= ig, color="SCIENTIFIC_NAME")
-#' htmlmap_network(batmicrobiome, igraph= ig, lines=TRUE, color="SCIENTIFIC_NAME")
-#' htmlmap_network(batmicrobiome, igraph= ig, color="SCIENTIFIC_NAME")
-htmlmap_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard", 
-                        color=NULL,  size=4, alpha = 0.8,line_weight=1, 
-                        line_color ="Black",line_alpha=0.4 , base_data=FALSE, 
-                        base_data_color="grey"){
+#' htmlmap_network(epoxamicin_KS, maxdist=0.99, line_color = "red", line_weight = 4, line_alpha=0.5)
+htmlmap_network <- function(physeq, 
+                            #distance related 
+                            igraph=NULL, 
+                            maxdist=0.9, 
+                            distance="jaccard",
+                            #linerelated
+                            line_color ="black",
+                            line_alpha=0.4 , 
+                            line_weight=1,
+                            #point related
+                            color="blue",  
+                            fill = FALSE,
+                            fillOpacity = 0.2,
+                            fillColor = color,
+                            size=1, 
+                            alpha = 0.8){
   
-  #install leaflet using devtools
-  #replace when leaflet is on CRAN
+  # install leaflet using devtools replace when leaflet is on CRAN
+  #############################################################################
   if(!require("leaflet")){
     devtools::install_github('rstudio/leaflet')
     library("leaflet")
   }
   
   #helper functions to calculate membership in clusters or lines
-  ##############################################################################
+  #############################################################################
   get_clusters <- function(num, graph=igraph){
-    #get cluster membership info from igraph object from cluster with clusterid of 'num'
+    #get cluster membership info from igraph object 
+    #from cluster with clusterid of 'num'
     clusts  <- igraph::clusters(graph)
     members <- which(clusts$membership == num) #get membership
     names   <- get.vertex.attribute(graph, 'name', members)
@@ -155,7 +158,6 @@ htmlmap_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard"
   
   get_lines <- function(graph=igraph, df=data){
     #get each edge of the network and return a list of dataframes with the node info
-    
     getline_df <- function(i, l=links, df1=df){
       #subset data frame using node info
       temprow   <- l[i,]
@@ -176,19 +178,26 @@ htmlmap_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard"
     #df must have link column dennoting belonging to the same line
     lines = unique(df$link)
     for (line in lines){
+      #currently I add extra columns here so I can quote them below. 
+      # it would be cleaner to call directly.
       line_df <- df[df$link == line,]
       line_df['LAT'] <- line_df[latcol]
       line_df['LON'] <- line_df[loncol]
-      
+
       map <- map %>% addPolylines(data = line_df,
                                   lng  = ~LON,
                                   lat  = ~LAT,
-                                  fill = TRUE)
+                                  color = line_color,
+                                  weight = line_weight,
+                                  opacity = line_alpha,
+                                  fill = fill,
+                                  fillOpacity =fillOpacity,
+                                  fillColor = fillColor)
     }
     return(map)
   }
   
-  #####################################
+  ############################################################################
 
   #make network, get cluster information, and add thamesat to the  original dataframe. 
   if(is.null(igraph)){
@@ -201,10 +210,18 @@ htmlmap_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard"
   latlon <- phylogeo:::.check_physeq(physeq)
   latcol <- as.character( latlon[1] )
   loncol <- as.character( latlon[2] )
-  
+  #get clusters and make a dataframe from them
   clusts <- seq( igraph::clusters(igraph)$no )
   clustdf <- Reduce( rbind, Map(get_clusters, clusts))
-  mdf <- merge(clustdf, data.frame(sample_data(physeq)), by="row.names", all.x=TRUE)
+  #get sample data
+  data <- data.frame(sample_data(physeq))
+  
+  #customize circle size prior to using the cluster
+  if(size == "Abundance") data$circlesize <- phyloseq::sample_sums(physeq) else
+                          data$circlesize <- size
+  
+  #merge sample data with cluster data
+  mdf <- merge(clustdf, data, by="row.names", all.x=TRUE)
   rownames(mdf) <- mdf$Row.names
   
   #create map
@@ -214,5 +231,9 @@ htmlmap_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard"
   #addlines
   linedf <- get_lines(df=mdf)
   map <- addlines(map, linedf, latcol, loncol)
+  
+  #add points
+  map <- map %>% addCircleMarkers(radius=~circlesize, color=color)
+  
   return(map)
 }
