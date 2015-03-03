@@ -18,7 +18,6 @@
 #' 
 #' @export
 #' @examples 
-#' 
 #' data(batfecal)
 #' htmlmap_phyloseq(batfecal, size=3)
 #' data(batmicrobiome)
@@ -110,7 +109,6 @@ htmlmap_phyloseq <- function(physeq, size=NULL, color=NULL){
 #' @importFrom igraph clusters  
 #' @export
 #' @examples
-#' library(phyloseq)
 #' htmlmap_network(batfecal)
 #' htmlmap_network(batfecal, maxdist=0.9)
 #' 

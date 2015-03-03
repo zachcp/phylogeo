@@ -68,6 +68,8 @@
 #'  seed is used for repeatable randomness if you are using the jitter functions
 #'
 #' @import ggplot2  
+#' @import maps
+#' @import mapproj
 #' @export
 #' @examples 
 #' map_phyloseq(batfecal, region="china", jitter=TRUE, jitter.x=2,jitter.y=2, color="PH")
@@ -79,7 +81,6 @@
 #' map_phyloseq(batfecal, projection="newyorker", r=0.3)
 #' map_phyloseq(batfecal, projection="elliptic", lon0=10) 
 #' map_phyloseq(batfecal, projection="albers", lat0=-20 , lat1=50)
-
 #' map_phyloseq(batmicrobiome, jitter=TRUE, color="SCIENTIFIC_NAME")
 map_phyloseq <- function(physeq, size=4, region=NULL, color=NULL, 
                          shape=NULL, alpha = 0.8, 
@@ -113,7 +114,7 @@ map_phyloseq <- function(physeq, size=4, region=NULL, color=NULL,
                               lat0=lat0, lat1=lat1, lon0=lon0,n=n, r=r)
   
   if(jitter){
-    setseed(seed)
+    set.seed(seed)
     data <- .jitter_df(df=data,xcol=loncol,ycol=latcol,jitter.x=jitter.x,
                        jitter.y=jitter.y, seed=seed)
   }
@@ -244,13 +245,13 @@ map_phyloseq <- function(physeq, size=4, region=NULL, color=NULL,
 #' 
 #' @import ggplot2
 #' @import phyloseq
+#' @import maps
+#' @import mapproj
 #' @importFrom igraph get.data.frame
 #' @importFrom igraph get.vertex.attribute
 #' @importFrom igraph clusters  
 #' @export
 #' @examples
-#' library(phyloseq)
-#' library(ggplot2)
 #' map_network(batfecal)
 #' map_network(batfecal, region="china", jitter=TRUE, lines=TRUE)
 #' map_network(batfecal, region="china", jitter=TRUE, seed=3453)
@@ -477,11 +478,10 @@ map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard",
 #' @seealso \code{\link[ggplot2]{map_data}}
 #'
 #' @import ggplot2
+#' @import maps
+#' @import mapproj
 #' @export
 #' @examples
-#' library(ggplot2)
-#' library(phyloseq)
-#' library(gridExtra)
 #' map_tree(epoxamicin_KS)
 #' map_tree(epoxamicin_KS, color="Geotype", jitter=TRUE)
 #' map_tree(epoxamicin_KS, projection="gilbert", color="Geotype", jitter=TRUE)
@@ -552,11 +552,11 @@ map_tree <- function(physeq,  region=NULL, color = NULL,size=4, alpha=0.8,
 #'  Number of kmeans clusters to divide your phylogenetic tree into
 #'  
 #' @import ggplot2
+#' @import maps
+#' @import mapproj
 #' @import gridExtra
 #' @export
 #' @examples
-#' library(ggplot2)
-#' library(gridExtra)
 #' map_clusters(epoxamicin_KS, clusternum=6)
 #' map_clusters(epoxamicin_KS, clusternum=10)
 map_clusters <- function(physeq, clusternum=3){
