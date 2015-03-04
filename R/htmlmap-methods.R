@@ -176,12 +176,15 @@ htmlmap_network <- function(physeq,
     #df must have link column dennoting belonging to the same line
     lines = unique(df$link)
     for (line in lines){
-      #currently I add extra columns here so I can quote them below. 
+      #currently I add extra columns here so I can quote them below.
       # it would be cleaner to call directly.
+      # I also have to make sure the columns are numeric
       line_df <- df[df$link == line,]
       line_df['LAT'] <- line_df[latcol]
       line_df['LON'] <- line_df[loncol]
-
+      line_df$LON <- as.numeric(as.character(line_df$LON))
+      line_df$LAT <- as.numeric(as.character(line_df$LAT))
+      
       map <- map %>% addPolylines(data = line_df,
                                   lng  = ~LON,
                                   lat  = ~LAT,
@@ -204,6 +207,7 @@ htmlmap_network <- function(physeq,
     if( !"igraph" %in% class(igraph) ){
       stop("igraph must be an igraph network object")} 
   }
+  
   #check basic physeq and lat/lon and make clusters
   latlon <- phylogeo:::.check_physeq(physeq)
   latcol <- as.character( latlon[1] )
