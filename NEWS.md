@@ -1,3 +1,6 @@
+#0.99.3
+fixes for Bioconductor. Improved documentation, some code refactoring
+
 #0.99.2
 no new features. added email to biocdev and bumping so automated builds will pass
 

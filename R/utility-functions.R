@@ -1,12 +1,6 @@
 #
 # A set of functions used by map and plot functions to test for validity of data
 #
-###############################################################################
-#' Check for Latitude and Longitude Columns in a Dataframe 
-#' and return the column values
-
-
-################################################################################
 #' Data: Projectionlist
 .projlist <- c("aitoff", "albers", "azequalarea", "azequidistant",
               "bicentric", "bonne", "conic", "cylequalarea", "cylindrical",
@@ -17,7 +11,6 @@
               "rectangular", "simpleconic", "sinusoidal", "square","stereographic",
               "tetra","trapezoidal")
 
-################################################################################
 #' Helper Functions
 .check_physeq <- function(physeq){
   #check phyloseq objects for Lat/Lon
@@ -47,7 +40,6 @@
   if (lon_present == FALSE) { stop("sampledata must have a valid longitude column")  }
   list(latcol, loncol)
 }
-##################################################################################################
 
 #' Create a basemap from the maps() worldmap focusing on a region
 #' projection defaults to mercator, but others can be selected 
@@ -159,7 +151,7 @@
 #     return(worldmap + coord_map(projection=projection, orientation=orientation, lat=lat, angle=angle))
   }
 }
-################################################################################
+
 #Mapproj info from http://www.inside-r.org/packages/cran/mapproj/docs/mapproject
 #mercator() equally spaced straight meridians, conformal, straight compass courses
 #sinusoidal() equally spaced parallels, equal-area, same as bonne(0)
