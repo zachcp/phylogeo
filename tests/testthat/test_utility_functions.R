@@ -2,7 +2,6 @@
 # Use testthat to test phyloseq data objects for the presence of Lat/Long
 ################################################################################
 library("phylogeo")
-library("phyloseq")
 library("testthat")
 library("dplyr")
 context("Utility Functions")

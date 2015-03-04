@@ -10,7 +10,7 @@
 #'
 #' @return a ggplot object
 #' @param physeq (Required). 
-#'  The name of the phyloseq object. This must have sample data with 
+#'  The name of the \code{\link[phyloseq]{phyloseq}} phyloseq object. This must have sample data with 
 #'  Latitude and Longitude Columns.
 #'  
 #' @param size (Optional). Default \code{4}. 
@@ -66,6 +66,10 @@
 #'  
 #' @param seed (Optional). Default \code{1234}. 
 #'  seed is used for repeatable randomness if you are using the jitter functions
+#'  
+#' @seealso 
+#'  \href{http://zachcp.github.io/phylogeo/phylogeo_basics}{phylogeo basics}.
+#'  \href{http://zachcp.github.io/phylogeo/phylogeo_projections}{phylogeo projections}.
 #'
 #' @import ggplot2  
 #' @import maps
@@ -151,7 +155,7 @@ map_phyloseq <- function(physeq, size=4, region=NULL, color=NULL,
 #'   
 #' @return a ggplot object
 #' @param physeq (Required). 
-#'  The name of the phyloseq object. This must have sample data with 
+#'  The name of the \code{\link[phyloseq]{phyloseq}} phyloseq object. This must have sample data with 
 #'  Latitude and Longitude Columns.
 #'  
 #' @param igraph  (Optional). Default \code{NULL}
@@ -242,6 +246,9 @@ map_phyloseq <- function(physeq, size=4, region=NULL, color=NULL,
 #'
 #' @seealso
 #' \href{https://joey711.github.io/phyloseq/distance}{phyloseq's distance command}.
+#' @seealso 
+#'  \href{http://zachcp.github.io/phylogeo/phylogeo_basics}{phylogeo basics}.
+#'  \href{http://zachcp.github.io/phylogeo/phylogeo_projections}{phylogeo projections}.
 #' 
 #' @import ggplot2
 #' @import phyloseq
@@ -404,7 +411,7 @@ map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard",
 #' @return a ggplot object
 #' 
 #' @param physeq (Required). 
-#'  The name of the phyloseq object. This must have sample data with 
+#'  The name of the \code{\link[phyloseq]{phyloseq}} phyloseq object. This must have sample data with 
 #'  Latitude and Longitude Columns.
 #'  
 #'  @param region (Optional). Default \code{NULL}.
@@ -476,6 +483,9 @@ map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard",
 #'  
 #' @seealso \code{\link[phyloseq]{plot_tree}}
 #' @seealso \code{\link[ggplot2]{map_data}}
+#' @seealso 
+#'  \href{http://zachcp.github.io/phylogeo/phylogeo_basics}{phylogeo basics}.
+#'  \href{http://zachcp.github.io/phylogeo/phylogeo_projections}{phylogeo projections}.
 #'
 #' @import ggplot2
 #' @import maps
@@ -555,6 +565,8 @@ map_tree <- function(physeq,  region=NULL, color = NULL,size=4, alpha=0.8,
 #' @import maps
 #' @import mapproj
 #' @import gridExtra
+#' @seealso 
+#'  \href{http://zachcp.github.io/phylogeo/phylogeo_basics}{phylogeo basics}.
 #' @export
 #' @examples
 #' map_clusters(epoxamicin_KS, clusternum=6)

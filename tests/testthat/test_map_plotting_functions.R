@@ -3,7 +3,6 @@
 ################################################################################
 library("phylogeo") 
 library("testthat") 
-library("ggplot2")
 library("igraph")
 
 test_that("map_phyloseq: results in a ggplot", {

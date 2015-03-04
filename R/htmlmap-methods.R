@@ -9,7 +9,7 @@
 #' @seealso http://rstudio.github.io/leaflet/
 #' 
 #' @param physeq (Required). 
-#'  The name of the phyloseq object. This must have sample data with 
+#'  The name of the \code{\link[phyloseq]{phyloseq}} phyloseq object. This must have sample data with 
 #'  Latitude and Longitude Columns.
 #'  
 #' @param size (Optional). Default \code{NULL}. 
@@ -21,7 +21,7 @@
 #' data(batfecal)
 #' htmlmap_phyloseq(batfecal, size=3)
 #' data(batmicrobiome)
-#' htmlmap_phyloseq(batmicrobiome, jitter=TRUE, color="SCIENTIFIC_NAME")
+#' htmlmap_phyloseq(batmicrobiome, color="SCIENTIFIC_NAME")
 htmlmap_phyloseq <- function(physeq, size=NULL, color=NULL){
   
   #install leaflet using devtools
@@ -57,11 +57,11 @@ htmlmap_phyloseq <- function(physeq, size=NULL, color=NULL){
 #'   
 #' @return an htmlwidgets plot
 #' @param physeq (Required). 
-#'  The name of the phyloseq object. This must have sample data with 
+#'  The name of the \code{\link[phyloseq]{phyloseq}} phyloseq object. This must have sample data with 
 #'  Latitude and Longitude Columns.
 #'  
 #' @param igraph  (Optional). Default \code{NULL}
-#'  An optional igraph object. Will reduce plotting time to use 
+#'  An optional \code{\link[igraph]{igraph}} igraph object. Will reduce plotting time to use 
 #'  a precalculated network 
 #'  
 #' @param distance (Optional). Default \code{"jaccard"}. 
@@ -100,8 +100,8 @@ htmlmap_phyloseq <- function(physeq, size=NULL, color=NULL){
 #' @param size (Optional). Default \code{1}. 
 #'  The size of the vertex points. If "Abundance" is supplied as the argument
 #'  the size will be scaled to the abundance of the OTUs in the sample.
-#'  
-#' \href{https://joey711.github.io/phyloseq/distance}{phyloseq's distance command}.
+#'
+#'  @seealso  \href{https://joey711.github.io/phyloseq/distance}{phyloseq's distance command}.
 #' 
 #' @import phyloseq
 #' @importFrom igraph get.data.frame

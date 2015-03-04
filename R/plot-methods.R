@@ -9,7 +9,7 @@
 #' @usage plot_distance(physeq, distancemethod="jaccard")
 #'
 #' @param physeq (Required). 
-#'  The name of the phyloseq object. This must have sample data with 
+#'  The name of the \code{\link[phyloseq]{phyloseq}} phyloseq object. This must have sample data with 
 #'  Latitude and Longitude Columns.
 #'  
 #' @param distancemethod (Optional). Default \code{"jaccard"}.
