@@ -2,10 +2,17 @@
 # methods for plotting geographic-distance plots
 #
 ###############################################################################
-#' Calculate and Plot Sample Distances by Geography/Ecological Distance
-#'
-#' Scatterplot generation of samples using geogrpahic and eoclogical distances
-#'
+#' plot_distance is a plotting function for visualizing the geographic
+#' and ecological distances between all pairs of samples in a microbiome study.
+#' This function acts on \code{\link[phyloseq]{phyloseq}} phyloseq objects and 
+#' requires that the \code{\link[phyloseq]{sample_data}} sample_data table 
+#' contains Latitude and Longitude columns. This will calcualte the pairwise
+#' distances between each set of samples and plot them as a scatter plot.
+#' 
+#' Any of the ecological distances supported by phyloseq
+#' \code{\link[phyloseq]{distance}} will work here and can be specified with 
+#' "distancemethod="
+#' 
 #' @usage plot_distance(physeq, distancemethod="jaccard")
 #' @return a ggplot object
 #'
@@ -16,7 +23,8 @@
 #' @param distancemethod (Optional). Default \code{"jaccard"}.
 #'  The name of an ecological distance method. 
 #'  See ?distance for more information
-#'  
+#'
+#' @seealso \code{\link[phyloseq]{distance}}
 #' @import phyloseq
 #' @importFrom reshape2 melt
 #' @importFrom sp spDists

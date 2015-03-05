@@ -21,8 +21,9 @@ data(batmicrobiome)
 data(epoxamicin_KS)
 ```
 
-phylogeo uses the [mapproj](http://www.inside-r.org/packages/cran/mapproj/docs/mapproject) package
-for projecting maps and phyloseq's mapping functions can use many functions. Here are a few:
+phylogeo uses the [mapproj](http://www.inside-r.org/packages/cran/mapproj/docs/mapproject) package to draw
+its maps. This package supports a large number of projections and phylogeo supports nearly all of them as
+demonstrated below.
 
 
 ### Mercator Projection

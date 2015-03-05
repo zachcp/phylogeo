@@ -8,7 +8,8 @@
 #' @import ggplot2
 #' @import gridExtra
 #' @keywords package
-#' @description a package for mapping microbiome data
+#' @description a package for mapping microbiome data built on top of 
+#' the \code{\link[phyloseq]{phyloseq}} phylsoeq pacakge.
 NULL
 
 #' \code{\link[phyloseq]{phyloseq}} Phyloseq Object for a microbiome study focusing on bat guano

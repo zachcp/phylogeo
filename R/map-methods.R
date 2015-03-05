@@ -2,7 +2,13 @@
 # methods for drawing maps of \code{\link[phyloseq]{phyloseq}} phyloseq objects
 #
 ###############################################################################
-#' Draw A Map of the Samples in a \code{\link[phyloseq]{phyloseq}} Phyloseq Object
+#' map_phyloseq is a plotting function that draws a map of your microbiome 
+#' dataset. This function acts on \code{\link[phyloseq]{phyloseq}} 
+#' phyloseq objects and requires that the \code{\link[phyloseq]{sample_data}} 
+#' sample_data table contains Latitude and Longitude columns. The resulting 
+#' map can be customized by a nubmer of parameters including size="Abundance" 
+#' which will scale the size of hte circle according to the nubmer of reads in
+#' the \code{\link[phyloseq]{otu_table}} otu table. 
 #'
 #' This plotting funciton will draw a map of the samples in your microbiome 
 #' project, using the \code{\link[phyloseq]{phyloseq}} phyloseq package. Most
@@ -73,7 +79,7 @@
 #'  \href{http://zachcp.github.io/phylogeo/phylogeo_projections}{phylogeo projections}.
 #'
 #'@seealso
-#'  \code{\link[mapproj]{mapproj}}
+#'  \code{\link[mapproj]{mapproject}}
 #'  \code{\link[ggplot2]{coord_map}}
 #'  
 #' 
@@ -154,11 +160,15 @@ map_phyloseq <- function(physeq, size=4, region=NULL, color=NULL,
   return(worldmap)
 }
 ################################################################################
-#' Create a Network from the Phyloseq Objects and Draw A Map of the Clusters
-#'
-#' In this case, edges in the network are created if the distance between
-#' nodes is below a potentially arbitrary threshold,
-#' and special care should be given to considering the choice of this threshold.
+#' map_network is a plotting function that draws a map of your microbiome 
+#' dataset, highlighting the degree of similarity between sample sites. 
+#' This funciton acts on \code{\link[phyloseq]{phyloseq}} 
+#' phyloseq objects and requires that the \code{\link[phyloseq]{sample_data}} 
+#' sample_data table contains Latitude and Longitude columns. map_network 
+#' will calculate the ecological simiarity of each of your sample sites using 
+#' the distance metrics available in the \code{\link[phyloseq]{make_network}} 
+#' phyloseq package. These distances are then plotted as lines. Many aspects
+#' of the plots can be customized using the parameters below.
 #'   
 #' @return a ggplot object
 #' @param physeq (Required). 
@@ -249,15 +259,13 @@ map_phyloseq <- function(physeq, size=4, region=NULL, color=NULL,
 #' @param seed (Optional). Default \code{1234}. 
 #'  seed is used for repeatable randomness if you are using the jitter functions
 #'
-#'  
-#'
 #' @seealso
 #' \href{https://joey711.github.io/phyloseq/distance}{phyloseq's distance command}.
 #' @seealso 
 #'  \href{http://zachcp.github.io/phylogeo/phylogeo_basics}{phylogeo basics}.
 #'  \href{http://zachcp.github.io/phylogeo/phylogeo_projections}{phylogeo projections}.
 #'@seealso
-#'  \code{\link[mapproj]{mapproj}}
+#'  \code{\link[mapproj]{mapproject}}
 #'  \code{\link[ggplot2]{coord_map}}
 #' 
 #' @import ggplot2
@@ -294,7 +302,7 @@ map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard",
   ##############################################################################
   get_clusters <- function(num, graph=igraph){
     #get cluster membership info from igraph object from cluster with clusterid of 'num'
-    clusts  <- igraph::clusters(graph)
+    clusts  <- clusters(graph)
     members <- which(clusts$membership == num) #get membership
     names   <- get.vertex.attribute(graph, 'name', members)
     df = data.frame(names)
@@ -415,7 +423,11 @@ map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard",
   return(worldmap)
 }
 ################################################################################
-#' Map a \code{\link[phyloseq]{phyloseq}} Phyloseq Object while also drawing a phlogenetic tree of the taxa
+#' map_tree is a plotting function that acts on \code{\link[phyloseq]{phyloseq}}
+#' phyloseq objects to plot a figure that is a composite of a phylogetic tree 
+#' and a geographic map. The tips on the tree and the locations of the map 
+#' correspond to each other, allowing for an easy way to look for the geographic
+#' distrivution of clades in your tree.
 #'
 #' @return a ggplot object
 #' 
@@ -494,7 +506,7 @@ map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard",
 #'  \href{http://zachcp.github.io/phylogeo/phylogeo_basics}{phylogeo basics}.
 #'  \href{http://zachcp.github.io/phylogeo/phylogeo_projections}{phylogeo projections}.
 #' @seealso
-#'  \code{\link[mapproj]{mapproj}}
+#'  \code{\link[mapproj]{mapproject}}
 #'  \code{\link[ggplot2]{coord_map}}
 #' @seealso
 #'   \code{\link[phyloseq]{plot_tree}}
@@ -558,9 +570,14 @@ map_tree <- function(physeq,  region=NULL, color = NULL,size=4, alpha=0.8,
   }
   return(combinedplot)
 }
-################################################################################
-#' Explore the spatial distribution of subsets of your sequence data 
-#'   
+###############################################################################
+#' map_clusters is a plotting function for  \code{\link[phyloseq]{phyloseq}} 
+#' phyloseq objects which requires a phylogentic tree. map_clusters will use 
+#' the phylogenetic tree (required) of your phyloseq dataset and will cluster
+#' these sequence into a specified number of clusters using kmeans clustering.
+#' A map is then generated for each of these clusters showing the cluster and
+#' locaiton of the sequences in each cluster on a map. 
+#' 
 #' @return a ggplot object
 #' @param physeq (Required). 
 #'  The name of the \code{\link[phyloseq]{phyloseq}} phyloseq object. This must have sample data with 
@@ -580,7 +597,7 @@ map_tree <- function(physeq,  region=NULL, color = NULL,size=4, alpha=0.8,
 #' @seealso 
 #'  \href{http://zachcp.github.io/phylogeo/phylogeo_basics}{phylogeo basics}.
 #' @seealso
-#'  \code{\link[mapproj]{mapproj}}
+#'  \code{\link[mapproj]{mapproject}}
 #'  \code{\link[ggplot2]{coord_map}}
 #'  
 #' @export
