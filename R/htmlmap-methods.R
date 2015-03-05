@@ -5,7 +5,7 @@
 #' nodes is below a potentially arbitrary threshold,
 #' and special care should be given to considering the choice of this threshold.
 #'
-#' @return an HTML/JS Leaflet Map
+#' @return  \code{\link[htmlwidgets]{htmlwidgets}} Leaflet Map
 #' @seealso http://rstudio.github.io/leaflet/
 #' 
 #' @param physeq (Required). 
@@ -29,6 +29,9 @@ htmlmap_phyloseq <- function(physeq, size=NULL, color=NULL){
   if(!require("leaflet")){
     devtools::install_github('rstudio/leaflet')
     library("leaflet")
+  }
+  if(!require("dplyr")){
+    library("dplyr")
   }
   #get data
   data = phyloseq::sample_data(physeq)
@@ -55,7 +58,9 @@ htmlmap_phyloseq <- function(physeq, size=NULL, color=NULL){
 #' nodes is below a potentially arbitrary threshold,
 #' and special care should be given to considering the choice of this threshold.
 #'   
-#' @return an htmlwidgets plot
+#' @return an  \code{\link[htmlwidgets]{htmlwidgets}} plot
+#' @seealso http://rstudio.github.io/leaflet/
+#' 
 #' @param physeq (Required). 
 #'  The name of the \code{\link[phyloseq]{phyloseq}} phyloseq object. This must have sample data with 
 #'  Latitude and Longitude Columns.
