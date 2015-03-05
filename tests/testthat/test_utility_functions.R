@@ -22,9 +22,9 @@ test_that("phyloseq objects have latitude and longitude columns", {
   data(epoxamicin_KS)
   latlist  <- list( c("LATITUDE"),c("LONGITUDE"))
   latlist2 <- list( c("Latitude"),c("Longitude"))
-  expect_equal(.check_physeq(batfecal), latlist )
-  expect_equal(.check_physeq(batmicrobiome), latlist )
-  expect_equal(.check_physeq(epoxamicin_KS), latlist2 )
+  expect_equal(.check_physeq(batfecal), latlist)
+  expect_equal(.check_physeq(batmicrobiome), latlist)
+  expect_equal(.check_physeq(epoxamicin_KS), latlist2)
   
   # remove lat.long column and be sure it trips an error
   df <- data.frame(sample_data(batfecal))
@@ -42,14 +42,10 @@ test_that("jittering works and uses the seed correctly", {
   df <- data.frame(x= c(1,2,3,4,5), y=c(3,4,5,6,7))
   df_j1 <- .jitter_df(df, "x","y",3,4,123)
   df_j2 <- .jitter_df(df, "x","y",3,4,123)
-  df_j3 <- .jitter_df(df, "x","y",3,4,222)
   expect_is(df_j1 , "data.frame")
   expect_is(df_j2 , "data.frame")
   #jittered dfs with same seed should be equal
   expect_equal(df_j1, df_j2)
-  #jitter dfs with different seed will not be
-  expect_false(df_j1 == df_j3)
-  
 })
 
 test_that("checknames trips an error when its supposed to",{
