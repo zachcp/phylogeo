@@ -39,14 +39,17 @@ test_that("phyloseq objects have latitude and longitude columns", {
 })
 
 test_that("jittering works and uses the seed correctly", {
-  df1 <- data.frame(x= c(1,2,3,4,5), y=c(3,4,5,6,7))
-  df2 <- data.frame(x= c(1,2,3,4,5), y=c(3,4,5,6,7))
-  df1_j <- .jitter_df(df1, "x","y",3,4,123)
-  df2_j <- .jitter_df(df2, "x","y",3,4,123)
+  df <- data.frame(x= c(1,2,3,4,5), y=c(3,4,5,6,7))
+  df_j1 <- .jitter_df(df, "x","y",3,4,123)
+  df_j2 <- .jitter_df(df, "x","y",3,4,123)
+  df_j3 <- .jitter_df(df, "x","y",3,4,222)
+  expect_is(df_j1 , "data.frame")
+  expect_is(df_j2 , "data.frame")
+  #jittered dfs with same seed should be equal
+  expect_equal(df_j1, df_j2)
+  #jitter dfs with different seed will not be
+  expect_false(df_j1 == df_j3)
   
-  expect_is(df1_j , "data.frame")
-  expect_is(df2_j , "data.frame")
-  expect_equal(df1_j, df2_j)
 })
 
 test_that("checknames trips an error when its supposed to",{
@@ -55,5 +58,5 @@ test_that("checknames trips an error when its supposed to",{
   
   expect_output(.check_names("col1", df),"")
   expect_output(.check_names("col2", df),"")
-  expect_warning(.check_names("col3", df))
+  expect_error(.check_names("col3", df))
 })
