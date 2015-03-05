@@ -3,13 +3,13 @@
 #
 #' Data: Projectionlist
 .projlist <- c("aitoff", "albers", "azequalarea", "azequidistant",
-              "bicentric", "bonne", "conic", "cylequalarea", "cylindrical",
-              "eisenlohr", "elliptic", "fisheye", "gall", "gilbert", "globular",
-              "gnomonic","guyou","harrison", "hex", "homing", "lagrange", 
-              "lambert", "laue", "lune","mercator", "mecca","mollweide", 
-              "newyorker", "orthographic", "perspective","polyconic", 
-              "rectangular", "simpleconic", "sinusoidal", "square","stereographic",
-              "tetra","trapezoidal")
+               "bicentric", "bonne", "conic", "cylequalarea", "cylindrical",
+               "eisenlohr", "elliptic", "fisheye", "gall", "gilbert", "globular",
+               "gnomonic","guyou","harrison", "hex", "homing", "lagrange", 
+               "lambert", "laue", "lune","mercator", "mecca","mollweide", 
+               "newyorker", "orthographic", "perspective","polyconic", 
+               "rectangular", "simpleconic", "sinusoidal", "square","stereographic",
+               "tetra","trapezoidal")
 
 #' Helper Functions
 .check_physeq <- function(physeq){
@@ -63,13 +63,13 @@
                                "stereographic")){
       #temporary check for projections that are currently not working and 
       #will require work to include
-         stop("You are using a projection that is not yet supported by phylogeo")
+      stop("You are using a projection that is not yet supported by phylogeo")
       
     } else{
       print("you are using a non-standard projection that may require additional parameters")
     }
   }
-   
+  
   if(is.null(region)){
     #default worldmap cuts out Antarctica by filtering everythign below -59 Latitude
     world <- ggplot2::map_data("world")
@@ -107,48 +107,48 @@
     return(worldmap)
   } else if(projection %in% c("aitoff", "azequidistant","azequalarea","bonne","
                               cylindrical","gilbert",
-                        "eisenlohr","globular","gnomonic","guyou","hex","laue",
-                        "lagrange","mercator","mollweide","orthographic",
-                        "polyconic","sinusoidal","square","tetra",
-                        "vandergrinten")){
-          return(worldmap + coord_map(projection=projection, orientation=orientation))
+                              "eisenlohr","globular","gnomonic","guyou","hex","laue",
+                              "lagrange","mercator","mollweide","orthographic",
+                              "polyconic","sinusoidal","square","tetra",
+                              "vandergrinten")){
+    return(worldmap + coord_map(projection=projection, orientation=orientation))
   } else if(projection %in% c("cylequalarea","rectangular","conic","mecca","homing")){
-            if(is.null(lat0)){
-               stop("The bonne,conic,cylequalarea, homing, mecca, and 
+    if(is.null(lat0)){
+      stop("The bonne,conic,cylequalarea, homing, mecca, and 
                     rectangular projections require the lat0 argument")
-            }
-         return(worldmap + coord_map(projection=projection, orientation=orientation, lat0=lat0))
+    }
+    return(worldmap + coord_map(projection=projection, orientation=orientation, lat0=lat0))
   } else if(projection == "fisheye"){
-             if(is.null(n)){
-              stop("The fisheye projection requires a refractive index, n")
-             }
-         return(worldmap + coord_map(projection=projection, orientation=orientation, n=n))
+    if(is.null(n)){
+      stop("The fisheye projection requires a refractive index, n")
+    }
+    return(worldmap + coord_map(projection=projection, orientation=orientation, n=n))
   }else if(projection == "newyorker"){
-          if(is.null(r)){
-            stop("The newyorker projection requires a pedestalheight, r")
-          }
-        return(worldmap + coord_map(projection=projection, orientation=orientation, r=r))
+    if(is.null(r)){
+      stop("The newyorker projection requires a pedestalheight, r")
+    }
+    return(worldmap + coord_map(projection=projection, orientation=orientation, r=r))
   }else if(projection %in% c("simpleconic","lambert","albers","trapezoidal")){
-        if(is.null(lat0) || is.null(lat1)){
-          stop("The albers,lambert, ,and simpleconic projections require a lat0 and lat1 value")
-        }
+    if(is.null(lat0) || is.null(lat1)){
+      stop("The albers,lambert, ,and simpleconic projections require a lat0 and lat1 value")
+    }
     return(worldmap + coord_map( projection=projection, orientation=orientation, lat0=lat0,lat1=lat1))
   }else if(projection %in% c("bicentric","elliptic")){
-          if(is.null(lon0) ){
-            stop("The bicentric and elliptic projection require a lon0 value")
-          }
-      return(worldmap + coord_map(projection=projection, orientation=orientation, lon0=lon0))
-#need to fix the harrison and lune projections
-#   }else if(projection %in% c("harrison")){
-#           if(is.null(dist) || is.null(angle) ){
-#             stop("The harrison projection require a dist and angle value")
-#           }
-#       return(worldmap + coord_map(projection=projection, orientation=orientation, dist=dist,angle=angle))
-#   }else if(projection  %in% c("lune")){
-#         if(is.null(lat) || is.null(angle) ){
-#           stop("The lune projection require a lat and angle value")
-#         }
-#     return(worldmap + coord_map(projection=projection, orientation=orientation, lat=lat, angle=angle))
+    if(is.null(lon0) ){
+      stop("The bicentric and elliptic projection require a lon0 value")
+    }
+    return(worldmap + coord_map(projection=projection, orientation=orientation, lon0=lon0))
+    #need to fix the harrison and lune projections
+    #   }else if(projection %in% c("harrison")){
+    #           if(is.null(dist) || is.null(angle) ){
+    #             stop("The harrison projection require a dist and angle value")
+    #           }
+    #       return(worldmap + coord_map(projection=projection, orientation=orientation, dist=dist,angle=angle))
+    #   }else if(projection  %in% c("lune")){
+    #         if(is.null(lat) || is.null(angle) ){
+    #           stop("The lune projection require a lat and angle value")
+    #         }
+    #     return(worldmap + coord_map(projection=projection, orientation=orientation, lat=lat, angle=angle))
   }
 }
 

@@ -12,7 +12,8 @@ Imports:
     mapproj (>= 1.2),
     igraph (>= 0.7.0),
     reshape2 (>= 1.2.2),
-    sp (>= 1.0-15)
+    sp (>= 1.0-15),
+    ape 
 Depends:
     R (>= 3.0),
     ggplot2 (>= 1.0.0),

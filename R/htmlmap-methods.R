@@ -16,13 +16,23 @@
 #'  The size of the vertex points."Abundance" is a special code that will scale 
 #'  points by the number of reads in a sample
 #' 
+#' @param color (Optional). Default \code{"blue"}. 
+#'  Color of points using color names (e.g. red, blue)
+#' 
+#' @seealso
+#'  \code{\link[leaflet]{leaflet}}
+#'  \code{\link[phyloseq]{phyloseq}}
+#' 
+#' @import dplyr
+#' @import phyloseq
+#' @importFrom dplyr %>%
 #' @export
 #' @examples 
 #' data(batfecal)
 #' htmlmap_phyloseq(batfecal, size=3)
 #' data(batmicrobiome)
-#' htmlmap_phyloseq(batmicrobiome, color="SCIENTIFIC_NAME")
-htmlmap_phyloseq <- function(physeq, size=NULL, color=NULL){
+#' htmlmap_phyloseq(batmicrobiome, color="blue")
+htmlmap_phyloseq <- function(physeq, size=NULL, color="blue"){
   
   #install leaflet using devtools
   #replace when leaflet is on CRAN
@@ -30,11 +40,9 @@ htmlmap_phyloseq <- function(physeq, size=NULL, color=NULL){
     devtools::install_github('rstudio/leaflet')
     library("leaflet")
   }
-  if(!require("dplyr")){
-    library("dplyr")
-  }
+  
   #get data
-  data = phyloseq::sample_data(physeq)
+  data = sample_data(physeq)
   
   #customize circle size
   if(!is.null(size)){
@@ -45,8 +53,8 @@ htmlmap_phyloseq <- function(physeq, size=NULL, color=NULL){
   map = leaflet(data) %>% addTiles()
   
   #add custom circles
-  if(!is.null(size)) map <- map %>% addCircleMarkers(radius=~circlesize) else
-                     map <- map %>% addCircles()
+  if(!is.null(size)) map <- map %>% addCircleMarkers(radius=~circlesize, color = color) else
+                     map <- map %>% addCircles(color = color)
   
   return(map)
 }
@@ -88,27 +96,34 @@ htmlmap_phyloseq <- function(physeq, size=NULL, color=NULL){
 #'  
 #' @param color (Optional). Default \code{black}.
 #'   Color of the points
+#'   
+#' @param circle_alpha (Optional). Default \code{1}. 
+#'  The opacity of the points.
 #'  
-#' @param fill (Optional). Default \code{NULL}.
-#'  The name of the sample variable in \code{physeq} to use for color mapping
-#'  of points (graph vertices). Note: "cluster" can be used to show igraph 
-#'  clusters
+#' @param fill (Optional). Default \code{TRUE}.
+#'  Boolean. Whether to fill in the points or not.
 #'  
-#' @param fillOpacity (Optional). Default \code{NULL}.
-#'  The name of the sample variable in \code{physeq} to use for color mapping
-#'  of points (graph vertices). Note: "cluster" can be used to show igraph 
-#'  clusters
+#' @param fillOpacity (Optional). Default \code{1}.
+#'  opacity of circle fills
 #'  
-#' @param fillcolor (Optional). Default \code{color}.
+#' @param fillColor (Optional). Default \code{color}.
 #'  Color to be used for filling in the circle
 #'  
 #' @param size (Optional). Default \code{1}. 
 #'  The size of the vertex points. If "Abundance" is supplied as the argument
 #'  the size will be scaled to the abundance of the OTUs in the sample.
+#'  
 #'
-#'  @seealso  \href{https://joey711.github.io/phyloseq/distance}{phyloseq's distance command}.
+#'  @seealso
+#'    \code{\link[leaflet]{leaflet}}
+#'    \code{\link[phyloseq]{phyloseq}}
+#'  
+#'  @seealso  
+#'    \href{https://joey711.github.io/phyloseq/distance}{phyloseq's distance command}.
 #' 
 #' @import phyloseq
+#' @import dplyr
+#' @importFrom dplyr %>%
 #' @importFrom igraph get.data.frame
 #' @importFrom igraph get.vertex.attribute
 #' @importFrom igraph clusters  
@@ -119,7 +134,7 @@ htmlmap_phyloseq <- function(physeq, size=NULL, color=NULL){
 #' 
 #' htmlmap_network(batmicrobiome, maxdist=0.5)
 #' ig <- make_network(batmicrobiome)
-#' htmlmap_network(batmicrobiome, igraph= ig )
+#' htmlmap_network(batmicrobiome, igraph= ig)
 #' htmlmap_network(epoxamicin_KS, maxdist=0.99, line_color = "red", line_weight = 4, line_alpha=0.5)
 htmlmap_network <- function(physeq, 
                             #distance related 
@@ -131,12 +146,12 @@ htmlmap_network <- function(physeq,
                             line_alpha=0.4 , 
                             line_weight=1,
                             #point related
-                            color="blue",  
+                            color="blue", 
+                            circle_alpha = 0.8,
                             fill = FALSE,
-                            fillOpacity = 0.2,
+                            fillOpacity = 1,
                             fillColor = color,
-                            size=1, 
-                            alpha = 0.8){
+                            size=1){
   
   # install leaflet using devtools replace when leaflet is on CRAN
   #############################################################################
@@ -164,7 +179,7 @@ htmlmap_network <- function(physeq,
     getline_df <- function(i, l=links, df1=df){
       #subset data frame using node info
       temprow   <- l[i,]
-      tempnames <-c(temprow$from,temprow$to)
+      tempnames <- c(temprow$from,temprow$to)
       smalldf <- df1[rownames(df1) %in% tempnames, ]
       smalldf['link'] <- i
       smalldf
@@ -240,7 +255,10 @@ htmlmap_network <- function(physeq,
   map <- addlines(map, linedf, latcol, loncol)
   
   #add points
-  map <- map %>% addCircleMarkers(radius=~circlesize, color=color)
+  map <- map %>% addCircleMarkers(radius=~circlesize, 
+                                  color=color, 
+                                  opacity = circle_alpha, 
+                                  fillOpacity = fillOpacity)
   
   return(map)
 }

@@ -1,5 +1,5 @@
 ###############################################
-#'  Mapping of microbiome data.
+#'  Mapping microbiome data.
 #'
 #' @name phylogeo
 #' @author Zach Charlop-Powers \email{zcharlop@@rockefeller.edu}
@@ -11,16 +11,17 @@
 #' @description a package for mapping microbiome data
 NULL
 
-#' Phyloseq Object for Bat Guano
+#' \code{\link[phyloseq]{phyloseq}} Phyloseq Object for a microbiome study focusing on bat guano
 #'
 #' A phyloseq object with data collected from the bat guano experiments
 #' 
 #' @docType data
 #' @name batfecal
+#' @description this is the Earth Microbiome Data study 1702 concernign bat guano from Chinese caves. 
 #' @format a \code{\link{phyloseq}} object
 NULL
 
-#' Phyloseq Object for Bat Microbiome Data 
+#' \code{\link[phyloseq]{phyloseq}} Phyloseq Object for Bat Microbiome Data 
 #'
 #' A phyloseq object with data collected from the bat guano experiments
 #' 
@@ -30,7 +31,9 @@ NULL
 #' @format a \code{\link{phyloseq}} object
 NULL
 
-#' Phyloseq Object for Epoxamicin KS Sequence Data 
+#' \code{\link[phyloseq]{phyloseq}} Phyloseq Object for a soil microbiome study using degenerate primers
+#' targeting ketosynthase domains (KS), a conserved domain in the biosynthesis of polyketides. This data is
+#' the subset of KS amplicons that map to the epoxyketone natural product Epoxamicin.
 #'
 #' A phyloseq object with OTU data generated from PCR amplifying the KS domain from environmental DNA and keeping the
 #' hits for Epoxamicin

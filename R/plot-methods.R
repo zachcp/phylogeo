@@ -7,6 +7,7 @@
 #' Scatterplot generation of samples using geogrpahic and eoclogical distances
 #'
 #' @usage plot_distance(physeq, distancemethod="jaccard")
+#' @return a ggplot object
 #'
 #' @param physeq (Required). 
 #'  The name of the \code{\link[phyloseq]{phyloseq}} phyloseq object. This must have sample data with 

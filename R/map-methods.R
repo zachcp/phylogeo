@@ -1,17 +1,18 @@
 #
-# methods for drawing maps of phyloseq objects
+# methods for drawing maps of \code{\link[phyloseq]{phyloseq}} phyloseq objects
 #
 ###############################################################################
-#' Draw A Map from a Phyloseq Object
+#' Draw A Map of the Samples in a \code{\link[phyloseq]{phyloseq}} Phyloseq Object
 #'
-#' In this case, edges in the network are created if the distance between
-#' nodes is below a potentially arbitrary threshold,and special care should 
-#' be given to considering the choice of this threshold.
-#'
+#' This plotting funciton will draw a map of the samples in your microbiome 
+#' project, using the \code{\link[phyloseq]{phyloseq}} phyloseq package. Most
+#' aspect of the map are customizable using the parameters below.
+#' 
+#' 
 #' @return a ggplot object
 #' @param physeq (Required). 
-#'  The name of the \code{\link[phyloseq]{phyloseq}} phyloseq object. This must have sample data with 
-#'  Latitude and Longitude Columns.
+#'  The name of the \code{\link[phyloseq]{phyloseq}} phyloseq object. 
+#'  This must have sample data with Latitude and Longitude Columns.
 #'  
 #' @param size (Optional). Default \code{4}. 
 #'  The size of the vertex points."Abundance" is a special code that will scale 
@@ -71,6 +72,12 @@
 #'  \href{http://zachcp.github.io/phylogeo/phylogeo_basics}{phylogeo basics}.
 #'  \href{http://zachcp.github.io/phylogeo/phylogeo_projections}{phylogeo projections}.
 #'
+#'@seealso
+#'  \code{\link[mapproj]{mapproj}}
+#'  \code{\link[ggplot2]{coord_map}}
+#'  
+#' 
+#'
 #' @import ggplot2  
 #' @import maps
 #' @import mapproj
@@ -106,7 +113,7 @@ map_phyloseq <- function(physeq, size=4, region=NULL, color=NULL,
   #check plot options. "Abundance" is a special method for plotting by size
   .check_names(color,data)
   if(!size == "Abundance"){
-    .check_names(size,data, allownumeric=T)
+    .check_names(size,data, allownumeric=TRUE)
     print(size)
   }
   
@@ -134,14 +141,14 @@ map_phyloseq <- function(physeq, size=4, region=NULL, color=NULL,
     reads <- data.frame(sample_sums(physeq)); names(reads)<- "Abundance"
     data2 <- merge(data,reads,by="row.names")
     worldmap <- worldmap + geom_point(data=data2, 
-                                      aes_string( x=loncol, y=latcol, group=NULL, 
-                                                  color=color, size = "Abundance"),
+                                      aes_string(x=loncol, y=latcol, group=NULL, 
+                                                color=color, size = "Abundance"),
                                       alpha= alpha) 
   }else{
     worldmap <- worldmap + geom_point(data=data, 
-                             aes_string(x=loncol, y=latcol, group=NULL, 
-                                        color=color, size = size),
-                             alpha= alpha) 
+                                      aes_string(x=loncol, y=latcol, group=NULL, 
+                                                 color=color, size = size),
+                                      alpha= alpha) 
   }
   
   return(worldmap)
@@ -249,6 +256,9 @@ map_phyloseq <- function(physeq, size=4, region=NULL, color=NULL,
 #' @seealso 
 #'  \href{http://zachcp.github.io/phylogeo/phylogeo_basics}{phylogeo basics}.
 #'  \href{http://zachcp.github.io/phylogeo/phylogeo_projections}{phylogeo projections}.
+#'@seealso
+#'  \code{\link[mapproj]{mapproj}}
+#'  \code{\link[ggplot2]{coord_map}}
 #' 
 #' @import ggplot2
 #' @import phyloseq
@@ -279,7 +289,7 @@ map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard",
                         orientation=NULL,
                         lat0=NULL, lat1=NULL, lon0=NULL,n=NULL, r=NULL,
                         seed=1234){
-
+  
   #helper functions to calculate membership in clusters or lines
   ##############################################################################
   get_clusters <- function(num, graph=igraph){
@@ -295,7 +305,7 @@ map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard",
   
   get_lines <- function(graph=igraph, df=data){
     #get each edge of the network and return a list of dataframes with the node info
- 
+    
     getline_df <- function(i, l=links, df1=df){
       #subset data frame using node info
       temprow   <- l[i,]
@@ -377,36 +387,35 @@ map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard",
   if(lines){
     linedf <- get_lines(df=mdf) 
     worldmap <- worldmap + 
-                  geom_line(data=linedf,
-                            aes_string(x=loncol,y=latcol, group="link"), 
-                            size=line_weight, 
-                            alpha=line_alpha, 
-                            color=line_color)
+      geom_line(data=linedf,
+                aes_string(x=loncol,y=latcol, group="link"), 
+                size=line_weight, 
+                alpha=line_alpha, 
+                color=line_color)
   }
- 
+  
   # add points
   # how to hande when point_size information can be either global (outside of aes),
   # or per-sample (inside of aes)
   if(is.numeric(size)){
-   points <- geom_point(data=mdf, size = size, alpha= alpha,
-                        aes_string( x=loncol, y=latcol, group=NULL, 
-                                    color=color, shape=shape)) 
+    points <- geom_point(data=mdf, size = size, alpha= alpha,
+                         aes_string( x=loncol, y=latcol, group=NULL, 
+                                     color=color, shape=shape)) 
   }else{
     points <- geom_point(data=mdf, alpha= alpha,
                          aes_string( x=loncol, y=latcol, group=NULL, 
                                      color=color, size = size, shape=shape)) 
   } 
-  worldmap <- worldmap + points
-  
   points <- geom_point(data=mdf, size = size, alpha= alpha,
                        aes_string(x=loncol, y=latcol, 
                                   group=NULL, color=NULL, shape=NULL)) 
+  worldmap <- worldmap + points
   ###########################
   
   return(worldmap)
 }
 ################################################################################
-#' Map a Phyloseq Object while also drawing a phlogenetic tree of the taxa
+#' Map a \code{\link[phyloseq]{phyloseq}} Phyloseq Object while also drawing a phlogenetic tree of the taxa
 #'
 #' @return a ggplot object
 #' 
@@ -481,13 +490,18 @@ map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard",
 #' @param lon0 (Optional). Default \code{NULL}. 
 #'  Additional arguments for nonstandard map projection.
 #'  
-#' @seealso \code{\link[phyloseq]{plot_tree}}
-#' @seealso \code{\link[ggplot2]{map_data}}
 #' @seealso 
 #'  \href{http://zachcp.github.io/phylogeo/phylogeo_basics}{phylogeo basics}.
 #'  \href{http://zachcp.github.io/phylogeo/phylogeo_projections}{phylogeo projections}.
+#' @seealso
+#'  \code{\link[mapproj]{mapproj}}
+#'  \code{\link[ggplot2]{coord_map}}
+#' @seealso
+#'   \code{\link[phyloseq]{plot_tree}}
 #'
 #' @import ggplot2
+#' @import phyloseq
+#' @import gridExtra
 #' @import maps
 #' @import mapproj
 #' @export
@@ -496,87 +510,88 @@ map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard",
 #' map_tree(epoxamicin_KS, color="Geotype", jitter=TRUE)
 #' map_tree(epoxamicin_KS, projection="gilbert", color="Geotype", jitter=TRUE)
 map_tree <- function(physeq,  region=NULL, color = NULL,size=4, alpha=0.8,
-                    jitter= FALSE, jitter.x=3, jitter.y=3, 
-                    method = "sampledodge", nodelabf = nodeplotblank, 
-                    treesize = NULL, min.abundance = Inf, label.tips = NULL,
-                    text.size = NULL, sizebase = 5, base.spacing = 0.02, 
-                    ladderize = TRUE,plot.margin = 0.2, title = NULL, 
-                    treetheme = NULL, justify = "jagged",width_ratio = 2, 
-                    map_on_left = FALSE, projection=NULL, orientation=NULL,
-                    lat0=NULL, lat1=NULL, lon0=NULL,n=NULL, r=NULL) {
-    #check for the existence of a tree: lifted from phyloseq's plot_tree
-    if(!"phy_tree" %in% phyloseq::getslots.phyloseq(physeq)){
-      stop("tree missing or invalid. map-tree requires a phylogenetic tree")
-    }
-    #trim samples that are not in the tree
-    physeq2 <- phyloseq::prune_samples(phyloseq::sample_sums(physeq) > 0, physeq)
-    
-    mapplot  <- map_phyloseq(physeq2, region=region, color= color, size=size, 
-                             alpha = alpha, jitter=jitter, jitter.x=jitter.x, 
-                             jitter.y=jitter.y,projection=projection,orientation=orientation,
-                             lat0=lat0, lat1=lat1, lon0=lon0,n=n, r=r)  + 
-                    theme(legend.position="none") 
-    
-    treeplot <- phyloseq::plot_tree(physeq2, color=color, label.tips=label.tips,
-                                    text.size=text.size, sizebase=sizebase, 
-                                    base.spacing = base.spacing, 
-                                    ladderize = ladderize, 
-                                    plot.margin = plot.margin, 
-                                    title = title, 
-                                    treetheme=treetheme, 
-                                    justify = justify, 
-                                    nodelab =nodelabf) +
-      theme(legend.key = element_rect(fill = "white")) +
-      scale_y_continuous(expand = c(0,0)) + 
-      scale_x_continuous(expand = c(0,0))
-    # # trim space by setting xlims
-    # xvals <- treeplot$data$x
-    # xvals <- xvals[!is.na(xvals)]
-    # xmin <- min(xvals)
-    # xmax <- max(xvals) * 1.5
-    # treeplot <- treeplot + xlim( min(xvals), max(xvals))
-    
-    if(map_on_left){
-        combinedplot <- gridExtra::arrangeGrob(mapplot + 
-                                               theme(legend.position="none"),
-                                               treeplot, 
-                                               ncol=2, 
-                                               widths=c(width_ratio,1))
-    } else{
-        combinedplot <- gridExtra::arrangeGrob(treeplot + 
-                                                 theme(legend.position="none"),
-                                               mapplot, 
-                                               ncol=2, 
-                                               widths=c(1,width_ratio))    
-    }
-    return(combinedplot)
+                     jitter= FALSE, jitter.x=3, jitter.y=3, 
+                     method = "sampledodge", nodelabf = nodeplotblank, 
+                     treesize = NULL, min.abundance = Inf, label.tips = NULL,
+                     text.size = NULL, sizebase = 5, base.spacing = 0.02, 
+                     ladderize = TRUE,plot.margin = 0.2, title = NULL, 
+                     treetheme = NULL, justify = "jagged",width_ratio = 2, 
+                     map_on_left = FALSE, projection=NULL, orientation=NULL,
+                     lat0=NULL, lat1=NULL, lon0=NULL,n=NULL, r=NULL) {
+  #check for the existence of a tree: lifted from phyloseq's plot_tree
+  if(!"phy_tree" %in% getslots.phyloseq(physeq)){
+    stop("tree missing or invalid. map-tree requires a phylogenetic tree")
+  }
+  #trim samples that are not in the tree
+  physeq2 <- prune_samples(sample_sums(physeq) > 0, physeq)
+  
+  mapplot <- map_phyloseq(physeq2, region=region, color= color, size=size, 
+                          alpha = alpha, jitter=jitter, jitter.x=jitter.x, 
+                          jitter.y=jitter.y,projection=projection,orientation=orientation,
+                          lat0=lat0, lat1=lat1, lon0=lon0,n=n, r=r)  + 
+    theme(legend.position="none") 
+  
+  treeplot <- plot_tree(physeq2, color=color, label.tips=label.tips,
+                        text.size=text.size, sizebase=sizebase, 
+                        base.spacing = base.spacing, 
+                        ladderize = ladderize, 
+                        plot.margin = plot.margin, 
+                        title = title, 
+                        treetheme = treetheme, 
+                        justify = justify, 
+                        nodelab = nodelabf) +
+    theme(legend.key = element_rect(fill = "white")) +
+    scale_y_continuous(expand = c(0,0)) + 
+    scale_x_continuous(expand = c(0,0))
+  # # trim space by setting xlims
+  # xvals <- treeplot$data$x
+  # xvals <- xvals[!is.na(xvals)]
+  # xmin <- min(xvals)
+  # xmax <- max(xvals) * 1.5
+  # treeplot <- treeplot + xlim( min(xvals), max(xvals))
+  if(map_on_left){
+    combinedplot <- arrangeGrob(mapplot + theme(legend.position="none"),
+                                treeplot, ncol=2, widths=c(width_ratio,1))
+  } else{
+    combinedplot <- arrangeGrob(treeplot + theme(legend.position="none"),
+                                mapplot, ncol=2, widths=c(1,width_ratio))    
+  }
+  return(combinedplot)
 }
 ################################################################################
 #' Explore the spatial distribution of subsets of your sequence data 
 #'   
+#' @return a ggplot object
 #' @param physeq (Required). 
-#'  The name of the phyloseq object. This must have sample data with 
+#'  The name of the \code{\link[phyloseq]{phyloseq}} phyloseq object. This must have sample data with 
 #'  Latitude and Longitude Columns.
 #'  
 #' @param clusternum (Optional). Default \code{3}.
-#'  Number of kmeans clusters to divide your phylogenetic tree into
+#'  Number of clusters to divide your phylogenetic tree into using kmeans clustering.
 #'  
 #' @import ggplot2
+#' @import phyloseq
 #' @import maps
 #' @import mapproj
 #' @import gridExtra
+#' @import ape
+#' @importFrom ape cophenetic.phylo
+#' @importFrom gridExtra arrangeGrob
 #' @seealso 
 #'  \href{http://zachcp.github.io/phylogeo/phylogeo_basics}{phylogeo basics}.
+#' @seealso
+#'  \code{\link[mapproj]{mapproj}}
+#'  \code{\link[ggplot2]{coord_map}}
+#'  
 #' @export
 #' @examples
+#' map_clusters(epoxamicin_KS, clusternum=2)
 #' map_clusters(epoxamicin_KS, clusternum=6)
-#' map_clusters(epoxamicin_KS, clusternum=10)
 map_clusters <- function(physeq, clusternum=3){
   # check for the existence of a tree: lifted from phyloseq's plot_tree
-  if(!"phy_tree" %in% phyloseq::getslots.phyloseq(physeq)){
+  if(!"phy_tree" %in% getslots.phyloseq(physeq)){
     stop("tree missing or invalid. map-tree requires a phylogenetic tree")
   }
-  
   
   ################################################
   # Helper Functions
@@ -621,22 +636,22 @@ map_clusters <- function(physeq, clusternum=3){
     physeq2 <- prune_samples(sample_sums(physeq2)>0, physeq2)
     p <-  map_phyloseq(physeq2, size="Abundance")
     return(p)
-
+    
   }
   
   # make biplot of the tow together
   make_diplot <- function(clusternum, physeq=physeq){
-     p1 <- make_cluster_tree(physeq, clusternum)
-     p2 <- make_map_of_cluster(physeq, clusternum)
-     combinedplot <- gridExtra::arrangeGrob(p1,p2, ncol=2, widths=c(1,2))
+    p1 <- make_cluster_tree(physeq, clusternum)
+    p2 <- make_map_of_cluster(physeq, clusternum)
+    combinedplot <- arrangeGrob(p1,p2, ncol=2, widths=c(1,2))
   }
-
+  
   ################################################
   # Do the work
   ################################################
   
   # get kmeans data from the phylogenetic tree
-  distances <- ape::cophenetic.phylo( phy_tree(physeq))
+  distances <- cophenetic.phylo( phy_tree(physeq))
   kmeans_out <- kmeans(distances, centers=clusternum)
   clusters <- data.frame(kmeans_out$cluster)
   names(clusters) <- "cluster"
@@ -644,7 +659,6 @@ map_clusters <- function(physeq, clusternum=3){
   
   # plot everthing out
   plots <- lapply(1:clusternum, make_diplot, physeq=physeq)
-  combinedplot <- do.call(gridExtra::arrangeGrob,plots)
-  
+  combinedplot <- do.call(arrangeGrob, plots)
   return(combinedplot)
 }
