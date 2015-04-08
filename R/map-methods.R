@@ -2,7 +2,7 @@
 # methods for drawing maps of \code{\link[phyloseq]{phyloseq}} phyloseq objects
 #
 ###############################################################################
-#' Simple Mapping for \code{\link[phyloseq]{phyloseq}} Samples
+#' Simple Mapps for \code{\link[phyloseq]{phyloseq}} Samples
 #'
 #' map_phyloseq is a plotting function that draws a map of your microbiome 
 #' dataset. This function acts on \code{\link[phyloseq]{phyloseq}} 
@@ -162,7 +162,7 @@ map_phyloseq <- function(physeq, size=4, region=NULL, color=NULL,
   return(worldmap)
 }
 ################################################################################
-#' Mapping Function to Visualize Sample Similarity of \code{\link[phyloseq]{phyloseq}} objects.
+#' Mapping Functions to Visualize \code{\link[phyloseq]{phyloseq}} Phyloseq Object Sample Similarity.
 #' 
 #' map_network is a plotting function that draws a map of your microbiome 
 #' dataset, highlighting the degree of similarity between sample sites. 
@@ -427,7 +427,7 @@ map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard",
   return(worldmap)
 }
 ################################################################################
-#' Plot a phlogenetic tree and map their location.
+#' Plot a phlogenetic tree and map the location of the tree's end-nodes.
 #' 
 #' map_tree is a plotting function that acts on \code{\link[phyloseq]{phyloseq}}
 #' phyloseq objects to plot a figure that is a composite of a phylogetic tree 
@@ -577,7 +577,7 @@ map_tree <- function(physeq,  region=NULL, color = NULL,size=4, alpha=0.8,
   return(combinedplot)
 }
 ###############################################################################
-#' Explore the spatial distribution of subsets (clusters) of your sequence data
+#' Explore the spatial distribution of clustered-subsets of your sequence data
 #' 
 #' map_clusters is a plotting function for  \code{\link[phyloseq]{phyloseq}} 
 #' phyloseq objects which requires a phylogentic tree. map_clusters will use 

@@ -32,14 +32,15 @@ NULL
 #' @format a \code{\link{phyloseq}} object
 NULL
 
-#' \code{\link[phyloseq]{phyloseq}} Phyloseq Object for a soil microbiome study using degenerate primers
-#' targeting ketosynthase domains (KS), a conserved domain in the biosynthesis of polyketides. This data is
-#' the subset of KS amplicons that map to the epoxyketone natural product Epoxamicin.
-#'
-#' A phyloseq object with OTU data generated from PCR amplifying the KS domain from environmental DNA and keeping the
-#' hits for Epoxamicin
+#' @title\code{\link[phyloseq]{phyloseq}} Phyloseq object indicating the presence of \code{\href{http://en.wikipedia.org/wiki/Epoxomicin}Epoxamicin}-like
+#' biosynthetic clusters.
 #' 
 #' @docType data
 #' @name epoxamicin_KS
+#' @description\code{\link[phyloseq]{phyloseq}} Phyloseq Object for a soil microbiome study using degenerate primers
+#' targeting ketosynthase domains (KS), a conserved domain in the biosynthesis of polyketides. This data is
+#' the subset of KS amplicons that map to the epoxyketone natural product Epoxamicin.
 #' @format a \code{\link{phyloseq}} object
+#' @seealso 
+#'   \href{http://www.ncbi.nlm.nih.gov/pubmed/25831524}{Multiplexed metagenome mining using short DNA sequence tags facilitates targeted discovery of epoxyketone proteasome inhibitors}.
 NULL
