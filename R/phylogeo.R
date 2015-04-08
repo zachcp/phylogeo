@@ -12,29 +12,22 @@
 #' the \code{\link[phyloseq]{phyloseq}} phylsoeq pacakge.
 NULL
 
-#' \code{\link[phyloseq]{phyloseq}} Phyloseq Object for a microbiome study focusing on bat guano
-#'
-#' A phyloseq object with data collected from the bat guano experiments
-#' 
+#' @title \code{\link[phyloseq]{phyloseq}} Phyloseq Object for a microbiome study focusing on bat guano
 #' @docType data
 #' @name batfecal
-#' @description this is the Earth Microbiome Data study 1702 concernign bat guano from Chinese caves. 
+#' @description this is the  \href{http://www.earthmicrobiome.org/}{Earth Microbiome Project} Study 1702 concerning bat guano from Chinese caves. 
 #' @format a \code{\link{phyloseq}} object
 NULL
 
-#' \code{\link[phyloseq]{phyloseq}} Phyloseq Object for Bat Microbiome Data 
-#'
-#' A phyloseq object with data collected from the bat guano experiments
-#' 
+#' @title \code{\link[phyloseq]{phyloseq}} Phyloseq Object for Bat Microbiome Data 
 #' @docType data
 #' @name batmicrobiome
-#' @description this is the Earth Microbiome Data study 1734 about bat guano from the US, Ecuador and Costa Rica
+#' @description this is the \href{http://www.earthmicrobiome.org/}{Earth Microbiome Project} Study 1734 about bat guano from the US, Ecuador and Costa Rica
 #' @format a \code{\link{phyloseq}} object
 NULL
 
 #' @title\code{\link[phyloseq]{phyloseq}} Phyloseq object indicating the presence of \code{\href{http://en.wikipedia.org/wiki/Epoxomicin}Epoxamicin}-like
 #' biosynthetic clusters.
-#' 
 #' @docType data
 #' @name epoxamicin_KS
 #' @description\code{\link[phyloseq]{phyloseq}} Phyloseq Object for a soil microbiome study using degenerate primers
