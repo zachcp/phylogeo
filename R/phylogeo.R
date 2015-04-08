@@ -17,6 +17,8 @@ NULL
 #' @name batfecal
 #' @description this is the  \href{http://www.earthmicrobiome.org/}{Earth Microbiome Project} Study 1702 concerning bat guano from Chinese caves. 
 #' @format a \code{\link{phyloseq}} object
+#' @seealso
+#'  \code{\link[phyloseq]{phyloseq}}
 NULL
 
 #' @title \code{\link[phyloseq]{phyloseq}} Phyloseq Object for Bat Microbiome Data 
@@ -24,16 +26,21 @@ NULL
 #' @name batmicrobiome
 #' @description this is the \href{http://www.earthmicrobiome.org/}{Earth Microbiome Project} Study 1734 about bat guano from the US, Ecuador and Costa Rica
 #' @format a \code{\link{phyloseq}} object
+#' @seealso
+#'  \code{\link[phyloseq]{phyloseq}}
 NULL
 
-#' @title\code{\link[phyloseq]{phyloseq}} Phyloseq object indicating the presence of \code{\href{http://en.wikipedia.org/wiki/Epoxomicin}Epoxamicin}-like
+#' @title \code{\link[phyloseq]{phyloseq}} Phyloseq object indicating the presence of \code{\href{http://en.wikipedia.org/wiki/Epoxomicin}Epoxamicin}-like
 #' biosynthetic clusters.
 #' @docType data
 #' @name epoxamicin_KS
-#' @description\code{\link[phyloseq]{phyloseq}} Phyloseq Object for a soil microbiome study using degenerate primers
+#' @description \code{\link[phyloseq]{phyloseq}} Phyloseq Object for a soil microbiome study using degenerate primers
 #' targeting ketosynthase domains (KS), a conserved domain in the biosynthesis of polyketides. This data is
 #' the subset of KS amplicons that map to the epoxyketone natural product Epoxamicin.
 #' @format a \code{\link{phyloseq}} object
+#' @seealso
+#'  \code{\link[phyloseq]{phyloseq}}
+#'  \code{\link[phyloseq]{plot_tree}}
 #' @seealso 
 #'   \href{http://www.ncbi.nlm.nih.gov/pubmed/25831524}{Multiplexed metagenome mining using short DNA sequence tags facilitates targeted discovery of epoxyketone proteasome inhibitors}.
 NULL
