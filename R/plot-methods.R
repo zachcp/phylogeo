@@ -2,6 +2,8 @@
 # methods for plotting geographic-distance plots
 #
 ###############################################################################
+#' Calculate and Plot Sample Distances by Geography/Ecological Distance
+#' 
 #' plot_distance is a plotting function for visualizing the geographic
 #' and ecological distances between all pairs of samples in a microbiome study.
 #' This function acts on \code{\link[phyloseq]{phyloseq}} phyloseq objects and 
