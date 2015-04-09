@@ -557,7 +557,7 @@ map_tree <- function(physeq,  region=NULL, color = NULL,size=4, alpha=0.8,
                         title = title, 
                         treetheme = treetheme, 
                         justify = justify, 
-                        nodelab = nodelabf) +
+                        nodelabf = nodelabf) +
     theme(legend.key = element_rect(fill = "white")) +
     scale_y_continuous(expand = c(0,0)) + 
     scale_x_continuous(expand = c(0,0))
