@@ -45,7 +45,7 @@
 #' projection defaults to mercator, but others can be selected 
 #' http://www.inside-r.org/packages/cran/mapproj/docs/mapproject
 .create_basemap <-function(region, df, latcol, loncol, projection, 
-                           orientation,lat0, lat1, lon0,n, r){
+                           orientation,lat0, lat1, lon0, n, r){
   
   # check that the projection is null or is in the projectionlist
   # print out a warning about projections
@@ -66,7 +66,7 @@
       stop("You are using a projection that is not yet supported by phylogeo")
       
     } else{
-      print("you are using a non-standard projection that may require additional parameters")
+      #print("you are using a non-standard projection that may require additional parameters")
     }
   }
   

@@ -122,7 +122,6 @@ map_phyloseq <- function(physeq, size=4, region=NULL, color=NULL,
   .check_names(color,data)
   if(!size == "Abundance"){
     .check_names(size,data, allownumeric=TRUE)
-    print(size)
   }
   
   #create map
