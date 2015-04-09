@@ -44,6 +44,7 @@
 #' Create a basemap from the maps() worldmap focusing on a region
 #' projection defaults to mercator, but others can be selected 
 #' http://www.inside-r.org/packages/cran/mapproj/docs/mapproject
+#' @import ggplot2
 .create_basemap <-function(region, df, latcol, loncol, projection, 
                            orientation,lat0, lat1, lon0, n, r){
   
@@ -111,33 +112,33 @@
                               "lagrange","mercator","mollweide","orthographic",
                               "polyconic","sinusoidal","square","tetra",
                               "vandergrinten")){
-    return(worldmap + coord_map(projection=projection, orientation=orientation))
+    return(worldmap + coord_map(projection=projection, xlim=c(-180,180),ylim=c(-90,90), orientation=c(90,0,0)))
   } else if(projection %in% c("cylequalarea","rectangular","conic","mecca","homing")){
     if(is.null(lat0)){
       stop("The bonne,conic,cylequalarea, homing, mecca, and 
                     rectangular projections require the lat0 argument")
     }
-    return(worldmap + coord_map(projection=projection, orientation=orientation, lat0=lat0))
+    return(worldmap + coord_map(projection=projection, orientation=orientation, lat0=lat0, xlim=c(-180,180),ylim=c(-90,90)))
   } else if(projection == "fisheye"){
     if(is.null(n)){
       stop("The fisheye projection requires a refractive index, n")
     }
-    return(worldmap + coord_map(projection=projection, orientation=orientation, n=n))
+    return(worldmap + coord_map(projection=projection, orientation=orientation, n=n, xlim=c(-180,180),ylim=c(-90,90)))
   }else if(projection == "newyorker"){
     if(is.null(r)){
       stop("The newyorker projection requires a pedestalheight, r")
     }
-    return(worldmap + coord_map(projection=projection, orientation=orientation, r=r))
+    return(worldmap + coord_map(projection=projection, orientation=orientation, r=r, xlim=c(-180,180),ylim=c(-90,90)))
   }else if(projection %in% c("simpleconic","lambert","albers","trapezoidal")){
     if(is.null(lat0) || is.null(lat1)){
       stop("The albers,lambert, ,and simpleconic projections require a lat0 and lat1 value")
     }
-    return(worldmap + coord_map( projection=projection, orientation=orientation, lat0=lat0,lat1=lat1))
+    return(worldmap + coord_map( projection=projection, orientation=orientation, lat0=lat0,lat1=lat1, xlim=c(-180,180),ylim=c(-90,90)))
   }else if(projection %in% c("bicentric","elliptic")){
     if(is.null(lon0) ){
       stop("The bicentric and elliptic projection require a lon0 value")
     }
-    return(worldmap + coord_map(projection=projection, orientation=orientation, lon0=lon0))
+    return(worldmap + coord_map(projection=projection, orientation=orientation, lon0=lon0, xlim=c(-180,180),ylim=c(-90,90)))
     #need to fix the harrison and lune projections
     #   }else if(projection %in% c("harrison")){
     #           if(is.null(dist) || is.null(angle) ){
