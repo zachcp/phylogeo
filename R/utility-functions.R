@@ -238,8 +238,7 @@
   df[ycol] <- df[,ycol] + disty
   df
 }
-
-#check for NAs.
+#' check for NAs.
 .check_NA <- function(df, col){
   colvals <- df[col]
   colvals[ colvals == "None"] <- NA  #some data has "None" so be sure to replace with NA
@@ -250,6 +249,7 @@
   }
   df
 }
+#' make a columnnumeric
 .coerce_numeric <- function(df, col){
   df[col] <- lapply( lapply(df[col], as.character), as.numeric)
   df
