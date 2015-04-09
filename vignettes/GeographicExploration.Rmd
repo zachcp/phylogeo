@@ -1,5 +1,10 @@
 <link href="http://joey711.github.com/phyloseq/markdown.css" rel="stylesheet"></link>
 
+<!--
+%\VignetteEngine{knitr::rmarkdown}
+%\VignetteIndexEntry{Geographic Exploration using Phylogeo}
+-->
+
 ---
 title: "vignette for phylogeo: geographic exploration of biom data"
 date: "`r Sys.Date()`"
@@ -7,10 +12,6 @@ output:
   rmarkdown::html_vignette
   html_document:
     toc: yes
-  
-vignette: >
-  %\VignetteIndexEntry{Geographic Exploration}
-  %\VignetteEngine{knitr::rmarkdown}
 ---
 
 ```{r, echo = FALSE, message = FALSE}

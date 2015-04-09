@@ -1,34 +1,41 @@
 <link href="http://joey711.github.com/phyloseq/markdown.css" rel="stylesheet"></link>
 
+<!--
+%\VignetteEngine{knitr::rmarkdown}
+%\VignetteIndexEntry{Map Projections in Phylogeo}
+-->
+
 ---
 title: "Projections in Phylogeo"
 date: "`r Sys.Date()`"
 output: 
-  rmarkdown::html_vignette:
-    toc: true
-    toc_depth: 2
-vignette: >
-  %\VignetteIndexEntry{Map Projections in Phylogeo}
-  %\VignetteEngine{knitr::rmarkdown}
+  rmarkdown::html_vignette
+  html_document:
+    toc: yes
 ---
-  
-```{r, echo = FALSE, message = FALSE}
+
+```{r, message = FALSE, warning=FALSE, echo=FALSE}
+#load knitr and set the default parameters
 library("knitr")
-opts_chunk$set(cache=FALSE, fig.width=9, message=FALSE, warning=FALSE, comment = "#>")
+opts_chunk$set(cache=TRUE, fig.width=9, message=FALSE, warning=FALSE, comment = "#>")
+```
+
+### Load Some Data
+phylogeo uses the [mapproj](http://www.inside-r.org/packages/cran/mapproj/docs/mapproject) package to draw
+its maps. This package supports a large number of projections and phylogeo supports nearly all of them as
+demonstrated below.
+
+```{r, message = FALSE, warning=FALSE}
 library(phylogeo)
 data(mountainsoil)
 data(batmicrobiome)
 data(epoxomicin_KS)
 ```
 
-phylogeo uses the [mapproj](http://www.inside-r.org/packages/cran/mapproj/docs/mapproject) package to draw
-its maps. This package supports a large number of projections and phylogeo supports nearly all of them as
-demonstrated below.
-
-
 ### Mercator Projection
 ```{r, message=FALSE, warning=FALSE}
 #mercator() equally spaced straight meridians, conformal, straight compass courses
+map_phyloseq(epoxomicin_KS)
 map_phyloseq(epoxomicin_KS, projection="mercator")
 map_network(epoxomicin_KS, projection="mercator", lines=TRUE, color="Geotype", jitter=TRUE)
 map_tree(epoxomicin_KS, projection="mercator")
