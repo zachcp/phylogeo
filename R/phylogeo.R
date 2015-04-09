@@ -38,6 +38,7 @@ NULL
 #'       the physical-chemistry of the sample, and the location of the sample.
 #'       For documentation about sample data see the phyloseq's 
 #'       \code{\link[phyloseq]{sample_data}}}
+#' }
 #'                              
 #' @examples 
 #' data(batfecal)
@@ -54,12 +55,12 @@ NULL
 #'  \code{\link[phyloseq]{sample_data}}
 NULL
 
-#' @title  A Phyloseq dataset for Bat Microbiome Data 
+#' @title  a phyloseq dataset from a bat-guano microbiome study
 #' @docType data
 #' @name batmicrobiome
 #' @description This is data from Study 1734 of the 
 #' \href{http://www.earthmicrobiome.org/}{Earth Microbiome Project}
-#' which invesitgates the gut microbiota of phyllostomid bats that span a
+#' which investigates the gut microbiota of phyllostomid bats that span a
 #' breadth of diets. Bat guano samples were obtained from the US, 
 #' Ecuador and Belize.
 #' 
@@ -79,7 +80,9 @@ NULL
 #'       the physical-chemistry of the sample, and the location of the sample.
 #'       For documentation about sample data see the phyloseq's 
 #'       \code{\link[phyloseq]{sample_data}}}
+#'}
 #'       
+#' @source \url{http://www.earthmicrobiome.org/} 
 #' @examples 
 #' data(batmicrobiome)
 #' map_phyloseq(batmicrobiome)
@@ -88,10 +91,9 @@ NULL
 #'  \code{\link[phyloseq]{phyloseq}}
 NULL
 
-#' @title Phyloseq object indicating the presence of Epoxamicin-like biosynthetic clusters.
+#' @title a phyloseq dataset of Epoxomicin-like ketosynthase (KS) domains.
 #' @docType data
-#' @name epoxamicin_KS
-#' 
+#' @name epoxomicin_KS
 #' @references 
 #' Owen JG, Charlop-Powers Z., Smith AG., Ternei MA., Calle PY., Reddy BV., Montiel D. & Brady SF (2015)
 #' Multiplexed metagenome mining using short DNA sequence tags facilitates targeted discovery 
@@ -101,13 +103,32 @@ NULL
 #' 
 #' @description a \code{\link[phyloseq]{phyloseq}}object for a soil microbiome study using degenerate primers
 #' targeting ketosynthase domains (KS), a conserved domain in the biosynthesis of polyketides. This data is
-#' the subset of KS amplicons that map to the epoxyketone natural product Epoxamicin.
+#' the subset of KS amplicons that map to the epoxyketone natural product \code{\href{https://en.wikipedia.org/wiki/Epoxomicin}{Epoxomicin}}.
 #' 
-#' @format a \code{\link{phyloseq}} object
+#' @format a \code{\link[phyloseq]{phyloseq}} object containing the following:
+#' \describe{
+#' \item{otu_table(epoxomicin_KS)}{The observed taxonomic unit (OTU) table containing
+#'       species abundance counts for each sample. For documentation on OTU 
+#'       tables see the phyloseq's \code{\link[phyloseq]{otu_table}}}
+#' \item{tax_table(epoxomicin_KS)}{The taxonomy table providing taxonomy information
+#'       for each OTU in the dataset. There are 257 taxa and 7 taxonomic ranks.
+#'       For documentation on taxonomy tables see the phyloseq's 
+#'       \code{\link[phyloseq]{tax_table}}}
+#' \item{sample_data(epoxomicin_KS)}{Data for each of the 162 samples in the dataset.
+#'       The \code{\link[phyloseq]{sample_data}} dataframe has 10 columns
+#'       containing basic information about the sample's location.
+#'       For documentation about sample data see the phyloseq's 
+#'       \code{\link[phyloseq]{sample_data}}}
+#' \item{phys_tree(epoxomicin_KS)}{a phylogenetic tree of the 257 
+#'       OTUs/sequences in the dataset. 
+#'       For documentation about tree data see the phyloseq's 
+#'       \code{\link[phyloseq]{phy_tree}}}
+#'       
+#'}
 #' @examples
-#' data(epoxamicin_KS)
-#' map_phyloseq(epoxamicin_KS)
-#' map_tree(epoxamicin_KS)
+#' data(epoxomicin_KS)
+#' map_phyloseq(epoxomicin_KS)
+#' map_tree(epoxomicin_KS)
 #' 
 #' @seealso
 #'  \code{\link[phyloseq]{phyloseq}}
