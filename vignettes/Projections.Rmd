@@ -1,23 +1,20 @@
-<link href="http://joey711.github.com/phyloseq/markdown.css" rel="stylesheet"></link>
-
-<!--
-%\VignetteEngine{knitr::rmarkdown}
-%\VignetteIndexEntry{Map Projections in Phylogeo}
--->
-
 ---
 title: "Projections in Phylogeo"
 date: "`r Sys.Date()`"
 output: 
   rmarkdown::html_vignette
-  html_document:
-    toc: yes
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
 ---
+
+<link href="http://joey711.github.com/phyloseq/markdown.css" rel="stylesheet"></link>
 
 ```{r, message = FALSE, warning=FALSE, echo=FALSE}
 #load knitr and set the default parameters
 library("knitr")
-opts_chunk$set(cache=TRUE, fig.width=9, message=FALSE, warning=FALSE, comment = "#>")
+opts_chunk$set(cache=TRUE, fig.width=6, message=FALSE, warning=FALSE, comment = "#>")
 ```
 
 ### Load Some Data
