@@ -17,7 +17,7 @@ phylogeo has three datasets.
 
   - `mountainsoil` is the biom data and associated sample information from the microbio.me/qiime [experiment 1702](microbio.me/qiime/1702)
   - `batmicrobiome` is the biom data and associated sample information from yet another bat-related experiment, microbio.me/qiime [experiment 1734](microbio.me/qiime/1734)
-  - `epoxamicin_KS` is the data from the Brady Lab containing OTU and sequence data for ketosynthase domain amplicons from environmental DNA
+  - `epoxomicin_KS` is the data from the Brady Lab containing OTU and sequence data for ketosynthase domain amplicons from environmental DNA
   
 These datasets have geographic coordinates and are suitable for illustrating the features of the phylogeo package, and they can be loaded using the `data()` command.
   
@@ -28,7 +28,7 @@ library(phylogeo)
 
 data(mountainsoil)
 data(batmicrobiome)
-data(epoxamicin_KS)
+data(epoxomicin_KS)
 ```
 
 ## phyloseq mapping functions
@@ -60,7 +60,7 @@ map_network(batmicrobiome)
 #play with the jitter and cutoff to get a better view
 map_network(batmicrobiome, color="SCIENTIFIC_NAME", jitter=TRUE, jitter.x=20,jitter.y=1, lines=TRUE, line_weight = 0.2)
 #map-network with a different dataset
-map_network(epoxamicin_KS, color="Region", jitter=TRUE, lines=TRUE, line_weight = 2)
+map_network(epoxomicin_KS, color="Region", jitter=TRUE, lines=TRUE, line_weight = 2)
 ```
 One current downside to the current mapping setup is that the `region` keyword only works on country names and cannot zoom to, say "the western hemisphere". In this example the result is a lot of dead space. For figures you would want to ggsave a PDF/SVG and zoom to your region of interest. Down the line a more nuanced mapping system might be considered.
 
@@ -68,9 +68,9 @@ One current downside to the current mapping setup is that the `region` keyword o
 The goal of *map_tree* is to provide access to both phylogenetic and geographic information in one place. To be useful, the data may need to be pared back to relatively small number of OTUs/samples. 
 ```{r}
 #simple map + tree
-map_tree(epoxamicin_KS)
+map_tree(epoxomicin_KS)
 #color the map to see locations
-map_tree(epoxamicin_KS, color="Geotype", jitter=TRUE)
+map_tree(epoxomicin_KS, color="Geotype", jitter=TRUE)
 ```
 
 ```{r}
@@ -84,7 +84,7 @@ map_tree(epoxamicin_KS, color="Geotype", jitter=TRUE)
 *map_clusters* provides a way to explore the spatial distribution of subsets of your data. From your phylogentic tree (required), a distance matrix is used to make a kmeans calculation which will cluster your tree into *k* number of clusters. The members of these clusters will then be displayed on the map.
 ```{r}
 #clustered trees plus maps
-map_clusters(epoxamicin_KS, clusternum=6)
+map_clusters(epoxomicin_KS, clusternum=6)
 ```
 
 ## phyloseq plotting functions

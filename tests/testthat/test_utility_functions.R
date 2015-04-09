@@ -17,23 +17,23 @@ context("Utility Functions")
 
 
 test_that("phyloseq objects have latitude and longitude columns", {
-  data(batfecal)
+  data(mountainsoil)
   data(batmicrobiome)
-  data(epoxamicin_KS)
+  data(epoxomicin_KS)
   latlist  <- list( c("LATITUDE"),c("LONGITUDE"))
   latlist2 <- list( c("Latitude"),c("Longitude"))
-  expect_equal(.check_physeq(batfecal), latlist)
+  expect_equal(.check_physeq(mountainsoil), latlist)
   expect_equal(.check_physeq(batmicrobiome), latlist)
-  expect_equal(.check_physeq(epoxamicin_KS), latlist2)
+  expect_equal(.check_physeq(epoxomicin_KS), latlist2)
   
   # remove lat.long column and be sure it trips an error
-  df <- data.frame(sample_data(batfecal))
+  df <- data.frame(sample_data(mountainsoil))
   dflat <- df %>% dplyr::select(-LATITUDE)
   dflon <- df %>% dplyr::select(-LONGITUDE)
-  bat_lat <- batfecal
+  bat_lat <- mountainsoil
   sample_data(bat_lat) <- dflat
   expect_error(.check_physeq(bat_lat))
-  bat_lon <- batfecal
+  bat_lon <- mountainsoil
   sample_data(bat_lon) <- dflon
   expect_error(.check_physeq(bat_lon))
 })

@@ -6,27 +6,27 @@ library("testthat")
 library("igraph")
 
 test_that("map_phyloseq: results in a ggplot", {
-  data(batfecal)
-  p1 <- map_phyloseq(batfecal)
+  data(mountainsoil)
+  p1 <- map_phyloseq(mountainsoil)
   # ggplot-class tests
   expect_is(p1, "ggplot")
 })
 
 test_that("map_clusters: returns a ggplot", {
-  data(batfecal) #no tree shoud fail 
-  data(epoxamicin_KS) #has tree should work
-  p1 <- map_clusters(epoxamicin_KS)
+  data(mountainsoil) #no tree shoud fail 
+  data(epoxomicin_KS) #has tree should work
+  p1 <- map_clusters(epoxomicin_KS)
   # ggplot-class tests
-  expect_error(map_clusters(batfecal))
+  expect_error(map_clusters(mountainsoil))
   expect_is(p1, "ggplot")
 })
 
 test_that("map_tree: tree_objects are present when mapping a phylogenetic tree", {
-  data(batfecal)
-  data(epoxamicin_KS)
-  p1 <- map_tree(epoxamicin_KS)
+  data(mountainsoil)
+  data(epoxomicin_KS)
+  p1 <- map_tree(epoxomicin_KS)
   # ggplot-class tests
-  expect_error(map_tree(batfecal))
+  expect_error(map_tree(mountainsoil))
   expect_is(p1, "ggplot")
 })
 
