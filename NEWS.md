@@ -1,3 +1,10 @@
+#0.99.5
+More documentation changes and small fixes after another round of bioconductor code review.
+
+#0.99.4
+Moved all of the htmlwidgets/leaflet stuff to another branch in order to build for bioconductor.
+when Rstudio/leaflet is available on CRAN I can merge i back to the master branch
+
 #0.99.3
 fixes for Bioconductor. Improved documentation, some code refactoring
 
