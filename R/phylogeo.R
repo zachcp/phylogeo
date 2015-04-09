@@ -103,7 +103,7 @@ NULL
 #' 
 #' @description a \code{\link[phyloseq]{phyloseq}}object for a soil microbiome study using degenerate primers
 #' targeting ketosynthase domains (KS), a conserved domain in the biosynthesis of polyketides. This data is
-#' the subset of KS amplicons that map to the epoxyketone natural product \code{\href{https://en.wikipedia.org/wiki/Epoxomicin}{Epoxomicin}}.
+#' the subset of KS amplicons that map to the epoxyketone natural product \href{https://en.wikipedia.org/wiki/Epoxomicin}{Epoxomicin}.
 #' 
 #' @format a \code{\link[phyloseq]{phyloseq}} object containing the following:
 #' \describe{
