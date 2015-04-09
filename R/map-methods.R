@@ -176,8 +176,8 @@ map_phyloseq <- function(physeq, size=4, region=NULL, color=NULL,
 #'   
 #' @return a ggplot object
 #' @param physeq (Required). 
-#'  The name of the \code{\link[phyloseq]{phyloseq}} phyloseq object. This must have sample data with 
-#'  Latitude and Longitude Columns.
+#'  The name of the \code{\link[phyloseq]{phyloseq}} phyloseq object. 
+#'  This must have sample data with Latitude and Longitude Columns.
 #'  
 #' @param igraph  (Optional). Default \code{NULL}
 #'  An optional igraph object. Will reduce plotting time to use 
@@ -290,8 +290,10 @@ map_phyloseq <- function(physeq, size=4, region=NULL, color=NULL,
 #' ig <- make_network(batmicrobiome)
 #' map_network(batmicrobiome, igraph= ig, lines=TRUE)
 #' map_network(batmicrobiome, igraph= ig, lines=TRUE, color="SCIENTIFIC_NAME")
-#' map_network(batmicrobiome, igraph= ig, lines=TRUE, color="SCIENTIFIC_NAME", jitter=TRUE)
-#' map_network(batmicrobiome, projection="mollweide", igraph= ig, lines=TRUE, color="SCIENTIFIC_NAME", jitter=TRUE)
+#' map_network(batmicrobiome, igraph= ig, lines=TRUE, color="SCIENTIFIC_NAME",
+#'            jitter=TRUE)
+#' map_network(batmicrobiome, projection="mollweide", igraph= ig,
+#'             lines=TRUE, color="SCIENTIFIC_NAME", jitter=TRUE)
 map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard", 
                         color=NULL, region=NULL, size=4, alpha = 0.8, 
                         jitter=FALSE, jitter.x=3, jitter.y=3, shape=NULL, 
@@ -305,7 +307,8 @@ map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard",
   #helper functions to calculate membership in clusters or lines
   ##############################################################################
   get_clusters <- function(num, graph=igraph){
-    #get cluster membership info from igraph object from cluster with clusterid of 'num'
+    # get cluster membership info from igraph object from cluster 
+    # with clusterid of 'num'
     clusts  <- clusters(graph)
     members <- which(clusts$membership == num) #get membership
     names   <- get.vertex.attribute(graph, 'name', members)
@@ -374,7 +377,8 @@ map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard",
   #create map
   ############################################
   worldmap <- .create_basemap(region=region, df=mdf,latcol=latcol, 
-                              loncol=loncol, projection=projection, orientation=orientation,
+                              loncol=loncol, projection=projection, 
+                              orientation=orientation,
                               lat0=lat0, lat1=lat1, lon0=lon0,n=n, r=r)
   
   #modify points if using jitter
@@ -438,15 +442,15 @@ map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard",
 #' @return a ggplot object
 #' 
 #' @param physeq (Required). 
-#'  The name of the \code{\link[phyloseq]{phyloseq}} phyloseq object. This must have sample data with 
-#'  Latitude and Longitude Columns.
+#'  The name of the \code{\link[phyloseq]{phyloseq}} phyloseq object. 
+#'  This must have sample data with Latitude and Longitude Columns.
 #'  
 #'  @param region (Optional). Default \code{NULL}.
-#'  The name of geographic region that can be used to zoom.
-#'  The default worldmap cuts out Antartica. To get it back use region="world"
+#'  The name of geographic region that can be used to zoom.The default worldmap 
+#'  cuts out Antartica. To get it back use region="world"
 #'  
 #' @param color (Optional). Default \code{NULL}.
-#'  The name of the sample variable in \code{physeq} to use for color mapping
+#'  The name of the sample variable in \code{physeq} to use for color mapping 
 #'  of points (graph vertices).
 #'  
 #' @param size (Optional). Default \code{4}. 
@@ -522,6 +526,9 @@ map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard",
 #' @import gridExtra
 #' @import maps
 #' @import mapproj
+#' @importFrom ape ladderize
+#' @importFrom ape cophenetic.phylo
+#' @importFrom ape reorder.phylo
 #' @export
 #' @examples
 #' map_tree(epoxomicin_KS)
@@ -545,7 +552,8 @@ map_tree <- function(physeq,  region=NULL, color = NULL,size=4, alpha=0.8,
   
   mapplot <- map_phyloseq(physeq2, region=region, color= color, size=size, 
                           alpha = alpha, jitter=jitter, jitter.x=jitter.x, 
-                          jitter.y=jitter.y,projection=projection,orientation=orientation,
+                          jitter.y=jitter.y,projection=projection,
+                          orientation=orientation,
                           lat0=lat0, lat1=lat1, lon0=lon0,n=n, r=r)  + 
     theme(legend.position="none") 
   
@@ -588,8 +596,8 @@ map_tree <- function(physeq,  region=NULL, color = NULL,size=4, alpha=0.8,
 #' 
 #' @return a ggplot object
 #' @param physeq (Required). 
-#'  The name of the \code{\link[phyloseq]{phyloseq}} phyloseq object. This must have sample data with 
-#'  Latitude and Longitude Columns.
+#'  The name of the \code{\link[phyloseq]{phyloseq}} phyloseq object. 
+#'  This must have sample data with Latitude and Longitude Columns.
 #'  
 #' @param clusternum (Optional). Default \code{3}.
 #'  Number of clusters to divide your phylogenetic tree into using kmeans clustering.
@@ -599,7 +607,9 @@ map_tree <- function(physeq,  region=NULL, color = NULL,size=4, alpha=0.8,
 #' @import maps
 #' @import mapproj
 #' @import gridExtra
-#' @import ape
+#' @importFrom ape ladderize
+#' @importFrom ape cophenetic.phylo
+#' @importFrom ape reorder.phylo
 #' @seealso 
 #'  \href{http://zachcp.github.io/phylogeo/phylogeo_basics}{phylogeo basics}.
 #' @seealso
