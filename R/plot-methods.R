@@ -52,7 +52,7 @@ plot_distance <- function(physeq, distancemethod="jaccard"){
     #df2$lat <- sapply(df2$lat, .degree_to_radian)
     #df2$lon <- sapply(df2$lon, .degree_to_radian)
     df2 <- as.matrix(df2)
-    geodistances <- sp::spDists(df2, longlat=TRUE)
+    geodistances <- spDists(df2, longlat=TRUE)
     colnames(geodistances) <- row.names(df2)
     row.names(geodistances) <- row.names(df2)
     geodistances <-  .dist_to_edge_table(geodistances, dname = "geodist")
