@@ -18,7 +18,7 @@ opts_chunk$set(cache=FALSE, fig.width=9, message=FALSE, warning=FALSE, comment =
 library(phylogeo)
 data(mountainsoil)
 data(batmicrobiome)
-data(epoxamicin_KS)
+data(epoxomicin_KS)
 ```
 
 phylogeo uses the [mapproj](http://www.inside-r.org/packages/cran/mapproj/docs/mapproject) package to draw
@@ -29,25 +29,25 @@ demonstrated below.
 ### Mercator Projection
 ```{r, message=FALSE, warning=FALSE}
 #mercator() equally spaced straight meridians, conformal, straight compass courses
-map_phyloseq(epoxamicin_KS, projection="mercator")
-map_network(epoxamicin_KS, projection="mercator", lines=TRUE, color="Geotype", jitter=TRUE)
-map_tree(epoxamicin_KS, projection="mercator")
+map_phyloseq(epoxomicin_KS, projection="mercator")
+map_network(epoxomicin_KS, projection="mercator", lines=TRUE, color="Geotype", jitter=TRUE)
+map_tree(epoxomicin_KS, projection="mercator")
 ```
 
 ### Mollweide Projection
 ```{r, message=FALSE, warning=FALSE}
 #mollweide() (homalographic) equal-area, hemisphere is a circle
-map_phyloseq(epoxamicin_KS, projection="mollweide")
+map_phyloseq(epoxomicin_KS, projection="mollweide")
 ```
 
 ## Fisheye Projection
 ```{r, message=FALSE, warning=FALSE}
 #fisheye(n) stereographic seen through medium with refractive index n
-map_phyloseq(epoxamicin_KS, projection="fisheye", n=0.5)
+map_phyloseq(epoxomicin_KS, projection="fisheye", n=0.5)
 ```
 
 ### Albers Projection
 ```{r, message=FALSE, warning=FALSE}
 #albers(lat0,lat1)equal-area, true scale on lat0 and lat1
-map_phyloseq(epoxamicin_KS, projection="albers", lat0=20, lat1=70)
+map_phyloseq(epoxomicin_KS, projection="albers", lat0=20, lat1=70)
 ```

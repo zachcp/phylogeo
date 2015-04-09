@@ -524,9 +524,9 @@ map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard",
 #' @import mapproj
 #' @export
 #' @examples
-#' map_tree(epoxamicin_KS)
-#' map_tree(epoxamicin_KS, color="Geotype", jitter=TRUE)
-#' map_tree(epoxamicin_KS, projection="gilbert", color="Geotype", jitter=TRUE)
+#' map_tree(epoxomicin_KS)
+#' map_tree(epoxomicin_KS, color="Geotype", jitter=TRUE)
+#' map_tree(epoxomicin_KS, projection="gilbert", color="Geotype", jitter=TRUE)
 map_tree <- function(physeq,  region=NULL, color = NULL,size=4, alpha=0.8,
                      jitter= FALSE, jitter.x=3, jitter.y=3, 
                      method = "sampledodge", nodelabf = nodeplotblank, 
@@ -608,8 +608,8 @@ map_tree <- function(physeq,  region=NULL, color = NULL,size=4, alpha=0.8,
 #'  
 #' @export
 #' @examples
-#' map_clusters(epoxamicin_KS, clusternum=2)
-#' map_clusters(epoxamicin_KS, clusternum=6)
+#' map_clusters(epoxomicin_KS, clusternum=2)
+#' map_clusters(epoxomicin_KS, clusternum=6)
 map_clusters <- function(physeq, clusternum=3){
   # check for the existence of a tree: lifted from phyloseq's plot_tree
   if(!"phy_tree" %in% getslots.phyloseq(physeq)){
