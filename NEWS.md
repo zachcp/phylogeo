@@ -1,5 +1,6 @@
 #0.99.5
 More documentation changes and small fixes after another round of bioconductor code review.
+Fixes to the projection output, function and dataset documentation, naespace import fixes.
 
 #0.99.4
 Moved all of the htmlwidgets/leaflet stuff to another branch in order to build for bioconductor.
