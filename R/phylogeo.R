@@ -9,96 +9,41 @@
 #' @import gridExtra
 #' @keywords package
 #' @description a package for mapping microbiome data built on top of 
-#' the \code{\link[phyloseq]{phyloseq}} phylsoeq pacakge.
+#' the \code{\link[phyloseq]{phyloseq}} phyloseq pacakge.
 NULL
 
-#' @title \code{\link[phyloseq]{phyloseq}} Phyloseq Object for a microbiome study focusing on bat guano
+#' @title A phyloseq dataset from a microbiome study focusing on microbial community succession following forest fieres
 #' @docType data
 #' @name batfecal
+#' @description This \code{\link[phyloseq]{phyloseq}} dataset is Study 1702 
+#'     of the  \href{http://www.earthmicrobiome.org/}{Earth Microbiome Project}
+#'     consisting of data derived from 22 soil samples in different elevations 
+#'     in Changbai Mountain, northeastern China. The microbial communities in 
+#'     these samples were investigated for differences due to elevation and 
+#'     microbial succession after post-fire.
 #' 
-#' @description This dataset is Study 1702 of the  \href{http://www.earthmicrobiome.org/}{Earth Microbiome Project} consisting
-#' of data derived from 22soil samples in different elevations in Changbai Mountain, northeastern China. The 
-#' microbial communities in these samples were investigated for differences due to elevation and microbial 
-#' succession after post-fire.
-#' 
-#' @format a \code{\link[phyloseq]{phyloseq}} object containing an \code{\link[phyloseq]{otu_table}}, 
-#'  a \code{\link[phyloseq]{tax_table}} and \code{\link[phyloseq]{sample_data}}. is a dataframe with the following variables:
+#' @format a \code{\link[phyloseq]{phyloseq}} object containing the following:
 #' \describe{
-#' \item{X.SampleID}{Unique Sample identifier}
-#' \item{BarcodeSequence}{Sample-Specific Barcode}
-#' \item{LinkerPrimerSequence}{The Primer Used for Amplification}
-#' \item{NUMBER_SAMPLES_PROMISED}{Number of Samples; constant}
-#' \item{NITRO_ORG_CARB_UNIT}{units}
-#' \item{ASSIGNED_FROM_GEO}{how is the sample assigned}
-#' \item{LAB_PERSON}{Who prepped the sample?}
-#' \item{EXPERIMENT_CENTER}{Where was the work done}
-#' \item{SAMPLE_PROGRESS}{Denoting that the sample was sequenced}
-#' \item{RUN_PREFIX}{Internal Processing Variable}
-#' \item{INVESTIGATION_TYPE}{Internal Processing Variable}
-#' \item{TAXON_ID}{Internal Taxon Value}
-#' \item{DEPTH}{Internal Depth Value}
-#' \item{TOT_ORG_CARB}{Total Organic Carbon}
-#' \item{ILLUMINA_TECHNOLOGY}{Sequencing Technology Used}
-#' \item{COMMON_NAME}{metagenome}
-#' \item{INCLUDES_TIMESERIES}{Using a tiem series?}
-#' \item{EXTRACTED_DNA_AVAIL_NOW}{DNA Availability}
-#' \item{STUDY_ABSTRACT}{Study Abstract}
-#' \item{TARGET_SUBFRAGMENT}{16S Fragment}
-#' \item{SAMPLE_LOCATION}{Where is the sample now}
-#' \item{PROJECT_NAME}{Chu_Changbai_mountain_soils}
-#' \item{ELEVATION}{Elevation}
-#' \item{RUN_DATE}{When was the data acquired}
-#' \item{PH_METH}{How was pH measured}
-#' \item{PCR_PRIMERS}{Primer sequences}
-#' \item{COLLECTION_DATE}{Collection date}
-#' \item{ALTITUDE}{Altitude}
-#' \item{TITLE}{Project Title}
-#' \item{ENV_BIOME}{Environemental Biome}
-#' \item{WATER_CONTENT_SOIL}{Water Content}
-#' \item{PLATFORM}{Sequencing Platform}
-#' \item{CARB_NITRO_RATIO}{Carbon to Nitroen Ratio}
-#' \item{ANNUAL_SEASON_TEMP}{Annual Season Temperature}
-#' \item{COUNTRY}{Country}
-#' \item{PH}{Soil pH}
-#' \item{STUDY_TITLE}{Study Title}
-#' \item{STUDY_ALIAS}{Study Alias}
-#' \item{ANONYMIZED_NAME}{Anonymized Sample Name}
-#' \item{MICROBIAL_N_C_UNIT}{Nitrogen and Carbon Units}
-#' \item{SAMPLE_CENTER}{Where the sample was processed}
-#' \item{SAMP_SIZE}{Size of the sample}
-#' \item{PRINCIPAL_INVESTIGATOR}{Principl Investigator}
-#' \item{STUDY_DESCRIPTION}{Study Description}
-#' \item{PHYSICAL_SAMP_AVAIL_NOW}{Internal Sample Variable}
-#' \item{LONGITUDE}{Longitude}
-#' \item{MIENS_COMPLIANT}{MIENS Compliant}
-#' \item{STUDY_ID}{Study ID}
-#' \item{EXPERIMENT_DESIGN_DESCRIPTION}{Experimental Design}
-#' \item{Description_duplicate}{Soil Description (duplicate)}
-#' \item{SEQUENCING_METH}{Sequencing Method}
-#' \item{HAS_EXTRACTED_DATA}{Has Extracted Data}
-#' \item{ENV_MATTER}{Environmental Source Material}
-#' \item{TARGET_GENE}{Target Gene}
-#' \item{SUBMIT_TO_INSDC}{Submit to INSDC}
-#' \item{ENV_FEATURE}{Environmental Features}
-#' \item{KEY_SEQ}{Internal Variable}
-#' \item{SPATIAL_SERIES}{Spatial Series}
-#' \item{MICROBIAL_NITRO}{Microbial Nitrogen}
-#' \item{MICROBIAL_CARB}{Microbial Carbon}
-#' \item{LIBRARY_CONSTRUCTION_PROTOCOL}{Library Construction Protocol}
-#' \item{REGION}{Region}
-#' \item{RUN_CENTER}{where was the sequencing done}
-#' \item{SAMPLE_TYPE}{sample type}
-#' \item{EMP_STATUS}{EMP Status}
-#' \item{DEFAULT_EMP_STATUS}{Default EMP Status}
-#' \item{EMP_PERSON}{Janet Jansson}
-#' \item{TOT_NITRO}{Total Nitrogen}
-#' \item{LATITUDE}{Latitude}
-#' \item{HAS_PHYSICAL_SPECIMEN}{is hte physical sampel available}
-#' \item{NUMBER_SAMPLES_COLLECTED}{Number of Samples Collected}
-#' \item{STUDY_CENTER}{Study Center}
-#' \item{Description}{Sample Description}
-#' }
+#' \item{otu_table(batfecal)}{The observed taxonomic unit (OTU) table containing
+#'       species abundance counts for each sample. For documentation on OTU 
+#'       tables see the phyloseq's \code{\link[phyloseq]{otu_table}}}
+#' \item{tax_table(batfecal)}{The taxonomy table providing taxonomy information
+#'       for each OTU in the dataset. There are 5815 taxa and 7 taxonomic ranks
+#'       labeled Rank1 - Rank7 and corresponding to Kingdom, Phylum... Species.
+#'       For documentation on taxonomy tables see the phyloseq's 
+#'       \code{\link[phyloseq]{tax_table}}}
+#' \item{sample_data(batfecal)}{Data for each of the 22 samples in the dataset.
+#'       The \code{\link[phyloseq]{sample_data}} dataframe has 73 columns
+#'       containing information about sample collection, sample processing, 
+#'       the physical-chemistry of the sample, and the location of the sample.
+#'       For documentation about sample data see the phyloseq's 
+#'       \code{\link[phyloseq]{sample_data}}}
+#'                              
+#' @examples 
+#' data(batfecal)
+#' map_phyloseq(batfecal)
 #'
+#'@source \url{http://www.earthmicrobiome.org/} 
 #' @seealso
 #'  \code{\link[phyloseq]{phyloseq}}
 #' @seealso
@@ -107,30 +52,64 @@ NULL
 #'  \code{\link[phyloseq]{tax_table}}
 #' @seealso
 #'  \code{\link[phyloseq]{sample_data}}
-
-
 NULL
 
-#' @title \code{\link[phyloseq]{phyloseq}} Phyloseq Object for Bat Microbiome Data 
+#' @title  A Phyloseq dataset for Bat Microbiome Data 
 #' @docType data
 #' @name batmicrobiome
-#' @description this is the \href{http://www.earthmicrobiome.org/}{Earth Microbiome Project} Study 1734 about bat guano from the US, Ecuador and Costa Rica
-#' @format a \code{\link{phyloseq}} object
+#' @description This is data from Study 1734 of the 
+#' \href{http://www.earthmicrobiome.org/}{Earth Microbiome Project}
+#' which invesitgates the gut microbiota of phyllostomid bats that span a
+#' breadth of diets. Bat guano samples were obtained from the US, 
+#' Ecuador and Belize.
+#' 
+#' @format a \code{\link[phyloseq]{phyloseq}} object containing the following:
+#' \describe{
+#' \item{otu_table(batmicrobiome)}{The observed taxonomic unit (OTU) table containing
+#'       species abundance counts for each sample. For documentation on OTU 
+#'       tables see the phyloseq's \code{\link[phyloseq]{otu_table}}}
+#' \item{tax_table(batmicrobiome)}{The taxonomy table providing taxonomy information
+#'       for each OTU in the dataset. There are 6174 taxa and 7 taxonomic ranks
+#'       labeled Rank1 - Rank7 and corresponding to Kingdom, Phylum... Species.
+#'       For documentation on taxonomy tables see the phyloseq's 
+#'       \code{\link[phyloseq]{tax_table}}}
+#' \item{sample_data(batmicrobiome)}{Data for each of the 94 samples in the dataset.
+#'       The \code{\link[phyloseq]{sample_data}} dataframe has 58 columns
+#'       containing information about sample collection, sample processing, 
+#'       the physical-chemistry of the sample, and the location of the sample.
+#'       For documentation about sample data see the phyloseq's 
+#'       \code{\link[phyloseq]{sample_data}}}
+#'       
+#' @examples 
+#' data(batmicrobiome)
+#' map_phyloseq(batmicrobiome)
+#' map_network(batmicrobiome)
 #' @seealso
 #'  \code{\link[phyloseq]{phyloseq}}
 NULL
 
-#' @title \code{\link[phyloseq]{phyloseq}} Phyloseq object indicating the presence of \code{\href{http://en.wikipedia.org/wiki/Epoxomicin}Epoxamicin}-like
-#' biosynthetic clusters.
+#' @title Phyloseq object indicating the presence of Epoxamicin-like biosynthetic clusters.
 #' @docType data
 #' @name epoxamicin_KS
-#' @description \code{\link[phyloseq]{phyloseq}} Phyloseq Object for a soil microbiome study using degenerate primers
+#' 
+#' @references 
+#' Owen JG, Charlop-Powers Z., Smith AG., Ternei MA., Calle PY., Reddy BV., Montiel D. & Brady SF (2015)
+#' Multiplexed metagenome mining using short DNA sequence tags facilitates targeted discovery 
+#' of epoxyketone proteasome inhibitors. 
+#' Proceedings of the National Academy of Sciences of the United States of America 112(14):4221-6
+#' \url{http://www.ncbi.nlm.nih.gov/pubmed/25831524}
+#' 
+#' @description a \code{\link[phyloseq]{phyloseq}}object for a soil microbiome study using degenerate primers
 #' targeting ketosynthase domains (KS), a conserved domain in the biosynthesis of polyketides. This data is
 #' the subset of KS amplicons that map to the epoxyketone natural product Epoxamicin.
+#' 
 #' @format a \code{\link{phyloseq}} object
+#' @examples
+#' data(epoxamicin_KS)
+#' map_phyloseq(epoxamicin_KS)
+#' map_tree(epoxamicin_KS)
+#' 
 #' @seealso
 #'  \code{\link[phyloseq]{phyloseq}}
 #'  \code{\link[phyloseq]{plot_tree}}
-#' @seealso 
-#'   \href{http://www.ncbi.nlm.nih.gov/pubmed/25831524}{Multiplexed metagenome mining using short DNA sequence tags facilitates targeted discovery of epoxyketone proteasome inhibitors}.
 NULL
