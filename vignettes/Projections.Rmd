@@ -16,7 +16,7 @@ vignette: >
 library("knitr")
 opts_chunk$set(cache=FALSE, fig.width=9, message=FALSE, warning=FALSE, comment = "#>")
 library(phylogeo)
-data(batfecal)
+data(mountainsoil)
 data(batmicrobiome)
 data(epoxamicin_KS)
 ```

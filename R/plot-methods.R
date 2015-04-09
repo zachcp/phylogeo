@@ -32,8 +32,8 @@
 #' @importFrom sp spDists
 #' @export
 #' @examples
-#' data(batfecal)
-#' plot_distance(batfecal)
+#' data(mountainsoil)
+#' plot_distance(mountainsoil)
 plot_distance <- function(physeq, distancemethod="jaccard"){
     latlon <-  .check_physeq(physeq)
     latcol <- as.character( latlon[1] )

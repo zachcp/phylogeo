@@ -15,7 +15,7 @@ Analysis of data generated using sequencing of microbial genes has provided a fe
 ## Datasets in Phylogeo
 phylogeo has three datasets. 
 
-  - `batfecal` is the biom data and associated sample information from the microbio.me/qiime [experiment 1702](microbio.me/qiime/1702)
+  - `mountainsoil` is the biom data and associated sample information from the microbio.me/qiime [experiment 1702](microbio.me/qiime/1702)
   - `batmicrobiome` is the biom data and associated sample information from yet another bat-related experiment, microbio.me/qiime [experiment 1734](microbio.me/qiime/1734)
   - `epoxamicin_KS` is the data from the Brady Lab containing OTU and sequence data for ketosynthase domain amplicons from environmental DNA
   
@@ -26,7 +26,7 @@ library(ggplot2)
 library(gridExtra)
 library(phylogeo)
 
-data(batfecal)
+data(mountainsoil)
 data(batmicrobiome)
 data(epoxamicin_KS)
 ```
@@ -47,9 +47,9 @@ The use and utility of these functions are explained below, after a description 
 *map_phyloseq* provides a way to quickly look at your data by mapping it. Because no calculations are done to the underlying data, drawing a map using this command is quite quick. The mapping in this command (and all commands) is handled by the `map_data` function of ggplot. This style of mapping allows zooming in by `region` using a lookup table of country-names. Other ggplot goodies like coloring by a variable are all available as is a set of convenience functions that allows you to jitter points that are overlapping at the scale you are interested in. Two examples showing how these features can be used to zoom into a region, separate samples and look at the distribution of a variable ("PH") in the phyloseq `sample_data` table.
 ```{r}
 #high level world map
-map_phyloseq(batfecal)
+map_phyloseq(mountainsoil)
 #zoomed in map, coloed by pH and jittered in order to see the points better
-map_phyloseq(batfecal, region="china", jitter=TRUE, jitter.x=2,jitter.y=2, color="PH")
+map_phyloseq(mountainsoil, region="china", jitter=TRUE, jitter.x=2,jitter.y=2, color="PH")
 ```
 
 ### map_network
@@ -92,7 +92,7 @@ map_clusters(epoxamicin_KS, clusternum=6)
 ### plot_distance
 This function creates a scatterplot of distances comparing the geographic great-circle distance to the the ecological distance (default:jaccard).
 ```{r}
-plot_distance(batfecal)
+plot_distance(mountainsoil)
 ```
 
 

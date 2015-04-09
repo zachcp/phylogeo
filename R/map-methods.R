@@ -91,15 +91,15 @@
 #' @import mapproj
 #' @export
 #' @examples 
-#' map_phyloseq(batfecal, region="china", jitter=TRUE, jitter.x=2,jitter.y=2, color="PH")
-#' map_phyloseq(batfecal, jitter=TRUE, seed=23454)
-#' map_phyloseq(batfecal, projection="mollweide")
+#' map_phyloseq(mountainsoil, region="china", jitter=TRUE, jitter.x=2,jitter.y=2, color="PH")
+#' map_phyloseq(mountainsoil, jitter=TRUE, seed=23454)
+#' map_phyloseq(mountainsoil, projection="mollweide")
 #' 
-#' map_phyloseq(batfecal, projection="conic", lat0=15)
-#' map_phyloseq(batfecal, projection="fisheye", n=0.5)
-#' map_phyloseq(batfecal, projection="newyorker", r=0.3)
-#' map_phyloseq(batfecal, projection="elliptic", lon0=10) 
-#' map_phyloseq(batfecal, projection="albers", lat0=-20 , lat1=50)
+#' map_phyloseq(mountainsoil, projection="conic", lat0=15)
+#' map_phyloseq(mountainsoil, projection="fisheye", n=0.5)
+#' map_phyloseq(mountainsoil, projection="newyorker", r=0.3)
+#' map_phyloseq(mountainsoil, projection="elliptic", lon0=10) 
+#' map_phyloseq(mountainsoil, projection="albers", lat0=-20 , lat1=50)
 #' map_phyloseq(batmicrobiome, jitter=TRUE, color="SCIENTIFIC_NAME")
 map_phyloseq <- function(physeq, size=4, region=NULL, color=NULL, 
                          shape=NULL, alpha = 0.8, 
@@ -281,10 +281,10 @@ map_phyloseq <- function(physeq, size=4, region=NULL, color=NULL,
 #' @importFrom igraph clusters  
 #' @export
 #' @examples
-#' map_network(batfecal)
-#' map_network(batfecal, region="china", jitter=TRUE, lines=TRUE)
-#' map_network(batfecal, region="china", jitter=TRUE, seed=3453)
-#' map_network(batfecal, region="china", jitter=TRUE, lines=TRUE, maxdist=0.9)
+#' map_network(mountainsoil)
+#' map_network(mountainsoil, region="china", jitter=TRUE, lines=TRUE)
+#' map_network(mountainsoil, region="china", jitter=TRUE, seed=3453)
+#' map_network(mountainsoil, region="china", jitter=TRUE, lines=TRUE, maxdist=0.9)
 #' map_network(batmicrobiome, lines=TRUE)
 #' 
 #' ig <- make_network(batmicrobiome)

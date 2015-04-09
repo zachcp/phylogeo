@@ -14,7 +14,7 @@ NULL
 
 #' @title A phyloseq dataset from a microbiome study focusing on microbial community succession following forest fieres
 #' @docType data
-#' @name batfecal
+#' @name mountainsoil
 #' @description This \code{\link[phyloseq]{phyloseq}} dataset is Study 1702 
 #'     of the  \href{http://www.earthmicrobiome.org/}{Earth Microbiome Project}
 #'     consisting of data derived from 22 soil samples in different elevations 
@@ -24,15 +24,15 @@ NULL
 #' 
 #' @format a \code{\link[phyloseq]{phyloseq}} object containing the following:
 #' \describe{
-#' \item{otu_table(batfecal)}{The observed taxonomic unit (OTU) table containing
+#' \item{otu_table(mountainsoil)}{The observed taxonomic unit (OTU) table containing
 #'       species abundance counts for each sample. For documentation on OTU 
 #'       tables see the phyloseq's \code{\link[phyloseq]{otu_table}}}
-#' \item{tax_table(batfecal)}{The taxonomy table providing taxonomy information
+#' \item{tax_table(mountainsoil)}{The taxonomy table providing taxonomy information
 #'       for each OTU in the dataset. There are 5815 taxa and 7 taxonomic ranks
 #'       labeled Rank1 - Rank7 and corresponding to Kingdom, Phylum... Species.
 #'       For documentation on taxonomy tables see the phyloseq's 
 #'       \code{\link[phyloseq]{tax_table}}}
-#' \item{sample_data(batfecal)}{Data for each of the 22 samples in the dataset.
+#' \item{sample_data(mountainsoil)}{Data for each of the 22 samples in the dataset.
 #'       The \code{\link[phyloseq]{sample_data}} dataframe has 73 columns
 #'       containing information about sample collection, sample processing, 
 #'       the physical-chemistry of the sample, and the location of the sample.
@@ -41,17 +41,14 @@ NULL
 #' }
 #'                              
 #' @examples 
-#' data(batfecal)
-#' map_phyloseq(batfecal)
+#' data(mountainsoil)
+#' map_phyloseq(mountainsoil)
 #'
 #'@source \url{http://www.earthmicrobiome.org/} 
 #' @seealso
 #'  \code{\link[phyloseq]{phyloseq}}
-#' @seealso
 #'  \code{\link[phyloseq]{otu_table}}
-#' @seealso
 #'  \code{\link[phyloseq]{tax_table}}
-#' @seealso
 #'  \code{\link[phyloseq]{sample_data}}
 NULL
 
@@ -89,6 +86,9 @@ NULL
 #' map_network(batmicrobiome)
 #' @seealso
 #'  \code{\link[phyloseq]{phyloseq}}
+#'  \code{\link[phyloseq]{otu_table}}
+#'  \code{\link[phyloseq]{tax_table}}
+#'  \code{\link[phyloseq]{sample_data}}
 NULL
 
 #' @title a phyloseq dataset of Epoxomicin-like ketosynthase (KS) domains.
@@ -132,5 +132,9 @@ NULL
 #' 
 #' @seealso
 #'  \code{\link[phyloseq]{phyloseq}}
+#'  \code{\link[phyloseq]{otu_table}}
+#'  \code{\link[phyloseq]{tax_table}}
+#'  \code{\link[phyloseq]{sample_data}}
+#'  \code{\link[phyloseq]{phy_tree}}
 #'  \code{\link[phyloseq]{plot_tree}}
 NULL
