@@ -1,6 +1,7 @@
 ---
 title: "phylogeo: geographic exploration of biom data"
 date: "`r Sys.Date()`"
+author: Zach Charlop-Powers
 output: 
   rmarkdown::html_vignette
 vignette: >
@@ -125,7 +126,7 @@ map_tree(epoxomicin_KS, color="Geotype", jitter=TRUE)
 *map_clusters* provides a way to explore the spatial distribution of subsets of your data. From your phylogentic tree (required), a distance matrix is used to make a kmeans calculation which will cluster your tree into *k* number of clusters. The members of these clusters will then be displayed on the map.
 ```{r}
 #clustered trees plus maps
-map_clusters(epoxomicin_KS, clusternum=6)
+map_clusters(epoxomicin_KS, clusternum=4)
 ```
 
 ## phyloseq plotting functions
