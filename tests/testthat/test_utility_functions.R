@@ -56,3 +56,25 @@ test_that("checknames trips an error when its supposed to",{
   expect_output(.check_names("col2", df),"")
   expect_error(.check_names("col3", df))
 })
+
+test_that(".check_NA can handle columns that are factors", {
+  #col2 has "NONE"
+  df1 <- data.frame(col1=c(1,2,3,4,1,2,3),
+                   col2=c(1,2,3,"None",1,2,3))
+  #col2 is a factor with "None"
+  df2 <- data.frame(col1=c(1,2,3,4,1,2,3),
+                   col2=as.factor(c(1,2,3,"None",1,2,3)))
+  expect_is(df2$col2, "factor")
+  #check for warning
+  #http://stackoverflow.com/questions/20885845/testthat-handling-both-warning-and-value
+  expect_warning(val <-  .check_NA(df1, "col2"))
+  expect_true(is.data.frame(val))
+  expect_warning(val <-  .check_NA(df2, "col2"))
+  expect_true(is.data.frame(val))
+  
+  #check that the none is removed  values
+  testdf <- .check_NA(df1, "col2")
+  expect_equal(testdf$col2, c("1","2","3","1","2","3"))
+  testdf <- .check_NA(df2, "col2")
+  expect_equal(testdf$col2, c("1","2","3","1","2","3"))
+})
