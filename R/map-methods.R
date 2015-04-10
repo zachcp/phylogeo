@@ -375,7 +375,7 @@ map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard",
   
   #create map
   ############################################
-  worldmap <- .create_basemap(region=region, df=mdf,latcol=latcol, 
+  worldmap <- .create_basemap(region=region, df=mdf,latcol=latcol,
                               loncol=loncol, projection=projection, 
                               orientation=orientation,
                               lat0=lat0, lat1=lat1, lon0=lon0,n=n, r=r)
@@ -423,7 +423,7 @@ map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard",
   } 
   points <- geom_point(data=mdf, size = size, alpha= alpha,
                        aes_string(x=loncol, y=latcol, 
-                                  group=NULL, color=NULL, shape=NULL)) 
+                                  group=NULL, color=color, shape=NULL)) 
   worldmap <- worldmap + points
   ###########################
   
@@ -549,7 +549,7 @@ map_tree <- function(physeq,  region=NULL, color = NULL,size=4, alpha=0.8,
   #trim samples that are not in the tree
   physeq2 <- prune_samples(sample_sums(physeq) > 0, physeq)
   
-  mapplot <- map_phyloseq(physeq2, region=region, color= color, size=size, 
+  mapplot <- map_phyloseq(physeq2, region=region, color=color, size=size, 
                           alpha = alpha, jitter=jitter, jitter.x=jitter.x, 
                           jitter.y=jitter.y,projection=projection,
                           orientation=orientation,
