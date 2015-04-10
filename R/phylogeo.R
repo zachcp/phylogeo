@@ -166,7 +166,7 @@ NULL
 #' map_tree(epoxomicin_KS)
 #' map_network(epoxomicin_KS)
 #' map_clusters(epoxomicin_KS)
-#' plot_distacne(epoxomicin_KS)
+#' plot_distance(epoxomicin_KS)
 #' 
 #' @seealso
 #'  \code{\link[phyloseq]{phyloseq}}
