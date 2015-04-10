@@ -14,22 +14,26 @@ vignette: >
 
 ```{r, echo = FALSE, message = FALSE}
 library("knitr")
-opts_chunk$set(cache=FALSE, fig.width=6, message=FALSE, warning=FALSE, comment = "#>")
+opts_chunk$set(cache=TRUE, fig.width=9, fig.height=4, message=FALSE, warning=FALSE, comment = "#>")
 ```
 
 ## About this vignette
-Analysis of data generated using sequencing of microbial genes has provided a 
+Analysis of data generated from microbial genome sequencing has provided a 
 fertile ground for exploring the large fraction of bacterial life that remains
-uncultured. The phylogeo package provides investigators with a way to explore
-the geographic components of their microbial gene data by building on the 
-powerful [phyloseq](https://github.com/joey711/phyloseq) package which 
-provides a framework for organizing data while combining it with the elegance
-of the [ggplot](http://ggplot2.org/) plotting package. 
+uncultured. The phylogeo package provides a way to explore the geographic 
+relationships of their microbial gene data by providing mapping functions
+to visualize relationships between metagenomic samples.
 
-phylogeo provides a series of functions that allow investigators to explore
-the geographic dimension of their data. As such, the primary requirement for
-using phylogeo is the presence of Latitude/Longitude columns in your 
-`sample_data` table. If these are present the following functions become
+phylogeo is built on top  of the  powerful [phyloseq](https://github.com/joey711/phyloseq) 
+package which provides a framework for organizing all of the relevant 
+microbiome data likeoperational taxonomic unit data, taxonomic data, 
+phylogenetic trees, and sample information. Furthermore, phyloseq uses the
+elegant [ggplot](http://ggplot2.org/) plotting package. 
+
+phylogeo's primary requirement is that your phyloseq sample_data data contain 
+Latitude and Longitude columns. (For basic information about the phyloseq data
+model [see here](http://joey711.github.io/phyloseq/import-data)). If your 
+phyloseq samples are location tagged then the following functions become
 available to you:
 
   - `map_phyloseq()` can visualize your sample locations on a map
@@ -44,9 +48,9 @@ description of the datasets included in phylogeo.
 ## Datasets in Phylogeo
 phylogeo has three datasets. 
 
-  - `mountainsoil` is the biomdata and associated sample information from the microbio.me/qiime [experiment 1702](microbio.me/qiime/1702)
-  - `batmicrobiome` is the biomdata and associated sample information from yet another bat-related experiment, microbio.me/qiime [experiment 1734](microbio.me/qiime/1734)
-  - `epoxomicin_KS` is the data from the Brady Lab containing OTU and sequence data for ketosynthase domain amplicons from environmental DNA
+  - `mountainsoil` is a dataset from a microbiome study focusing on microbial community succession following forest fires
+  - `batmicrobiome` is a dataset from a bat-guano microbiome study.
+  - `epoxomicin_KS` is a dataset of Epoxomicin-like ketosynthase (KS) domains.
   
 These datasets have geographic coordinates and are suitable for illustrating
 the features of the phylogeo package, and they can be loaded using 
@@ -97,7 +101,8 @@ map_network(batmicrobiome)
 #connect samples and visualize connections
 map_network(batmicrobiome, lines=TRUE, color="SCIENTIFIC_NAME", jitter=TRUE)
 #play with the jitter and cutoff to get a better view
-map_network(batmicrobiome, color="SCIENTIFIC_NAME", jitter=TRUE, jitter.x=20,jitter.y=1, lines=TRUE, line_weight = 0.2)
+map_network(batmicrobiome, color="SCIENTIFIC_NAME", jitter=TRUE, jitter.x=20,jitter.y=1, 
+            lines=TRUE, line_weight = 0.2, size=2)
 ```
 
 One current downside to the current mapping setup is that the `region` keyword
@@ -112,7 +117,7 @@ The goal of *map_tree* is to provide access to both phylogenetic and geographic 
 #simple map + tree
 map_tree(epoxomicin_KS)
 #color the map to see locations
-map_tree(epoxomicin_KS, color="Geotype", jitter=TRUE)
+map_tree(epoxomicin_KS, color="Geotype", jitter=TRUE, size=2, ladderize=TRUE)
 ```
 
 ```{r}

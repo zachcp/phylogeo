@@ -33,7 +33,6 @@ data(epoxomicin_KS)
 ### Mercator Projection
 ```{r, message=FALSE, warning=FALSE}
 #mercator() equally spaced straight meridians, conformal, straight compass courses
-map_phyloseq(epoxomicin_KS)
 map_phyloseq(epoxomicin_KS, projection="mercator")
 map_network(epoxomicin_KS, projection="mercator", lines=TRUE, color="Geotype", jitter=TRUE)
 map_tree(epoxomicin_KS, projection="mercator")
