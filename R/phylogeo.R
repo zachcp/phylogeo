@@ -101,9 +101,12 @@ NULL
 #' Proceedings of the National Academy of Sciences of the United States of America 112(14):4221-6
 #' \url{http://www.ncbi.nlm.nih.gov/pubmed/25831524}
 #' 
-#' @description a \code{\link[phyloseq]{phyloseq}}object for a soil microbiome study using degenerate primers
-#' targeting ketosynthase domains (KS), a conserved domain in the biosynthesis of polyketides. This data is
-#' the subset of KS amplicons that map to the epoxyketone natural product \href{https://en.wikipedia.org/wiki/Epoxomicin}{Epoxomicin}.
+#' @description a \code{\link[phyloseq]{phyloseq}}object for a soil microbiome
+#'  study using degenerate primers targeting ketosynthase domains (KS), a 
+#'  conserved domain in the biosynthesis of 
+#'  \href{http://en.wikipedia.org/wiki/Polyketide}{polyketides}. This data is
+#'  the subset of KS amplicons that map to the epoxyketone natural product 
+#'  \href{https://en.wikipedia.org/wiki/Epoxomicin}{epoxomicin}.
 #' 
 #' @format a \code{\link[phyloseq]{phyloseq}} object containing the following:
 #' \describe{
