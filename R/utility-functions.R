@@ -240,13 +240,16 @@
 }
 #' check for NAs.
 .check_NA <- function(df, col){
-  colvals <- df[col]
+  colvals <- df[[col]]
+  if (is.factor(colvals)) {
+    colvals <- as.vector(colvals)
+  }
   colvals[ colvals == "None"] <- NA  #some data has "None" so be sure to replace with NA
   truth    <- lapply(colvals, is.na)
   if( any(as.character(truth) == TRUE)){
-    warning(paste("Null Values in ",col, sep=""))
+    warning(paste("Null Values in ",col, ", these rows will be removed" sep=""))
     df[col] <- colvals 
-    df <- df[ !is.na(df[col,]), ]
+    df <- df[ !is.na(df[[col]]), ]
   }
   df
 }
