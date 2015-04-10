@@ -46,7 +46,7 @@ plot_distance <- function(physeq, distancemethod="jaccard"){
     names  <- names(data)
     
     #get bigcircle distances using spDists
-    #spDists exlpects the first column to be longitude
+    #spDists expects the first column to be longitude
     df2 <- data[ c(loncol, latcol) ]
     names(df2) <- c("lon", "lat")
     #df2$lat <- sapply(df2$lat, .degree_to_radian)
