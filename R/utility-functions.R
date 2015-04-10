@@ -245,6 +245,7 @@
   truth    <- lapply(colvals, is.na)
   if( any(as.character(truth) == TRUE)){
     warning(paste("Null Values in ",col, sep=""))
+    df[col] <- colvals 
     df <- df[ !is.na(df[col,]), ]
   }
   df
