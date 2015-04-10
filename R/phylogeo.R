@@ -112,7 +112,7 @@ NULL
 #' \describe{
 #' \item{otu_table(epoxomicin_KS)}{The observed taxonomic unit (OTU) table containing
 #'       species abundance counts for each sample. For documentation on OTU 
-#'       tables see the phyloseq's \code{\link[phyloseq]{otu_table}}}
+#'       tables see phyloseq's \code{\link[phyloseq]{otu_table}}} command.
 #' \item{tax_table(epoxomicin_KS)}{The taxonomy table providing taxonomy information
 #'       for each OTU in the dataset. There are 257 taxa and 7 taxonomic ranks.
 #'       For documentation on taxonomy tables see the phyloseq's 
