@@ -1,0 +1,126 @@
+---
+title: "phylogeo: geographic data on top of phylogeo"
+date: "`r Sys.Date()`"
+author: Zach Charlop-Powers
+output: 
+  rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{phylogeo: geographic data on top of phylogeo}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+--- 
+<link href="http://joey711.github.com/phyloseq/markdown.css" rel="stylesheet"></link>
+  
+```{r, echo = FALSE, message = FALSE}
+library("knitr")
+opts_chunk$set(cache=TRUE, fig.width=9, fig.height=4, message=FALSE, warning=FALSE, comment = "#>")
+```
+
+## About this vignette
+phylogeo is based on top of \href{http://joey711.github.io/phyloseq}{phyloseq} and therefore uses the same data model, an excellent overview of which can be found \href{http://joey711.github.io/phyloseq/import-data.html}{here}. This vignette
+is simple a continuation of that tutorial. Phyloseq creates: 
+
+- an OTU table, 
+- a Taxonomy Table, and a 
+- sample information dataframe.
+
+Phylogeo will add:
+
+- Latitude and Longitude information to the sample data, and, optionally
+- A phylogenetic tree of the data.
+
+
+### Load phylogeo and get some sequecne data from the `ape` package
+```{r, echo = FALSE, message = FALSE}
+library(phyloseq)
+library(phylogeo)
+library(ape)
+data(woodmouse)
+woodmousenames <- names(as.list(woodmouse))
+
+#get the woodmouse data, and the samplenames
+woodmousenames <- names(as.list(woodmouse))
+samplenum = 15
+samplenames =  paste0("Sample", 1:samplenum)
+```
+
+### Create a pretend OTU table
+```{r, echo = FALSE, message = FALSE}
+otumat = matrix(sample(1:100, 100, replace = TRUE), 
+                nrow = length(woodmousenames), 
+                ncol = samplenum)
+rownames(otumat) <- woodmousenames
+colnames(otumat) <-samplenames
+otumat
+```
+
+
+### Now we need a pretend taxonomy table
+```{r, echo = FALSE, message = FALSE}
+taxmat = matrix(sample(letters, 70, replace = TRUE), 
+                nrow = nrow(otumat), 
+                ncol = 7)
+rownames(taxmat) <- rownames(otumat)
+colnames(taxmat) <- c("Domain", "Phylum", "Class", "Order", "Family", "Genus", 
+                      "Species")
+taxmat
+```
+
+### And some fake SampleData
+```{r, echo = FALSE, message = FALSE}
+sampledata <- matrix(sample(letters,samplenum*7, replace=TRUE), 
+                     nrow=samplenum, 
+                     ncol=7)
+rownames(sampledata) <- samplenames
+# in your real data these columns might hold soil data, or processing information
+colnames(sampledata) <- paste0("Category", 1:ncol(sampledata))
+#add lat and lon columns
+lat = sample((-90:90), samplenum)
+lon = sample((-180:180), samplenum)
+sampledata <- cbind(sampledata, lat, lon)
+sampledata <- as.data.frame(sampledata)
+```
+
+
+### make a phylogenetic tree from the woodhouse sequencea
+```{r, echo = FALSE, message = FALSE}
+musc <- muscle(woodmouse)
+tree <- nj(musc)
+plot(tree)
+```
+
+
+### create the phyloseq object ...
+```{r, echo = FALSE, message = FALSE}
+phy <- phyloseq(sample_data = sample_data(sampledata),
+                otu_table   = otu_table(otumat, taxa_are_rows=TRUE),
+                tax_table   = tax_table(taxmat),
+                phy_tree    = phy_tree(tree))
+```
+
+
+#### ... and use phylogeo to plot it.
+```{r, message = FALSE}
+# map the locations
+map_phyloseq(phy)
+# map the locations
+map_phyloseq(phy, color="Category1")
+# map the relationship between samples
+map_network(phy, color="Category2", lines=TRUE)
+# map the relationship between samples
+map_network(phy, color="Category2", lines=TRUE)
+# only keep highly related samples
+map_network(phy, color="Category2",lines=TRUE, maxdist = 0.3)
+# but view all samples
+map_network(phy, color="Category2",lines=TRUE, maxdist = 0.4, base_data = TRUE)
+# map the tree
+map_tree(phy, color="Category1")
+# map the tree
+map_clusters(phy)
+# plot distance
+plot_distance(phy)
+```
+
+
+
+
