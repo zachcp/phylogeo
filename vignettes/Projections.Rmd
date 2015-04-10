@@ -15,7 +15,7 @@ vignette: >
 ```{r, message = FALSE, warning=FALSE, echo=FALSE}
 #load knitr and set the default parameters
 library("knitr")
-opts_chunk$set(cache=TRUE, fig.width=6, message=FALSE, warning=FALSE, comment = "#>")
+opts_chunk$set(cache=TRUE, fig.width=8, message=FALSE, warning=FALSE, comment = "#>")
 ```
 
 ### Load Some Data
