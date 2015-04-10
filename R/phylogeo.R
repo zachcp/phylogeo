@@ -43,6 +43,8 @@ NULL
 #' @examples 
 #' data(mountainsoil)
 #' map_phyloseq(mountainsoil)
+#' map_network(mountainsoil)
+#' plot_distance(mountainsoil)
 #'
 #'@source \url{http://www.earthmicrobiome.org/} 
 #' @seealso
@@ -84,6 +86,7 @@ NULL
 #' data(batmicrobiome)
 #' map_phyloseq(batmicrobiome)
 #' map_network(batmicrobiome)
+#' plot_distance(batmicrobiome)
 #' @seealso
 #'  \code{\link[phyloseq]{phyloseq}}
 #'  \code{\link[phyloseq]{otu_table}}
@@ -101,12 +104,41 @@ NULL
 #' Proceedings of the National Academy of Sciences of the United States of America 112(14):4221-6
 #' \url{http://www.ncbi.nlm.nih.gov/pubmed/25831524}
 #' 
-#' @description a \code{\link[phyloseq]{phyloseq}}object for a soil microbiome
+#' @description  abstract from research article (quoted):
+#' 
+#'  In molecular evolutionary analyses, short DNA sequences are used to infer
+#'  phylogenetic relationships among species. Here we apply this principle to
+#'  the study of bacterial biosynthesis, enabling the targeted isolation of
+#'  previously unidentified natural products directly from complex metagenomes.
+#'  Our approach uses short natural product sequence tags derived from
+#'  conserved biosynthetic motifs to profile biosynthetic diversity in the
+#'  environment and then guide the recovery of gene clusters from metagenomic
+#'  libraries. The methodology is conceptually simple, requires only a small
+#'  investment in sequencing, and is not computationally demanding. To
+#'  demonstrate the power of this approach to natural product discovery we
+#'  conducted a computational search for epoxyketone proteasome inhibitors
+#'  within 185 globally distributed soil metagenomes. This led to the
+#'  identification of 99 unique epoxyketone sequence tags, falling into
+#'  6 phylogenetically distinct clades. Complete gene clusters associated with
+#'  nine unique tags were recovered from four saturating soil metagenomic
+#'  libraries. Using heterologous expression methodologies, seven potent
+#'  epoxyketone proteasome inhibitors (clarepoxcins A-E and landepoxcins
+#'  A and B) were produced from these pathways, including compounds with
+#'  different warhead structures and a naturally occurring halohydrin
+#'  prodrug. This study provides a template for the targeted expansion of
+#'  bacterially derived natural products using the global metagenome.
+#'  
+#'  (end quote)
+#'  
+#'  a \code{\link[phyloseq]{phyloseq}}object for a soil microbiome
 #'  study using degenerate primers targeting ketosynthase domains (KS), a 
 #'  conserved domain in the biosynthesis of 
 #'  \href{http://en.wikipedia.org/wiki/Polyketide}{polyketides}. This data is
 #'  the subset of KS amplicons that map to the epoxyketone natural product 
-#'  \href{https://en.wikipedia.org/wiki/Epoxomicin}{epoxomicin}.
+#'  \href{https://en.wikipedia.org/wiki/Epoxomicin}{epoxomicin}. Note that
+#'  there are 102 sequences due to the addition of theee reference sequences,
+#'  BCW, SAL and Epn which are KS sequence derived from an orphan cluster,
+#'  the epoxomicin gene cluster or the eponemycin, repectively. 
 #' 
 #' @format a \code{\link[phyloseq]{phyloseq}} object containing the following:
 #' \describe{
@@ -132,6 +164,9 @@ NULL
 #' data(epoxomicin_KS)
 #' map_phyloseq(epoxomicin_KS)
 #' map_tree(epoxomicin_KS)
+#' map_network(epoxomicin_KS)
+#' map_clusters(epoxomicin_KS)
+#' plot_distacne(epoxomicin_KS)
 #' 
 #' @seealso
 #'  \code{\link[phyloseq]{phyloseq}}
