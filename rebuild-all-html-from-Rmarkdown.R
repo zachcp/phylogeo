@@ -13,13 +13,10 @@ unlink("cache", TRUE)
 unlink("figure", TRUE)
 
 # Create vector of .rmd files in this directory
-files = list.files(pattern="\\.[Rr]md")
-
-# Do not re-run the install.Rmd
-# Will just have to re-build this separately,
-# or else you get a mixture of phyloseq versions
-# used during the all-tutorial build.
-files = files[!files %in% c("install.Rmd")]
+rmd1 = Sys.glob("*.Rmd")
+rmd2 = Sys.glob("vignettes/*.Rmd")
+files = c(rmd1, rmd2)
+print(files)
 
 # Load and run knit2html on all of the .rmd files
 library("knitr")
