@@ -138,7 +138,8 @@ NULL
 #'  \href{https://en.wikipedia.org/wiki/Epoxomicin}{epoxomicin}. Note that
 #'  there are 102 sequences due to the addition of theee reference sequences,
 #'  BCW, SAL and Epn which are KS sequence derived from an orphan cluster,
-#'  the epoxomicin gene cluster or the eponemycin, repectively. 
+#'  the epoxomicin gene cluster or the eponemycin, repectively. There are only 
+#'  162 samples because 23 samples lacked Epoxomicin-like sequences.
 #' 
 #' @format a \code{\link[phyloseq]{phyloseq}} object containing the following:
 #' \describe{
