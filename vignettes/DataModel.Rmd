@@ -18,19 +18,22 @@ opts_chunk$set(cache=TRUE, fig.width=9, fig.height=4, message=FALSE, warning=FAL
 
 ## About this vignette
 phylogeo is based on top of [phyloseq](http://joey711.github.io/phyloseq) and therefore uses the same data model, an excellent overview of which can be found [here](http://joey711.github.io/phyloseq/import-data.html). This vignette
-is simple a continuation of that tutorial. We create some random data from phyloseq including the following: 
+is simply a continuation of that tutorial. We create some random data from phyloseq including the following: 
 
 - an OTU table, 
-- a Taxonomy Table, and a 
-- sample information dataframe.
-- Latitude and Longitude information to ass to the sample data, and
-- A phylogenetic tree of the data.
+- a Taxonomy Table,
+- a Sample Data dataframe.
+- Latitude and Longitude information that is added to the Sample Data, and
+- A phylogenetic tree of the relationship betwen the OTUs contianed in the OTU table.
 
-The last two items are neccessary to take advantage of phylogeo's plotting utilities.
+Phyloseq provides toolf for dealing with the first three items on this list. By adding lociton information and phylogenetic information you can take advantage fo the plotting tools in the phylogeo package.
 
+Note: If these data-types don't make sense to you, it may be worthwhile to look at the [phyloseq tutorials](http://joey711.github.io/phyloseq/tutorials-index) to get your bearings. For a grasp of what OTUs are and how they are used in metagenome analysis you could do worse than to start with Robert Edgars' page on [OTUs](http://www.drive5.com/usearch/manual/otu_definition.html). Edgar is the author of a number  of highly used bioinformatic programs that comarse DNA sequences including Muscle and USeqrch (see [here](http://drive5.com/software.html)).
+
+## Generate phyloseq data and plot with phylogeo
 
 ### Load phylogeo and get some sequecne data from the `ape` package
-Sequence data from the [ape](http://ape-package.ird.fr/) package will be used as an example, although you will probably have your own sequnecing data to use. 
+In this vignette, sequence data from the [ape](http://ape-package.ird.fr/) package will be used, although you will probably have your own sequencing data to use. Everything except that sequence data is generated denovo using base R.
 ```{r, message = FALSE}
 #load libraries
 library(phyloseq)
@@ -46,14 +49,14 @@ samplenum = 15
 samplenames =  paste0("Sample", 1:samplenum)
 ```
 
-### Create a pretend OTU table
+### Create an OTU table
 An operational taxonomic unit (OTU) table that a table holding count information. The row values are typicaly OTUs which in macro-biology are typically species, but in microbiology are semi-arbitrary cutoffs of sequence similarity that corresponds roughly to species. For 16S studies, these OTUs are typically 16S DNA amplicon sequences clustered at 97% identity. We can make an arbitrary dataset where out OTUs will be the woodmouse data, and the columns will be our samples.
 ```{r, message = FALSE}
 otumat = matrix(sample(1:100, 75, replace = TRUE), 
                 nrow = length(woodmousenames), 
                 ncol = samplenum)
 rownames(otumat) <- woodmousenames
-colnames(otumat) <-samplenames
+colnames(otumat) <- samplenames
 otumat
 ```
 
@@ -65,8 +68,8 @@ taxmat = matrix(sample(letters, 70, replace = TRUE),
                 nrow = nrow(otumat), 
                 ncol = 7)
 rownames(taxmat) <- rownames(otumat)
-colnames(taxmat) <- c("Domain", "Phylum", "Class", "Order", "Family", "Genus", 
-                      "Species")
+colnames(taxmat) <- c("Domain", "Phylum", "Class", "Order", 
+                      "Family", "Genus", "Species")
 taxmat
 ```
 
@@ -74,8 +77,8 @@ taxmat
 Sample data is information about your samples. The sample data  rownames must corresond to the values in the OTU table. We will make some smaple data with some arbitrary columns. These columns are often used to store informaiton about sample processing, or about the samples themselves.
 ```{r, message = FALSE}
 sampledata <- matrix(sample(letters,samplenum*7, replace=TRUE), 
-                     nrow=samplenum, 
-                     ncol=7)
+                     nrow = samplenum, 
+                     ncol = 7)
 rownames(sampledata) <- samplenames
 # in your real data these columns might hold soil data, or processing information
 colnames(sampledata) <- paste0("Category", 1:ncol(sampledata))
