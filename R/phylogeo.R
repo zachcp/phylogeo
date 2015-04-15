@@ -105,7 +105,8 @@ NULL
 #' Proceedings of the National Academy of Sciences of the United States of America 112(14):4221-6
 #' \url{http://www.ncbi.nlm.nih.gov/pubmed/25831524}
 #' 
-#' @description  abstract from research article (quoted):
+#' 
+#' @details abstract from research article (quoted):
 #' 
 #'  In molecular evolutionary analyses, short DNA sequences are used to infer
 #'  phylogenetic relationships among species. Here we apply this principle to
@@ -130,6 +131,8 @@ NULL
 #'  bacterially derived natural products using the global metagenome.
 #'  
 #'  (end quote)
+#' 
+#' @description 
 #'  
 #'  a \code{\link[phyloseq]{phyloseq}}object for a soil microbiome
 #'  study using degenerate primers targeting ketosynthase domains (KS), a 

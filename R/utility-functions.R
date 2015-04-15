@@ -51,13 +51,14 @@
   # check that the projection is null or is in the projectionlist
   # print out a warning about projections
   if(!(projection %in% .projlist)){
-    stop("The projection is not valid. Please use null or one of the following:
-         aitoff, albers, azequalarea, azequidistant, bicentric, bonne, conic, 
-         cylequalarea, cylindrical, eisenlohr, elliptic, fisheye, gall, 
-         gilbert, globular, gnomonic, guyou, harrison, hex, homing, lagrange, lambert, laue, 
-         lune, mercator, mecca, mollweide, newyorker, orthographic, perspective, 
-         polyconic, rectangular,simpleconic, square, sinusoidal, 
-         stereographic, tetra, trapezoidal")
+    stop(paste0(projection," is not a valid projection. Please use one of 
+                the following: aitoff, albers, azequalarea, azequidistant,
+                bicentric, bonne, conic, cylequalarea, eisenlohr, elliptic,
+                fisheye, gall, gilbert, globular, gnomonic, guyou, harrison,
+                hex, homing, lagrange, lambert, laue,  lune, mercator, mecca,
+                mollweide, newyorker, orthographic, perspective, polyconic, 
+                rectangular,simpleconic, square, sinusoidal, stereographic,
+                tetra, trapezoidal")
   }else if(projection %in% c("bonne","cylindrical","eisenlohr",
                              "gall","harrison","lune","perspective",
                              "stereographic")){
@@ -70,19 +71,7 @@
   }
 
   if(is.null(region)){
-    #default worldmap cuts out Antarctica by filtering everythign below -59 Latitude
     world <- ggplot2::map_data("world")
-    #world <- world[world$lat > -59,]
-    #ToDO: allow subsetting of samples by region. Is there a point-in-polygon library?
-    #this is a quick filter based on latitude and longitude not point-in-polygon
-    #maxlat  = max(world$lat)
-    #minlat  = min(world$lat)
-    #maxlong = max(world$long)
-    #minlong = min(world$long)
-    #df <- df[ df[, loncol] < maxlong, ]
-    #df <- df[ df[, loncol] > minlong, ]
-    #df <- df[ df[, latcol] < maxlat, ]
-    #df <- df[ df[, latcol] > minlat, ]
   }else if(region=="world"){
     world <- ggplot2::map_data("world")
   }else {

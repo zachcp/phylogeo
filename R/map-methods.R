@@ -50,28 +50,15 @@
 #' @param jitter.y (Optional). Default \code{3}. 
 #'  Value for Y jitter
 #'  
-#' @param projection (Optional). Default \code{NULL}. 
-#'  Projection. Default of NULL will result in meractor projection. Non-default
-#'  projection can be specified here but may require additional arguments 
-#'  specified by the `parameter` and `orientation` arguments
+#' @param projection (Optional). Default \code{"mercator"}. 
+#' See the documentation of \code[mapproj]{mapproject} for the list
+#' of available projections and their descriptions.
 #'
-#' @param orientation (Optional). Default \code{NULL}. 
-#'  Additional arguments for the map projection.
-#'  
-#' @param lat0 (Optional). Default \code{NULL}. 
-#'  Additional arguments for nonstandard map projection.
-#'  
-#' @param lat1 (Optional). Default \code{NULL}. 
-#'  Additional arguments for nonstandard map projection.
-#'  
-#' @param n (Optional). Default \code{NULL}. 
-#'  Additional arguments for nonstandard map projection.
-#'  
-#' @param r (Optional). Default \code{NULL}. 
-#'  Additional arguments for nonstandard map projection.
-#'  
-#' @param lon0 (Optional). Default \code{NULL}. 
-#'  Additional arguments for nonstandard map projection.
+#' @param ... orientation lat0 lat1 n r lon0 (Optional Arguments). Default \code{NULL}. 
+#' Arguments passed internally to the \code[mapproj]{mapproject}
+#' function from the \pkg{mapproj} package to control the projection.
+#' See the documentation of \code[mapproj]{mapproject} for more
+#' information (\code{?\code[mapproj]{mapproject}}).
 #'  
 #' @param seed (Optional). Default \code{1234}. 
 #'  seed is used for repeatable randomness if you are using the jitter functions
@@ -236,25 +223,16 @@ map_phyloseq <- function(physeq, size=4, region=NULL, color=NULL,
 #' @param base_data_color (Optional). Default \code{grey}.
 #'  named color to determine base data color
 #'  
-#' @param projection (Optional). Default \code{NULL}. 
-#'  Projection. Default of NULL will result in meractor projection. Non-default
-#'  projection can be specified here but may require additional arguments 
-#'  specified by the `parameter` and `orientation` arguments
+#' @param projection (Optional). Default \code{"mercator"}. 
+#' See the documentation of \code[mapproj]{mapproject} for the list
+#' of available projections and their descriptions.
 #'
-#' @param orientation (Optional). Default \code{NULL}. 
-#'  Additional arguments for the map projection.
+#' @param ... orientation lat0 lat1 n r lon0 (Optional Arguments). Default \code{NULL}. 
+#' Arguments passed internally to the \code[mapproj]{mapproject}
+#' function from the \pkg{mapproj} package to control the projection.
+#' See the documentation of \code[mapproj]{mapproject} for more
+#' information (\code{?\code[mapproj]{mapproject}}).
 #'  
-#' @param lat0 (Optional). Default \code{NULL}. 
-#'  Additional arguments for nonstandard map projection.
-#'  
-#' @param lat1 (Optional). Default \code{NULL}. 
-#'  Additional arguments for nonstandard map projection.
-#'  
-#' @param n (Optional). Default \code{NULL}. 
-#'  Additional arguments for nonstandard map projection.
-#'  
-#' @param r (Optional). Default \code{NULL}. 
-#'  Additional arguments for nonstandard map projection.
 #'  
 #' @param lon0 (Optional). Default \code{NULL}. 
 #'  Additional arguments for nonstandard map projection.
@@ -488,28 +466,14 @@ map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard",
 #' @param treetheme (Optional) Default \code{NULL}
 #' @param justify (Optional) Default \code{"jagged"}
 #' whether to place the map or the tree on the left.
-#' @param projection (Optional). Default \code{NULL}. 
-#'  Projection. Default of NULL will result in meractor projection. Non-default
-#'  projection can be specified here but may require additional arguments
-#'  specified by the `parameter` and `orientation` arguments
-#'
-#' @param orientation (Optional). Default \code{NULL}. 
-#'  Additional arguments for the map projection.
-#'  
-#' @param lat0 (Optional). Default \code{NULL}. 
-#'  Additional arguments for nonstandard map projection.
-#'  
-#' @param lat1 (Optional). Default \code{NULL}. 
-#'  Additional arguments for nonstandard map projection.
-#'  
-#' @param n (Optional). Default \code{NULL}. 
-#'  Additional arguments for nonstandard map projection.
-#'  
-#' @param r (Optional). Default \code{NULL}. 
-#'  Additional arguments for nonstandard map projection.
-#'  
-#' @param lon0 (Optional). Default \code{NULL}. 
-#'  Additional arguments for nonstandard map projection.
+#' @param projection (Optional). Default \code{"mercator"}. 
+#' See the documentation of \code[mapproj]{mapproject} for the list
+#' of available projections and their descriptions.
+#' @param ... orientation lat0 lat1 n r lon0 (Optional Arguments). Default \code{NULL}. 
+#' Arguments passed internally to the \code[mapproj]{mapproject}
+#' function from the \pkg{mapproj} package to control the projection.
+#' See the documentation of \code[mapproj]{mapproject} for more
+#' information (\code{?\code[mapproj]{mapproject}}).
 #'  
 #' @seealso 
 #'  \href{http://zachcp.github.io/phylogeo/phylogeo_basics}{phylogeo basics}.
