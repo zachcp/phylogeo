@@ -1,12 +1,12 @@
 #
-# methods for drawing maps of \code{\link[phyloseq]{phyloseq}} phyloseq objects
+# methods for drawing maps of phyloseq datasets
 #
 ###############################################################################
-#' Simple Mapps for \code{\link[phyloseq]{phyloseq}} Samples
+#' Simple Maps for \code{\link[phyloseq]{phyloseq}} Samples
 #'
 #' map_phyloseq is a plotting function that draws a map of your microbiome 
 #' dataset. This function acts on \code{\link[phyloseq]{phyloseq}} 
-#' phyloseq objects and requires that the \code{\link[phyloseq]{sample_data}} 
+#' objects and requires that the \code{\link[phyloseq]{sample_data}} 
 #' sample_data table contains Latitude and Longitude columns. The resulting 
 #' map can be customized by a nubmer of parameters including size="Abundance" 
 #' which will scale the size of hte circle according to the nubmer of reads in
@@ -19,7 +19,7 @@
 #' 
 #' @return a ggplot object
 #' @param physeq (Required). 
-#'  The name of the \code{\link[phyloseq]{phyloseq}} phyloseq object. 
+#'  The name of the \code{\link[phyloseq]{phyloseq}} object. 
 #'  This must have sample data with Latitude and Longitude Columns.
 #'  
 #' @param size (Optional). Default \code{4}. 
@@ -161,13 +161,13 @@ map_phyloseq <- function(physeq, size=4, region=NULL, color=NULL,
   return(worldmap)
 }
 ################################################################################
-#' Mapping Functions to Visualize \code{\link[phyloseq]{phyloseq}} Phyloseq Object Sample Similarity.
+#' Mapping Functions to Visualize Phyloseq Datasets Sample Similarity.
 #' 
 #' map_network is a plotting function that draws a map of your microbiome 
 #' dataset, highlighting the degree of similarity between sample sites. 
 #' This funciton acts on \code{\link[phyloseq]{phyloseq}} 
-#' phyloseq objects and requires that the \code{\link[phyloseq]{sample_data}} 
-#' sample_data table contains Latitude and Longitude columns. map_network 
+#' datasets and requires that the \code{\link[phyloseq]{sample_data}} 
+#' table contains Latitude and Longitude columns. map_network 
 #' will calculate the ecological simiarity of each of your sample sites using 
 #' the distance metrics available in the \code{\link[phyloseq]{make_network}} 
 #' phyloseq package. These distances are then plotted as lines. Many aspects
@@ -175,7 +175,7 @@ map_phyloseq <- function(physeq, size=4, region=NULL, color=NULL,
 #'   
 #' @return a ggplot object
 #' @param physeq (Required). 
-#'  The name of the \code{\link[phyloseq]{phyloseq}} phyloseq object. 
+#'  The name of the \code{\link[phyloseq]{phyloseq}} object. 
 #'  This must have sample data with Latitude and Longitude Columns.
 #'  
 #' @param igraph  (Optional). Default \code{NULL}
@@ -433,7 +433,7 @@ map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard",
 #' Plot a phlogenetic tree and map the location of the tree's end-nodes.
 #' 
 #' map_tree is a plotting function that acts on \code{\link[phyloseq]{phyloseq}}
-#' phyloseq objects to plot a figure that is a composite of a phylogetic tree 
+#' datasets to plot a figure that is a composite of a phylogetic tree 
 #' and a geographic map. The tips on the tree and the locations of the map 
 #' correspond to each other, allowing for an easy way to look for the geographic
 #' distrivution of clades in your tree.
@@ -441,7 +441,7 @@ map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard",
 #' @return a ggplot object
 #' 
 #' @param physeq (Required). 
-#'  The name of the \code{\link[phyloseq]{phyloseq}} phyloseq object. 
+#'  The name of the \code{\link[phyloseq]{phyloseq}} dataset.
 #'  This must have sample data with Latitude and Longitude Columns.
 #'  
 #'  @param region (Optional). Default \code{NULL}.
@@ -587,7 +587,7 @@ map_tree <- function(physeq,  region=NULL, color = NULL,size=4, alpha=0.8,
 #' Explore the spatial distribution of clustered-subsets of your sequence data
 #' 
 #' map_clusters is a plotting function for  \code{\link[phyloseq]{phyloseq}} 
-#' phyloseq objects which requires a phylogentic tree. map_clusters will use 
+#' datasets which requires a phylogentic tree. map_clusters will use 
 #' the phylogenetic tree (required) of your phyloseq dataset and will cluster
 #' these sequence into a specified number of clusters using kmeans clustering.
 #' A map is then generated for each of these clusters showing the cluster and
@@ -595,7 +595,7 @@ map_tree <- function(physeq,  region=NULL, color = NULL,size=4, alpha=0.8,
 #' 
 #' @return a ggplot object
 #' @param physeq (Required). 
-#'  The name of the \code{\link[phyloseq]{phyloseq}} phyloseq object. 
+#'  The name of the \code{\link[phyloseq]{phyloseq}} object. 
 #'  This must have sample data with Latitude and Longitude Columns.
 #'  
 #' @param clusternum (Optional). Default \code{3}.

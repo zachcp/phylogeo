@@ -6,8 +6,8 @@
 #' 
 #' plot_distance is a plotting function for visualizing the geographic
 #' and ecological distances between all pairs of samples in a microbiome study.
-#' This function acts on \code{\link[phyloseq]{phyloseq}} phyloseq objects and 
-#' requires that the \code{\link[phyloseq]{sample_data}} sample_data table 
+#' This function acts on \code{\link[phyloseq]{phyloseq}} datasets and 
+#' requires that the \code{\link[phyloseq]{sample_data}} table 
 #' contains Latitude and Longitude columns. This will calcualte the pairwise
 #' distances between each set of samples and plot them as a scatter plot.
 #' 
@@ -19,7 +19,7 @@
 #' @return a ggplot object
 #'
 #' @param physeq (Required). 
-#'  The name of the \code{\link[phyloseq]{phyloseq}} phyloseq object. This must have sample data with 
+#'  The name of the \code{\link[phyloseq]{phyloseq}} dataset. This must have sample data with 
 #'  Latitude and Longitude Columns.
 #'  
 #' @param distancemethod (Optional). Default \code{"jaccard"}.

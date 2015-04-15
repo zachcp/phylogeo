@@ -94,8 +94,9 @@ sampledata
 ### make a phylogenetic tree from the woodhouse sequences
 To take advantage of the information stored in the DNA sequences we need to generate a phylogenetic tree. Once generated and loaded into the physeq object, phylogeo can use to explore whether there are geogrphic trends in the subclades. The members of the tree must be the same names as the names of the rows (OTUs) in the OTU table.
 ```{r, message = FALSE}
-#muscle is an APE wrapper for the muscle program
+# muscle is used for alignments
 musc <- muscle(woodmouse)
+# nj will create a phylogenetic tree from the alignments
 tree <- nj(musc)
 plot(tree)
 ```
