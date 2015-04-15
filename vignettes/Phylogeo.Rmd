@@ -14,7 +14,7 @@ vignette: >
 
 ```{r, echo = FALSE, message = FALSE}
 library("knitr")
-opts_chunk$set(cache=TRUE, fig.width=9, fig.height=4, message=FALSE, warning=FALSE, comment = "#>")
+opts_chunk$set(cache=FALSE, fig.width=9, fig.height=4, message=FALSE, warning=FALSE, comment = "#>")
 ```
 
 ## About this vignette

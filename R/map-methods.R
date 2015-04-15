@@ -233,10 +233,6 @@ map_phyloseq <- function(physeq, size=4, region=NULL, color=NULL,
 #' See the documentation of  \code{\link[mapproj]{mapproject}} for more
 #' information (\code{?\code{\link[mapproj]{mapproject}}}).
 #'  
-#'  
-#' @param lon0 (Optional). Default \code{NULL}. 
-#'  Additional arguments for nonstandard map projection.
-#'  
 #' @param seed (Optional). Default \code{1234}. 
 #'  seed is used for repeatable randomness if you are using the jitter functions
 #'
@@ -473,7 +469,7 @@ map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard",
 #' Arguments passed internally to the  \code{\link[mapproj]{mapproject}}
 #' function from the \pkg{mapproj} package to control the projection.
 #' See the documentation of  \code{\link[mapproj]{mapproject}} for more
-#' information ((\code{?\code{\link[mapproj]{mapproject}}}).
+#' information (\code{?\code{\link[mapproj]{mapproject}}}).
 #'  
 #' @seealso 
 #'  \href{http://zachcp.github.io/phylogeo/phylogeo_basics}{phylogeo basics}.

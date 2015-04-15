@@ -91,12 +91,12 @@
            axis.title=element_blank())
   
   #check all of the projections and return the projected ggplot
-  if(is.null(projection)) { 
+  if(projection=="mercator") { 
     return(worldmap)
   } else if(projection %in% c("aitoff", "azequidistant","azequalarea","bonne","
                               cylindrical","gilbert",
                               "eisenlohr","globular","gnomonic","guyou","hex","laue",
-                              "lagrange","mercator","mollweide","orthographic",
+                              "lagrange","mollweide","orthographic",
                               "polyconic","sinusoidal","square","tetra",
                               "vandergrinten")){
     return(worldmap + coord_map(projection=projection, xlim=c(-180,180),ylim=c(-90,90), orientation=c(90,0,0)))

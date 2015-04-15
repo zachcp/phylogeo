@@ -1,11 +1,11 @@
 ---
-title: "phylogeo: geographic data on top of phylogeo"
+title: "DataModel: The phyloseq/phylogeo data model"
 date: "`r Sys.Date()`"
 author: Zach Charlop-Powers
 output: 
   rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{phylogeo: geographic data on top of phylogeo}
+  %\VignetteIndexEntry{DatamModel: The phyloseq/phylogeo data model}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 --- 
@@ -13,7 +13,7 @@ vignette: >
   
 ```{r, echo = FALSE, message = FALSE}
 library("knitr")
-opts_chunk$set(cache=TRUE, fig.width=9, fig.height=4, message=FALSE, warning=FALSE, comment = "#>")
+opts_chunk$set(cache=FALSE, fig.width=9, fig.height=4, message=FALSE, warning=FALSE, comment = "#>")
 ```
 
 ## About this vignette
@@ -26,13 +26,13 @@ is simply a continuation of that tutorial. We create some random data from phylo
 - Latitude and Longitude information that is added to the Sample Data, and
 - A phylogenetic tree of the relationship betwen the OTUs contianed in the OTU table.
 
-Phyloseq provides toolf for dealing with the first three items on this list. By adding lociton information and phylogenetic information you can take advantage fo the plotting tools in the phylogeo package.
+Phyloseq provides toolf for dealing with the first three items on this list. By adding location information and phylogenetic information you can take advantage fo the plotting tools in the phylogeo package.
 
-Note: If these data-types don't make sense to you, it may be worthwhile to look at the [phyloseq tutorials](http://joey711.github.io/phyloseq/tutorials-index) to get your bearings. For a grasp of what OTUs are and how they are used in metagenome analysis you could do worse than to start with Robert Edgars' page on [OTUs](http://www.drive5.com/usearch/manual/otu_definition.html). Edgar is the author of a number  of highly used bioinformatic programs that comarse DNA sequences including Muscle and USeqrch (see [here](http://drive5.com/software.html)).
+Note: If these data-types don't make sense to you, it may be worthwhile to look at the [phyloseq tutorials](http://joey711.github.io/phyloseq/tutorials-index) to get your bearings. For a grasp of what OTUs are and how they are used in metagenome analysis you could do worse than to start with Robert Edgars' page on [OTUs](http://www.drive5.com/usearch/manual/otu_definition.html). Edgar is the author of a number  of highly used bioinformatic programs including Muscle and USearch (see [here](http://drive5.com/software.html)).
 
 ## Generate phyloseq data and plot with phylogeo
 
-### Load phylogeo and get some sequecne data from the `ape` package
+### Load phylogeo and get some sequence data from the `ape` package
 In this vignette, sequence data from the [ape](http://ape-package.ird.fr/) package will be used, although you will probably have your own sequencing data to use. Everything except that sequence data is generated denovo using base R.
 ```{r, message = FALSE}
 #load libraries
@@ -74,7 +74,7 @@ taxmat
 ```
 
 ### And some fake Sample Data
-Sample data is information about your samples. The sample data  rownames must corresond to the values in the OTU table. We will make some smaple data with some arbitrary columns. These columns are often used to store informaiton about sample processing, or about the samples themselves.
+Sample data is information about your samples. The sample data  rownames must corresond to the values in the OTU table. We will make some sample data with some arbitrary columns. These columns are often used to store informaiton about sample processing, or about the samples themselves.
 ```{r, message = FALSE}
 sampledata <- matrix(sample(letters,samplenum*7, replace=TRUE), 
                      nrow = samplenum, 
@@ -82,10 +82,10 @@ sampledata <- matrix(sample(letters,samplenum*7, replace=TRUE),
 rownames(sampledata) <- samplenames
 # in your real data these columns might hold soil data, or processing information
 colnames(sampledata) <- paste0("Category", 1:ncol(sampledata))
-# generate some random lat and lon data and add it to the smaple data.
-lat = sample((-90:90), samplenum)
-lon = sample((-180:180), samplenum)
-sampledata <- cbind(sampledata, lat, lon)
+# generate some random lat/lon data and add it to the smaple data.
+latitude = sample((-90:90), samplenum)
+longitude = sample((-180:180), samplenum)
+sampledata <- cbind(sampledata, latitude, longitude)
 sampledata <- as.data.frame(sampledata)
 sampledata
 ```

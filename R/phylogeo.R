@@ -90,6 +90,7 @@ NULL
 #'       
 #' @source \url{http://www.earthmicrobiome.org/} 
 #' @usage
+#' library(phylogeo)
 #' data(batmicrobiome)
 #' map_phyloseq(batmicrobiome)
 #' map_network(batmicrobiome)
@@ -172,6 +173,7 @@ NULL
 #'       
 #'}
 #' @usage
+#' library(phylogeo)
 #' data(epoxomicin_KS)
 #' map_phyloseq(epoxomicin_KS)
 #' map_tree(epoxomicin_KS)
