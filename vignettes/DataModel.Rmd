@@ -64,7 +64,7 @@ otumat
 ### Now we need a pretend taxonomy table
 The taxonomy table lets you assign taxonomic information for each OTU. The rownames of the taxonomy table must be the same as the OTU table. Each of the columns represent some value, typically corresponding to the classic Kindom, Phylum.... Species heirarchy. However, this table can be used to assign arbitrary data to OTUs as well. Here we will generate some random taxonomy data using classic phylogeny, but with some made-up, filler data. 
 ```{r, message = FALSE}
-taxmat = matrix(sample(letters, 70, replace = TRUE), 
+taxmat = matrix(sample(letters, 75, replace = TRUE), 
                 nrow = nrow(otumat), 
                 ncol = 7)
 rownames(taxmat) <- rownames(otumat)
@@ -123,8 +123,6 @@ map_phyloseq(phy)
 map_phyloseq(phy, color="Category1", size="Abundance")
 # map the relationship between samples
 map_network(phy, color="Category2", lines=TRUE)
-# map the relationship between samples
-map_network(phy, color="Category2", lines=TRUE)
 # only keep highly related samples
 # tip: if there are unrelated samples that drop out of the network analysis try  base_data = TRUE
 map_network(phy, color="Category2",lines=TRUE, maxdist = 0.3)
@@ -139,7 +137,3 @@ map_clusters(phy)
 # pairwise sample distances ecological distance vs. geographic distance
 plot_distance(phy)
 ```
-
-
-
-

@@ -58,7 +58,7 @@
                 hex, homing, lagrange, lambert, laue,  lune, mercator, mecca,
                 mollweide, newyorker, orthographic, perspective, polyconic, 
                 rectangular,simpleconic, square, sinusoidal, stereographic,
-                tetra, trapezoidal")
+                tetra, trapezoidal"))
   }else if(projection %in% c("bonne","cylindrical","eisenlohr",
                              "gall","harrison","lune","perspective",
                              "stereographic")){

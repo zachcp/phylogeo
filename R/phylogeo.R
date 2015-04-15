@@ -39,15 +39,21 @@ NULL
 #'       For documentation about sample data see the phyloseq's 
 #'       \code{\link[phyloseq]{sample_data}}}
 #' }
-#'                              
+#' 
+#'                                                         
 #' @usage
+#' library(phylogeo)
 #' data(mountainsoil)
 #' map_phyloseq(mountainsoil)
 #' map_network(mountainsoil)
 #' plot_distance(mountainsoil)
 #' 
+#' # http://qiita.ucsd.edu/study/description/1702
+#' #
 #'
-#'@source \url{http://www.earthmicrobiome.org/} 
+#'@source 
+#' \url{http://qiita.ucsd.edu/study/description/1702} 
+#' 
 #' @seealso
 #'  \code{\link[phyloseq]{phyloseq}}
 #'  \code{\link[phyloseq]{otu_table}}
@@ -84,10 +90,10 @@ NULL
 #'       
 #' @source \url{http://www.earthmicrobiome.org/} 
 #' @usage
-#' data(mountainsoil)
-#' map_phyloseq(mountainsoil)
-#' map_network(mountainsoil)
-#' plot_distance(mountainsoil)
+#' data(batmicrobiome)
+#' map_phyloseq(batmicrobiome)
+#' map_network(batmicrobiome)
+#' plot_distance(batmicrobiome)
 #' @seealso
 #'  \code{\link[phyloseq]{phyloseq}}
 #'  \code{\link[phyloseq]{otu_table}}

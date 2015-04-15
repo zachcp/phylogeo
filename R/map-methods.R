@@ -51,14 +51,14 @@
 #'  Value for Y jitter
 #'  
 #' @param projection (Optional). Default \code{"mercator"}. 
-#' See the documentation of \code[mapproj]{mapproject} for the list
+#' See the documentation of \code{\link[mapproj]{mapproject}} for the list
 #' of available projections and their descriptions.
 #'
 #' @param ... orientation lat0 lat1 n r lon0 (Optional Arguments). Default \code{NULL}. 
-#' Arguments passed internally to the \code[mapproj]{mapproject}
+#' Arguments passed internally to the \code{\link[mapproj]{mapproject}}
 #' function from the \pkg{mapproj} package to control the projection.
-#' See the documentation of \code[mapproj]{mapproject} for more
-#' information (\code{?\code[mapproj]{mapproject}}).
+#' See the documentation of \code{\link[mapproj]{mapproject}} for more
+#' information (\code{?\code{\link[mapproj]{mapproject}}}).
 #'  
 #' @param seed (Optional). Default \code{1234}. 
 #'  seed is used for repeatable randomness if you are using the jitter functions
@@ -91,7 +91,7 @@
 map_phyloseq <- function(physeq, size=4, region=NULL, color=NULL, 
                          shape=NULL, alpha = 0.8, 
                          jitter=FALSE, jitter.x=3, jitter.y=3,
-                         projection=NULL,orientation=NULL,
+                         projection="mercator",orientation=NULL,
                          lat0=NULL, lat1=NULL, lon0=NULL,n=NULL, r=NULL,
                          seed=1234){
   #check basic physeq and lat/lon
@@ -218,20 +218,20 @@ map_phyloseq <- function(physeq, size=4, region=NULL, color=NULL,
 #'  The transparency level for graph-edge lines.
 #'  
 #' @param base_data (Optional). Default \code{FALSE}.
-#'  Boolean to determine whether to include dat points that aren't in a network.
+#'  Boolean to determine whether to include data points that aren't in a network.
 #' 
 #' @param base_data_color (Optional). Default \code{grey}.
 #'  named color to determine base data color
 #'  
 #' @param projection (Optional). Default \code{"mercator"}. 
-#' See the documentation of \code[mapproj]{mapproject} for the list
+#' See the documentation of \code{\link[mapproj]{mapproject}} for the list
 #' of available projections and their descriptions.
 #'
 #' @param ... orientation lat0 lat1 n r lon0 (Optional Arguments). Default \code{NULL}. 
-#' Arguments passed internally to the \code[mapproj]{mapproject}
+#' Arguments passed internally to the  \code{\link[mapproj]{mapproject}}
 #' function from the \pkg{mapproj} package to control the projection.
-#' See the documentation of \code[mapproj]{mapproject} for more
-#' information (\code{?\code[mapproj]{mapproject}}).
+#' See the documentation of  \code{\link[mapproj]{mapproject}} for more
+#' information (\code{?\code{\link[mapproj]{mapproject}}}).
 #'  
 #'  
 #' @param lon0 (Optional). Default \code{NULL}. 
@@ -276,7 +276,7 @@ map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard",
                         jitter=FALSE, jitter.x=3, jitter.y=3, shape=NULL, 
                         lines=FALSE, line_weight=1, line_color ="Black",
                         line_alpha=0.4 , base_data=FALSE, 
-                        base_data_color="grey",projection=NULL, 
+                        base_data_color="grey",projection="mercator", 
                         orientation=NULL,
                         lat0=NULL, lat1=NULL, lon0=NULL,n=NULL, r=NULL,
                         seed=1234){
@@ -467,13 +467,13 @@ map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard",
 #' @param justify (Optional) Default \code{"jagged"}
 #' whether to place the map or the tree on the left.
 #' @param projection (Optional). Default \code{"mercator"}. 
-#' See the documentation of \code[mapproj]{mapproject} for the list
+#' See the documentation of \code{\link[mapproj]{mapproject}} for the list
 #' of available projections and their descriptions.
 #' @param ... orientation lat0 lat1 n r lon0 (Optional Arguments). Default \code{NULL}. 
-#' Arguments passed internally to the \code[mapproj]{mapproject}
+#' Arguments passed internally to the  \code{\link[mapproj]{mapproject}}
 #' function from the \pkg{mapproj} package to control the projection.
-#' See the documentation of \code[mapproj]{mapproject} for more
-#' information (\code{?\code[mapproj]{mapproject}}).
+#' See the documentation of  \code{\link[mapproj]{mapproject}} for more
+#' information ((\code{?\code{\link[mapproj]{mapproject}}}).
 #'  
 #' @seealso 
 #'  \href{http://zachcp.github.io/phylogeo/phylogeo_basics}{phylogeo basics}.
@@ -504,7 +504,7 @@ map_tree <- function(physeq,  region=NULL, color = NULL,size=4, alpha=0.8,
                      text.size = NULL, sizebase = 5, base.spacing = 0.02, 
                      ladderize = TRUE,plot.margin = 0.2, title = NULL, 
                      treetheme = NULL, justify = "jagged",width_ratio = 2, 
-                     map_on_left = FALSE, projection=NULL, orientation=NULL,
+                     map_on_left = FALSE, projection="mercator", orientation=NULL,
                      lat0=NULL, lat1=NULL, lon0=NULL,n=NULL, r=NULL) {
   #check for the existence of a tree: lifted from phyloseq's plot_tree
   if(!"phy_tree" %in% getslots.phyloseq(physeq)){
