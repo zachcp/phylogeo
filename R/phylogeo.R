@@ -40,11 +40,12 @@ NULL
 #'       \code{\link[phyloseq]{sample_data}}}
 #' }
 #'                              
-#' @examples 
+#' @usage
 #' data(mountainsoil)
 #' map_phyloseq(mountainsoil)
 #' map_network(mountainsoil)
 #' plot_distance(mountainsoil)
+#' 
 #'
 #'@source \url{http://www.earthmicrobiome.org/} 
 #' @seealso
@@ -82,11 +83,11 @@ NULL
 #'}
 #'       
 #' @source \url{http://www.earthmicrobiome.org/} 
-#' @examples 
-#' data(batmicrobiome)
-#' map_phyloseq(batmicrobiome)
-#' map_network(batmicrobiome)
-#' plot_distance(batmicrobiome)
+#' @usage
+#' data(mountainsoil)
+#' map_phyloseq(mountainsoil)
+#' map_network(mountainsoil)
+#' plot_distance(mountainsoil)
 #' @seealso
 #'  \code{\link[phyloseq]{phyloseq}}
 #'  \code{\link[phyloseq]{otu_table}}
@@ -161,7 +162,7 @@ NULL
 #'       \code{\link[phyloseq]{phy_tree}}}
 #'       
 #'}
-#' @examples
+#' @usage
 #' data(epoxomicin_KS)
 #' map_phyloseq(epoxomicin_KS)
 #' map_tree(epoxomicin_KS)

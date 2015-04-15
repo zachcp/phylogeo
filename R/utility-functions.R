@@ -50,27 +50,25 @@
   
   # check that the projection is null or is in the projectionlist
   # print out a warning about projections
-  if(!is.null(projection)){
-    if(!(projection %in% .projlist)){
-      stop("The projection is not valid. Please use null or one of the following:
-           aitoff, albers, azequalarea, azequidistant, bicentric, bonne, conic, 
-           cylequalarea, cylindrical, eisenlohr, elliptic, fisheye, gall, 
-           gilbert, globular, gnomonic, guyou, harrison, hex, homing, lagrange, lambert, laue, 
-           lune, mercator, mecca, mollweide, newyorker, orthographic, perspective, 
-           polyconic, rectangular,simpleconic, square, sinusoidal, 
-           stereographic, tetra, trapezoidal")
-    }else if(projection %in% c("bonne","cylindrical","eisenlohr",
-                               "gall","harrison","lune","perspective",
-                               "stereographic")){
-      #temporary check for projections that are currently not working and 
-      #will require work to include
-      stop("You are using a projection that is not yet supported by phylogeo")
-      
-    } else{
-      #print("you are using a non-standard projection that may require additional parameters")
-    }
-  }
+  if(!(projection %in% .projlist)){
+    stop("The projection is not valid. Please use null or one of the following:
+         aitoff, albers, azequalarea, azequidistant, bicentric, bonne, conic, 
+         cylequalarea, cylindrical, eisenlohr, elliptic, fisheye, gall, 
+         gilbert, globular, gnomonic, guyou, harrison, hex, homing, lagrange, lambert, laue, 
+         lune, mercator, mecca, mollweide, newyorker, orthographic, perspective, 
+         polyconic, rectangular,simpleconic, square, sinusoidal, 
+         stereographic, tetra, trapezoidal")
+  }else if(projection %in% c("bonne","cylindrical","eisenlohr",
+                             "gall","harrison","lune","perspective",
+                             "stereographic")){
+  #temporary check for projections that are currently not working and 
+  #will require work to include
+  stop("You are using a projection that is not yet supported by phylogeo")
   
+  }else{
+  #print("you are using a non-standard projection that may require additional parameters")
+  }
+
   if(is.null(region)){
     #default worldmap cuts out Antarctica by filtering everythign below -59 Latitude
     world <- ggplot2::map_data("world")
