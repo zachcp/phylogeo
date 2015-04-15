@@ -41,15 +41,14 @@ NULL
 #' }
 #' 
 #'                                                         
-#' @usage
-#' library(phylogeo)
+#' @examples
 #' data(mountainsoil)
 #' map_phyloseq(mountainsoil)
 #' map_network(mountainsoil)
 #' plot_distance(mountainsoil)
 #' 
-#' # http://qiita.ucsd.edu/study/description/1702
-#' #
+#' @usage
+#' data(mountainsoil)
 #'
 #'@source 
 #' \url{http://qiita.ucsd.edu/study/description/1702} 
@@ -89,12 +88,15 @@ NULL
 #'}
 #'       
 #' @source \url{http://www.earthmicrobiome.org/} 
-#' @usage
-#' library(phylogeo)
+#' @examples
 #' data(batmicrobiome)
 #' map_phyloseq(batmicrobiome)
 #' map_network(batmicrobiome)
 #' plot_distance(batmicrobiome)
+#' 
+#' @usage
+#' data(batmicrobiome)
+#' 
 #' @seealso
 #'  \code{\link[phyloseq]{phyloseq}}
 #'  \code{\link[phyloseq]{otu_table}}
@@ -140,17 +142,16 @@ NULL
 #'  (end quote)
 #' 
 #' @description 
-#'  
 #'  a \code{\link[phyloseq]{phyloseq}}object for a soil microbiome
 #'  study using degenerate primers targeting ketosynthase domains (KS), a 
 #'  conserved domain in the biosynthesis of 
 #'  \href{http://en.wikipedia.org/wiki/Polyketide}{polyketides}. This data is
 #'  the subset of KS amplicons that map to the epoxyketone natural product 
-#'  \href{https://en.wikipedia.org/wiki/Epoxomicin}{epoxomicin}. Note that
-#'  there are 102 sequences due to the addition of theee reference sequences,
-#'  BCW, SAL and Epn which are KS sequence derived from an orphan cluster,
-#'  the epoxomicin gene cluster or the eponemycin, repectively. There are only 
-#'  162 samples because 23 samples lacked Epoxomicin-like sequences.
+#'  \href{https://en.wikipedia.org/wiki/Epoxomicin}{epoxomicin} and were used
+#'  to guide the discovery of a nubmer of Epoxomicin-like compounds. Note that
+#'  there are 102 sequences due to the addition of reference sequences (BCW, SAL
+#'   and Epn) from three. Also, there only 162 samples in the data because these  
+#'   are the sampels with one or more Epoxomicin-like sequence.
 #' 
 #' @format a \code{\link[phyloseq]{phyloseq}} object containing the following:
 #' \describe{
@@ -172,14 +173,16 @@ NULL
 #'       \code{\link[phyloseq]{phy_tree}}}
 #'       
 #'}
-#' @usage
-#' library(phylogeo)
+#' @examples
 #' data(epoxomicin_KS)
 #' map_phyloseq(epoxomicin_KS)
 #' map_tree(epoxomicin_KS)
 #' map_network(epoxomicin_KS)
 #' map_clusters(epoxomicin_KS)
 #' plot_distance(epoxomicin_KS)
+#' 
+#' @usage
+#' data(epoxomicin_KS)
 #' 
 #' @seealso
 #'  \code{\link[phyloseq]{phyloseq}}

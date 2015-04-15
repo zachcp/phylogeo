@@ -1,3 +1,6 @@
+#0.99.6
+Documentation fixes for BioC
+
 #0.99.5
 More documentation changes and small fixes after another round of bioconductor code review.
 Fixes to the projection output, function and dataset documentation, naespace import fixes.
