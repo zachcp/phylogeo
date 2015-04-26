@@ -2,7 +2,7 @@
 # A set of functions used by map and plot functions to test for validity of data
 #
 #' Data: Projectionlist
-.projlist <- c("aitoff", "albers", "azequalarea", "azequidistant",
+projlist <- c("aitoff", "albers", "azequalarea", "azequidistant",
                "bicentric", "bonne", "conic", "cylequalarea", "cylindrical",
                "eisenlohr", "elliptic", "fisheye", "gall", "gilbert", "globular",
                "gnomonic","guyou","harrison", "hex", "homing", "lagrange", 
@@ -12,7 +12,8 @@
                "tetra","trapezoidal")
 
 #' Helper Functions
-.check_physeq <- function(physeq){
+#' @keywords internal
+check_physeq <- function(physeq){
   #check phyloseq objects for Lat/Lon
   if (!"sam_data" %in% phyloseq::getslots.phyloseq(physeq)){
     stop("Mapping requires that phyloseq objects have Sample_Data with Latitude and Longitude")
@@ -45,12 +46,13 @@
 #' projection defaults to mercator, but others can be selected 
 #' http://www.inside-r.org/packages/cran/mapproj/docs/mapproject
 #' @import ggplot2
-.create_basemap <-function(region, df, latcol, loncol, projection, 
+#' @keywords internal
+create_basemap <-function(region, df, latcol, loncol, projection, 
                            orientation,lat0, lat1, lon0, n, r){
   
   # check that the projection is null or is in the projectionlist
   # print out a warning about projections
-  if(!(projection %in% .projlist)){
+  if(!(projection %in% projlist)){
     stop(paste0(projection," is not a valid projection. Please use one of 
                 the following: aitoff, albers, azequalarea, azequidistant,
                 bicentric, bonne, conic, cylequalarea, eisenlohr, elliptic,
@@ -197,7 +199,8 @@
 #sp\_albers(lat0,lat1) Albers on the spheroid.
 
 #' utility function to check the validity of arguments
-.check_names <- function(member, df, allownumeric=FALSE){
+#' @keywords internal
+check_names <- function(member, df, allownumeric=FALSE){
   message <- paste(member, " variable must be a valid column name of a Phyloseq table",sep="")
   names   <- names(df)
   if(!is.null(member)){
@@ -215,7 +218,8 @@
   }
 }
 #' utility function to move the x and y positions of the dataset
-.jitter_df <- function(df, xcol, ycol, jitter.x, jitter.y, seed){
+#' @keywords internal
+jitter_df <- function(df, xcol, ycol, jitter.x, jitter.y, seed){
   set.seed(seed) # setting the seed allows you to repeat your randomness
   df <- data.frame(df)
   dflength <- length(df[,1])
@@ -226,7 +230,8 @@
   df
 }
 #' check for NAs.
-.check_NA <- function(df, col){
+#' @keywords internal
+check_NA <- function(df, col){
   colvals <- df[[col]]
   if (is.factor(colvals)) colvals <- as.vector(colvals) #convert to vector
   colvals[ colvals == "None"] <- NA  #some data has "None" so be sure to replace with NA
@@ -239,7 +244,8 @@
   df
 }
 #' make a columnnumeric
-.coerce_numeric <- function(df, col){
+#' @keywords internal
+coerce_numeric <- function(df, col){
   df[col] <- lapply( lapply(df[col], as.character), as.numeric)
   df
 }
@@ -247,7 +253,8 @@
 #' three column distances while removing all of the duplicates
 #' lifted/modified from here: 
 #' https://github.com/joey711/phyloseq/blob/master/R/plot-methods.R
-.dist_to_edge_table = function(Dist, dname = "dist"){
+#' @keywords internal
+dist_to_edge_table = function(Dist, dname = "dist"){
   dmat <- as.matrix(Dist)
   # Set duplicate entries and self-links to Inf
   dmat[upper.tri(dmat, diag = TRUE)] <- Inf
@@ -259,13 +266,15 @@
   return(df_3col)
 }
 #' Utility Function for Converting Degrees to Radians
-.degree_to_radian <- function(degree) {
+#' @keywords internal
+degree_to_radian <- function(degree) {
   ### angle in radians = angle in degrees * Pi / 180
   radian <- degree * pi / 180
   return( radian )
 }
 #' Utility Function for Converting Radians to Degrees
-.radian_to_degree <- function(radian) {
+#' @keywords internal
+radian_to_degree <- function(radian) {
   ### angle in radians * 180 / Pi = angle in degrees
   degree <- radian * 180 / pi
   return(degree)

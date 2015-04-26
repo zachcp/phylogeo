@@ -95,33 +95,33 @@ map_phyloseq <- function(physeq, size=4, region=NULL, color=NULL,
                          lat0=NULL, lat1=NULL, lon0=NULL,n=NULL, r=NULL,
                          seed=1234){
   #check basic physeq and lat/lon
-  latlon <- .check_physeq(physeq)
+  latlon <- check_physeq(physeq)
   latcol <- as.character( latlon[1] )
   loncol <- as.character( latlon[2] )
   data   <- data.frame( sample_data(physeq) )
-  data   <- .check_NA(data, latcol)
-  data   <- .coerce_numeric(data,latcol)
-  data   <- .check_NA(data, loncol)
-  data   <- .coerce_numeric(data,loncol)
+  data   <- check_NA(data, latcol)
+  data   <- coerce_numeric(data,latcol)
+  data   <- check_NA(data, loncol)
+  data   <- coerce_numeric(data,loncol)
   names  <- names(data)
   
   #check plot options. "Abundance" is a special method for plotting by size
-  .check_names(color,data)
+  check_names(color,data)
   if(!size == "Abundance"){
-    .check_names(size,data, allownumeric=TRUE)
+    check_names(size,data, allownumeric=TRUE)
   }
   
   #create map
   #############################################################################
-  worldmap <- .create_basemap(region=region, df=data, 
-                              latcol=latcol,loncol=loncol,
-                              projection=projection,orientation=orientation,
-                              lat0=lat0, lat1=lat1, lon0=lon0,n=n, r=r)
+  worldmap <- create_basemap(region=region, df=data, 
+                            latcol=latcol,loncol=loncol,
+                            projection=projection,orientation=orientation,
+                            lat0=lat0, lat1=lat1, lon0=lon0,n=n, r=r)
   
   if(jitter){
     set.seed(seed)
-    data <- .jitter_df(df=data,xcol=loncol,ycol=latcol,jitter.x=jitter.x,
-                       jitter.y=jitter.y, seed=seed)
+    data <- jitter_df(df=data,xcol=loncol,ycol=latcol,jitter.x=jitter.x,
+                     jitter.y=jitter.y, seed=seed)
   }
   
   # how to hande when size information can be either global (outside of aes), 
@@ -321,15 +321,15 @@ map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard",
   #####################################
   
   #check basic physeq and lat/lon
-  latlon <- .check_physeq(physeq)
+  latlon <- check_physeq(physeq)
   latcol <- as.character( latlon[1] )
   loncol <- as.character( latlon[2] )
-  data <- data.frame( sample_data(physeq) )
-  data <- .check_NA(data, latcol)
-  data <- .coerce_numeric(data,latcol)
-  data <- .check_NA(data, loncol)
-  data <- .coerce_numeric(data,loncol)
-  names <- names(data)
+  data   <- data.frame( sample_data(physeq) )
+  data   <- check_NA(data, latcol)
+  data   <- coerce_numeric(data,latcol)
+  data   <- check_NA(data, loncol)
+  data   <- coerce_numeric(data,loncol)
+  names  <- names(data)
   
   #make network, get cluster information, and add thamesat to the  original dataframe. 
   if(is.null(igraph)){
@@ -344,20 +344,20 @@ map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard",
   rownames(mdf) <- mdf$Row.names
   
   #check plot options
-  .check_names(color,mdf)
-  .check_names(size,mdf, allownumeric=TRUE)
+  check_names(color,mdf)
+  check_names(size,mdf, allownumeric=TRUE)
   
   #create map
   ############################################
-  worldmap <- .create_basemap(region=region, df=mdf,latcol=latcol,
-                              loncol=loncol, projection=projection, 
-                              orientation=orientation,
-                              lat0=lat0, lat1=lat1, lon0=lon0,n=n, r=r)
+  worldmap <- create_basemap(region=region, df=mdf,latcol=latcol,
+                            loncol=loncol, projection=projection, 
+                            orientation=orientation,
+                            lat0=lat0, lat1=lat1, lon0=lon0,n=n, r=r)
   
   #modify points if using jitter
   if(jitter){
-    mdf <- .jitter_df(df=mdf, xcol=loncol, ycol=latcol, jitter.x=jitter.x,
-                      jitter.y=jitter.y, seed=seed)
+    mdf <- jitter_df(df=mdf, xcol=loncol, ycol=latcol, jitter.x=jitter.x,
+                    jitter.y=jitter.y, seed=seed)
   }
   
   #add points that aren't part of a network
