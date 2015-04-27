@@ -3,20 +3,21 @@
 #
 #' Data: Projectionlist
 projlist <- c("aitoff", "albers", "azequalarea", "azequidistant",
-               "bicentric", "bonne", "conic", "cylequalarea", "cylindrical",
-               "eisenlohr", "elliptic", "fisheye", "gall", "gilbert", "globular",
-               "gnomonic","guyou","harrison", "hex", "homing", "lagrange", 
-               "lambert", "laue", "lune","mercator", "mecca","mollweide", 
-               "newyorker", "orthographic", "perspective","polyconic", 
-               "rectangular", "simpleconic", "sinusoidal", "square","stereographic",
-               "tetra","trapezoidal")
+              "bicentric", "bonne", "conic", "cylequalarea", "cylindrical",
+              "eisenlohr", "elliptic", "fisheye", "gall", "gilbert", 
+              "globular","gnomonic","guyou","harrison", "hex", "homing",
+              "lagrange", "lambert", "laue", "lune","mercator", "mecca",
+              "mollweide", "orthographic", "perspective","polyconic", 
+              "rectangular", "simpleconic", "sinusoidal", "square",
+              "stereographic","tetra","trapezoidal")
 
 #' Helper Functions
 #' @keywords internal
 check_physeq <- function(physeq){
   #check phyloseq objects for Lat/Lon
   if (!"sam_data" %in% phyloseq::getslots.phyloseq(physeq)){
-    stop("Mapping requires that phyloseq objects have Sample_Data with Latitude and Longitude")
+    stop("Mapping requires that phyloseq objects have Sample_Data with Latitude 
+         and Longitude")
   }
   
   #check that sampledata has latitude and longitude columns
@@ -48,7 +49,7 @@ check_physeq <- function(physeq){
 #' @import ggplot2
 #' @keywords internal
 create_basemap <-function(region, df, latcol, loncol, projection, 
-                           orientation,lat0, lat1, lon0, n, r){
+                          orientation, ...){
   
   # check that the projection is null or is in the projectionlist
   # print out a warning about projections
@@ -58,7 +59,7 @@ create_basemap <-function(region, df, latcol, loncol, projection,
                 bicentric, bonne, conic, cylequalarea, eisenlohr, elliptic,
                 fisheye, gall, gilbert, globular, gnomonic, guyou, harrison,
                 hex, homing, lagrange, lambert, laue,  lune, mercator, mecca,
-                mollweide, newyorker, orthographic, perspective, polyconic, 
+                mollweide, orthographic, perspective, polyconic, 
                 rectangular,simpleconic, square, sinusoidal, stereographic,
                 tetra, trapezoidal"))
   }else if(projection %in% c("bonne","cylindrical","eisenlohr",
@@ -96,38 +97,39 @@ create_basemap <-function(region, df, latcol, loncol, projection,
   if(projection=="mercator") { 
     return(worldmap)
   } else if(projection %in% c("aitoff", "azequidistant","azequalarea","bonne","
-                              cylindrical","gilbert",
-                              "eisenlohr","globular","gnomonic","guyou","hex","laue",
-                              "lagrange","mollweide","orthographic",
-                              "polyconic","sinusoidal","square","tetra",
-                              "vandergrinten")){
-    return(worldmap + coord_map(projection=projection, xlim=c(-180,180),ylim=c(-90,90), orientation=c(90,0,0)))
+                            cylindrical","gilbert",
+                            "eisenlohr","globular","gnomonic","guyou","hex","laue",
+                            "lagrange","mollweide","orthographic",
+                            "polyconic","sinusoidal","square","tetra",
+                            "vandergrinten")){
+    return(worldmap + coord_map(projection=projection, xlim=c(-180,180), 
+                                ylim=c(-90,90), orientation=c(90,0,0), ...))
   } else if(projection %in% c("cylequalarea","rectangular","conic","mecca","homing")){
-    if(is.null(lat0)){
+    if(!"lat0" %in% names(list(...))){
       stop("The bonne,conic,cylequalarea, homing, mecca, and 
-                    rectangular projections require the lat0 argument")
+            rectangular projections require the lat0 argument")
     }
-    return(worldmap + coord_map(projection=projection, orientation=orientation, lat0=lat0, xlim=c(-180,180),ylim=c(-90,90)))
+    return(worldmap + coord_map(projection=projection, orientation=orientation, 
+                                ..., xlim=c(-180,180),ylim=c(-90,90)))
   } else if(projection == "fisheye"){
-    if(is.null(n)){
+    if(!"n" %in% names(list(...))){
       stop("The fisheye projection requires a refractive index, n")
     }
-    return(worldmap + coord_map(projection=projection, orientation=orientation, n=n, xlim=c(-180,180),ylim=c(-90,90)))
-  }else if(projection == "newyorker"){
-    if(is.null(r)){
-      stop("The newyorker projection requires a pedestalheight, r")
-    }
-    return(worldmap + coord_map(projection=projection, orientation=orientation, r=r, xlim=c(-180,180),ylim=c(-90,90)))
+    return(worldmap + coord_map(projection=projection, orientation=orientation, 
+                                ..., xlim=c(-180,180),ylim=c(-90,90)))
   }else if(projection %in% c("simpleconic","lambert","albers","trapezoidal")){
-    if(is.null(lat0) || is.null(lat1)){
-      stop("The albers,lambert, ,and simpleconic projections require a lat0 and lat1 value")
+    if( !"lat0" %in% names(list(...)) || !"lat1" %in% names(list(...))){
+      stop("The albers,lambert, ,and simpleconic projections require 
+           a lat0 and lat1 value")
     }
-    return(worldmap + coord_map( projection=projection, orientation=orientation, lat0=lat0,lat1=lat1, xlim=c(-180,180),ylim=c(-90,90)))
+    return(worldmap + coord_map( projection=projection, orientation=orientation,
+                                 ... , xlim=c(-180,180),ylim=c(-90,90)))
   }else if(projection %in% c("bicentric","elliptic")){
-    if(is.null(lon0) ){
+    if(!"lon0" %in% names(list(...))){
       stop("The bicentric and elliptic projection require a lon0 value")
     }
-    return(worldmap + coord_map(projection=projection, orientation=orientation, lon0=lon0, xlim=c(-180,180),ylim=c(-90,90)))
+    return(worldmap + coord_map(projection=projection, orientation=orientation, 
+                                ..., xlim=c(-180,180),ylim=c(-90,90)))
     #need to fix the harrison and lune projections
     #   }else if(projection %in% c("harrison")){
     #           if(is.null(dist) || is.null(angle) ){

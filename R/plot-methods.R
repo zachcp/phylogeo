@@ -19,8 +19,8 @@
 #' @return a ggplot object
 #'
 #' @param physeq (Required). 
-#'  The name of the \code{\link[phyloseq]{phyloseq}} dataset. This must have sample data with 
-#'  Latitude and Longitude Columns.
+#'  The name of the \code{\link[phyloseq]{phyloseq}} dataset. This must have 
+#'  sample data with Latitude and Longitude Columns.
 #'  
 #' @param distancemethod (Optional). Default \code{"jaccard"}.
 #'  The name of an ecological distance method. 
@@ -59,7 +59,7 @@ plot_distance <- function(physeq, distancemethod="jaccard"){
     
     #get ecologicaldistances
     ecodistance <- distance(physeq, method = distancemethod)
-    ecodistance <- .dist_to_edge_table(ecodistance, dname="ecodist" )
+    ecodistance <- dist_to_edge_table(ecodistance, dname="ecodist" )
     
     #make mergeable names for the two distance functions and merge
     concatvals <- function(x,y){ return(paste(x,"_",y,sep=""))}

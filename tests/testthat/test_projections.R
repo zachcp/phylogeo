@@ -48,10 +48,10 @@ test_that("Fisheye projection works", {
   expect_is(map_phyloseq(mountainsoil, projection="fisheye", n=0.5) , "ggplot")
 })
 
-test_that("NewYorker projection works", {
-  data(mountainsoil)
-  expect_is(map_phyloseq(mountainsoil, projection="newyorker", r=0.3) , "ggplot")
-})
+# test_that("NewYorker projection works", {
+#   data(mountainsoil)
+#   expect_is(map_phyloseq(mountainsoil, projection="newyorker", r=0.3) , "ggplot")
+# })
 
 test_that("Projections with two latitude parameters work: ", {
   data(mountainsoil)

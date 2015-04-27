@@ -54,18 +54,20 @@
 #' See the documentation of \code{\link[mapproj]{mapproject}} for the list
 #' of available projections and their descriptions.
 #'
-#' @param ... orientation lat0 lat1 n r lon0 (Optional Arguments). Default \code{NULL}. 
+#' @param ...  (Optional Arguments). Default \code{NULL}. 
 #' Arguments passed internally to the \code{\link[mapproj]{mapproject}}
-#' function from the \pkg{mapproj} package to control the projection.
-#' See the documentation of \code{\link[mapproj]{mapproject}} for more
-#' information (?\code{\link[mapproj]{mapproject}}).
+#' function from the \pkg{mapproj} package to control the projection including
+#' "orientation, lat0, lat1, n, r, lon0" See the documentation of 
+#' \code{\link[mapproj]{mapproject}} for more information 
+#' (?\code{\link[mapproj]{mapproject}}).
 #'  
 #' @param seed (Optional). Default \code{1234}. 
 #'  seed is used for repeatable randomness if you are using the jitter functions
 #'  
 #' @seealso 
 #'  \href{http://zachcp.github.io/phylogeo/phylogeo_basics}{phylogeo basics}.
-#'  \href{http://zachcp.github.io/phylogeo/phylogeo_projections}{phylogeo projections}.
+#'  \href{http://zachcp.github.io/phylogeo/phylogeo_projections}{phylogeo 
+#'  projections}.
 #'
 #'@seealso
 #'  \code{\link[mapproj]{mapproject}}
@@ -92,8 +94,7 @@ map_phyloseq <- function(physeq, size=4, region=NULL, color=NULL,
                          shape=NULL, alpha = 0.8, 
                          jitter=FALSE, jitter.x=3, jitter.y=3,
                          projection="mercator",orientation=NULL,
-                         lat0=NULL, lat1=NULL, lon0=NULL,n=NULL, r=NULL,
-                         seed=1234){
+                         ..., seed=1234){
   #check basic physeq and lat/lon
   latlon <- check_physeq(physeq)
   latcol <- as.character( latlon[1] )
@@ -115,8 +116,7 @@ map_phyloseq <- function(physeq, size=4, region=NULL, color=NULL,
   #############################################################################
   worldmap <- create_basemap(region=region, df=data, 
                             latcol=latcol,loncol=loncol,
-                            projection=projection,orientation=orientation,
-                            lat0=lat0, lat1=lat1, lon0=lon0,n=n, r=r)
+                            projection=projection,orientation=orientation,...)
   
   if(jitter){
     set.seed(seed)
@@ -136,7 +136,7 @@ map_phyloseq <- function(physeq, size=4, region=NULL, color=NULL,
     data2 <- merge(data,reads,by="row.names")
     worldmap <- worldmap + geom_point(data=data2, 
                                       aes_string(x=loncol, y=latcol, group=NULL, 
-                                                color=color, size = "Abundance"),
+                                              color=color, size = "Abundance"),
                                       alpha= alpha) 
   }else{
     worldmap <- worldmap + geom_point(data=data, 
@@ -227,11 +227,12 @@ map_phyloseq <- function(physeq, size=4, region=NULL, color=NULL,
 #' See the documentation of \code{\link[mapproj]{mapproject}} for the list
 #' of available projections and their descriptions.
 #'
-#' @param ... orientation lat0 lat1 n r lon0 (Optional Arguments). Default \code{NULL}. 
-#' Arguments passed internally to the  \code{\link[mapproj]{mapproject}}
-#' function from the \pkg{mapproj} package to control the projection.
-#' See the documentation of  \code{\link[mapproj]{mapproject}} for more
-#' information (?\code{\link[mapproj]{mapproject}}).
+#' @param ...  (Optional Arguments). Default \code{NULL}. 
+#' Arguments passed internally to the \code{\link[mapproj]{mapproject}}
+#' function from the \pkg{mapproj} package to control the projection including
+#' "orientation, lat0, lat1, n, r, lon0" See the documentation of 
+#' \code{\link[mapproj]{mapproject}} for more information 
+#' (?\code{\link[mapproj]{mapproject}}).
 #'  
 #' @param seed (Optional). Default \code{1234}. 
 #'  seed is used for repeatable randomness if you are using the jitter functions
@@ -273,9 +274,7 @@ map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard",
                         lines=FALSE, line_weight=1, line_color ="Black",
                         line_alpha=0.4 , base_data=FALSE, 
                         base_data_color="grey",projection="mercator", 
-                        orientation=NULL,
-                        lat0=NULL, lat1=NULL, lon0=NULL,n=NULL, r=NULL,
-                        seed=1234){
+                        orientation=NULL, ..., seed=1234){
   
   #helper functions to calculate membership in clusters or lines
   ##############################################################################
@@ -292,7 +291,8 @@ map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard",
   }
   
   get_lines <- function(graph=igraph, df=data){
-    #get each edge of the network and return a list of dataframes with the node info
+    # get each edge of the network and return a list of dataframes with 
+    # the node info
     
     getline_df <- function(i, l=links, df1=df){
       #subset data frame using node info
@@ -331,7 +331,8 @@ map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard",
   data   <- coerce_numeric(data,loncol)
   names  <- names(data)
   
-  #make network, get cluster information, and add thamesat to the  original dataframe. 
+  # make network, get cluster information, and add thamesat to the 
+  # original dataframe. 
   if(is.null(igraph)){
     igraph <- make_network(physeq, max.dist = maxdist, distance=distance)
   }else{
@@ -351,8 +352,7 @@ map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard",
   ############################################
   worldmap <- create_basemap(region=region, df=mdf,latcol=latcol,
                             loncol=loncol, projection=projection, 
-                            orientation=orientation,
-                            lat0=lat0, lat1=lat1, lon0=lon0,n=n, r=r)
+                            orientation=orientation, ...)
   
   #modify points if using jitter
   if(jitter){
@@ -384,8 +384,8 @@ map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard",
   }
   
   # add points
-  # how to hande when point_size information can be either global (outside of aes),
-  # or per-sample (inside of aes)
+  # how to hande when point_size information can be either global 
+  # (outside of aes), or per-sample (inside of aes)
   if(is.numeric(size)){
     points <- geom_point(data=mdf, size = size, alpha= alpha,
                          aes_string( x=loncol, y=latcol, group=NULL, 
@@ -465,11 +465,12 @@ map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard",
 #' @param projection (Optional). Default \code{"mercator"}. 
 #' See the documentation of \code{\link[mapproj]{mapproject}} for the list
 #' of available projections and their descriptions.
-#' @param ... orientation lat0 lat1 n r lon0 (Optional Arguments). Default \code{NULL}. 
-#' Arguments passed internally to the  \code{\link[mapproj]{mapproject}}
-#' function from the \pkg{mapproj} package to control the projection.
-#' See the documentation of  \code{\link[mapproj]{mapproject}} for more
-#' information (?\code{\link[mapproj]{mapproject}}).
+#' @param ...  (Optional Arguments). Default \code{NULL}. 
+#' Arguments passed internally to the \code{\link[mapproj]{mapproject}}
+#' function from the \pkg{mapproj} package to control the projection including
+#' "orientation, lat0, lat1, n, r, lon0" See the documentation of 
+#' \code{\link[mapproj]{mapproject}} for more information 
+#' (?\code{\link[mapproj]{mapproject}}).
 #'  
 #' @seealso 
 #'  \href{http://zachcp.github.io/phylogeo/phylogeo_basics}{phylogeo basics}.
@@ -500,8 +501,8 @@ map_tree <- function(physeq,  region=NULL, color = NULL,size=4, alpha=0.8,
                      text.size = NULL, sizebase = 5, base.spacing = 0.02, 
                      ladderize = TRUE,plot.margin = 0.2, title = NULL, 
                      treetheme = NULL, justify = "jagged",width_ratio = 2, 
-                     map_on_left = FALSE, projection="mercator", orientation=NULL,
-                     lat0=NULL, lat1=NULL, lon0=NULL,n=NULL, r=NULL) {
+                     map_on_left = FALSE, projection="mercator", 
+                     orientation=NULL, ...) {
   #check for the existence of a tree: lifted from phyloseq's plot_tree
   if(!"phy_tree" %in% getslots.phyloseq(physeq)){
     stop("tree missing or invalid. map-tree requires a phylogenetic tree")
@@ -512,8 +513,7 @@ map_tree <- function(physeq,  region=NULL, color = NULL,size=4, alpha=0.8,
   mapplot <- map_phyloseq(physeq2, region=region, color=color, size=size, 
                           alpha = alpha, jitter=jitter, jitter.x=jitter.x, 
                           jitter.y=jitter.y,projection=projection,
-                          orientation=orientation,
-                          lat0=lat0, lat1=lat1, lon0=lon0,n=n, r=r)  + 
+                          orientation=orientation, ...)  + 
     theme(legend.position="none") 
   
   treeplot <- plot_tree(physeq2, color=color, label.tips=label.tips,
@@ -559,7 +559,8 @@ map_tree <- function(physeq,  region=NULL, color = NULL,size=4, alpha=0.8,
 #'  This must have sample data with Latitude and Longitude Columns.
 #'  
 #' @param clusternum (Optional). Default \code{3}.
-#'  Number of clusters to divide your phylogenetic tree into using kmeans clustering.
+#'  Number of clusters to divide your phylogenetic tree into using 
+#'  kmeans clustering.
 #'  
 #' @import ggplot2
 #' @import phyloseq
