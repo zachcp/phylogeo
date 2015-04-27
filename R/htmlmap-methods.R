@@ -9,8 +9,8 @@
 #' @seealso http://rstudio.github.io/leaflet/
 #' 
 #' @param physeq (Required). 
-#'  The name of the \code{\link[phyloseq]{phyloseq}} phyloseq object. This must have sample data with 
-#'  Latitude and Longitude Columns.
+#'  The name of the \code{\link[phyloseq]{phyloseq}} phyloseq object. 
+#'  This must have sample data with Latitude and Longitude Columns.
 #'  
 #' @param size (Optional). Default \code{NULL}. 
 #'  The size of the vertex points."Abundance" is a special code that will scale 
@@ -23,9 +23,9 @@
 #'  \code{\link[leaflet]{leaflet}}
 #'  \code{\link[phyloseq]{phyloseq}}
 #' 
-#' @import dplyr
 #' @import phyloseq
 #' @importFrom dplyr %>%
+#' @imporFrom magrittr %<>%
 #' @export
 #' @examples 
 #' data(mountainsoil)
@@ -53,14 +53,14 @@ htmlmap_phyloseq <- function(physeq, size=NULL, color="blue"){
   map = leaflet(data) %>% addTiles()
   
   #add custom circles
-  if(!is.null(size)) map <- map %>% addCircleMarkers(radius=~circlesize, color = color) else
-                     map <- map %>% addCircles(color = color)
+  if(!is.null(size)) map %<>% addCircleMarkers(radius=~circlesize, color = color) else
+                     map %<>% addCircles(color = color)
   
   return(map)
 }
 
-#############################################################################
-#' Create a Network from the Phyloseq Objects and Draw An HTML Map of the Clusters
+################################################################################
+#' Create a Distance Network from Phyloseq Data and Draw An HTML Map of it.
 #'
 #' In this case, edges in the network are created if the distance between
 #' nodes is below a potentially arbitrary threshold,
@@ -70,12 +70,12 @@ htmlmap_phyloseq <- function(physeq, size=NULL, color="blue"){
 #' @seealso http://rstudio.github.io/leaflet/
 #' 
 #' @param physeq (Required). 
-#'  The name of the \code{\link[phyloseq]{phyloseq}} phyloseq object. This must have sample data with 
-#'  Latitude and Longitude Columns.
+#'  The name of the \code{\link[phyloseq]{phyloseq}} phyloseq object. This must
+#'  have sample data with Latitude and Longitude Columns.
 #'  
 #' @param igraph  (Optional). Default \code{NULL}
-#'  An optional \code{\link[igraph]{igraph}} igraph object. Will reduce plotting time to use 
-#'  a precalculated network 
+#'  An optional \code{\link[igraph]{igraph}} igraph object. Will reduce plotting
+#'  time to use a precalculated network 
 #'  
 #' @param distance (Optional). Default \code{"jaccard"}. 
 #'  Distance metric used to calculate between-sample distances.
@@ -135,7 +135,8 @@ htmlmap_phyloseq <- function(physeq, size=NULL, color="blue"){
 #' htmlmap_network(batmicrobiome, maxdist=0.5)
 #' ig <- make_network(batmicrobiome)
 #' htmlmap_network(batmicrobiome, igraph= ig)
-#' htmlmap_network(epoxamicin_KS, maxdist=0.99, line_color = "red", line_weight = 4, line_alpha=0.5)
+#' htmlmap_network(epoxamicin_KS, maxdist=0.99, line_color = "red", 
+#'                 line_weight = 4, line_alpha=0.5)
 htmlmap_network <- function(physeq, 
                             #distance related 
                             igraph=NULL, 
@@ -175,12 +176,13 @@ htmlmap_network <- function(physeq,
   }
   
   get_lines <- function(graph=igraph, df=data){
-    #get each edge of the network and return a list of dataframes with the node info
+    #get each edge of the network and return a list of 
+    #dataframes with the node info
     getline_df <- function(i, l=links, df1=df){
       #subset data frame using node info
       temprow   <- l[i,]
       tempnames <- c(temprow$from,temprow$to)
-      smalldf <- df1[rownames(df1) %in% tempnames, ]
+      smalldf   <- df1[rownames(df1) %in% tempnames, ]
       smalldf['link'] <- i
       smalldf
     }
@@ -205,22 +207,22 @@ htmlmap_network <- function(physeq,
       line_df$LON <- as.numeric(as.character(line_df$LON))
       line_df$LAT <- as.numeric(as.character(line_df$LAT))
       
-      map <- map %>% addPolylines(data = line_df,
-                                  lng  = ~LON,
-                                  lat  = ~LAT,
-                                  color = line_color,
-                                  weight = line_weight,
-                                  opacity = line_alpha,
-                                  fill = fill,
-                                  fillOpacity =fillOpacity,
-                                  fillColor = fillColor)
+      map %<>% addPolylines(data = line_df,
+                            lng  = ~LON,
+                            lat  = ~LAT,
+                            color = line_color,
+                            weight = line_weight,
+                            opacity = line_alpha,
+                            fill = fill,
+                            fillOpacity =fillOpacity,
+                            fillColor = fillColor)
     }
     return(map)
   }
   
   ############################################################################
 
-  #make network, get cluster information, and add thamesat to the  original dataframe. 
+  #make network, get cluster information, and add to the  original dataframe. 
   if(is.null(igraph)){
     igraph <- make_network(physeq, max.dist = maxdist, distance=distance)
   }else{
@@ -229,7 +231,7 @@ htmlmap_network <- function(physeq,
   }
   
   #check basic physeq and lat/lon and make clusters
-  latlon <- .check_physeq(physeq)
+  latlon <- check_physeq(physeq)
   latcol <- as.character( latlon[1] )
   loncol <- as.character( latlon[2] )
   #get clusters and make a dataframe from them
@@ -255,10 +257,10 @@ htmlmap_network <- function(physeq,
   map <- addlines(map, linedf, latcol, loncol)
   
   #add points
-  map <- map %>% addCircleMarkers(radius=~circlesize, 
-                                  color=color, 
-                                  opacity = circle_alpha, 
-                                  fillOpacity = fillOpacity)
+  map %<>% addCircleMarkers(radius=~circlesize, 
+                            color=color, 
+                            opacity = circle_alpha, 
+                            fillOpacity = fillOpacity)
   
   return(map)
 }
