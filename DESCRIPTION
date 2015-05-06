@@ -25,7 +25,8 @@ Suggests:
     knitr,
     dplyr,
     rmarkdown,
-    muscle
+    muscle,
+    magrittr
 VignetteBuilder: knitr
 BugReports: https://github.com/zachcp/phylogeo/issues
 biocViews: Sequencing, Microbiome, Metagenomics

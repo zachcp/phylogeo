@@ -25,7 +25,7 @@
 #' 
 #' @import phyloseq
 #' @importFrom dplyr %>%
-#' @imporFrom magrittr %<>%
+#' @importFrom magrittr %<>%
 #' @export
 #' @examples 
 #' data(mountainsoil)
