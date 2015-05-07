@@ -53,8 +53,8 @@ htmlmap_phyloseq <- function(physeq, size=NULL, color="blue"){
   map = leaflet(data) %>% addTiles()
   
   #add custom circles
-  if(!is.null(size)) map %<>% addCircleMarkers(radius=~circlesize, color = color) else
-                     map %<>% addCircles(color = color)
+  if(!is.null(size)) map %<>% addCircleMarkers(radius=~circlesize, color = makecolors(data,color)) else
+                     map %<>% addCircles(color = makecolors(data,color))
   
   return(map)
 }
@@ -258,9 +258,43 @@ htmlmap_network <- function(physeq,
   
   #add points
   map %<>% addCircleMarkers(radius=~circlesize, 
-                            color=color, 
+                            color=makecolors(mdf,color), 
                             opacity = circle_alpha, 
                             fillOpacity = fillOpacity)
   
   return(map)
+}
+#' makecolors
+#'
+#' handles the color values and passes correct values to leaflet
+#' @param data 
+#' @param color 
+#' @param bins 
+#'
+#' @return a color string or a vector of color strings
+#' @keywords internal
+#' https://github.com/rstudio/leaflet/issues/80
+makecolors <- function(data, color){
+  #install leaflet using devtools
+  #replace when leaflet is on CRAN
+  if(!require("leaflet")){
+    devtools::install_github('rstudio/leaflet')
+    library("leaflet")
+  }
+  
+  columns <- names(data)
+  #test if the string is a column value
+  if(!color %in% columns){
+    return(color)
+  } else {
+    testdata <- data[[color]]
+    #get colors depending on the columntypes
+    if(is.factor(testdata)){
+      return(leaflet::colorFactor("RdYlBu", NULL)(data[[color]]))
+    }else if(is.numeric(testdata)) {
+      return(leaflet::colorNumeric("Blues", NULL)(data[[color]]))
+    } else {
+      return("trouble")
+    }
+  }
 }
