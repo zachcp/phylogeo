@@ -269,7 +269,6 @@ htmlmap_network <- function(physeq,
 #' handles the color values and passes correct values to leaflet
 #' @param data 
 #' @param color 
-#' @param bins 
 #'
 #' @return a color string or a vector of color strings
 #' @keywords internal
@@ -293,8 +292,11 @@ makecolors <- function(data, color){
       return(leaflet::colorFactor("RdYlBu", NULL)(data[[color]]))
     }else if(is.numeric(testdata)) {
       return(leaflet::colorNumeric("Blues", NULL)(data[[color]]))
+    }else if(is.character(testdata)) {
+       fac = as.factor(testdata)
+       return(leaflet::colorFactor("RdYlBu", NULL)(fac))
     } else {
-      return("trouble")
+      stop("Error in makecolor function. Could not ascertain column datatype")
     }
   }
 }
