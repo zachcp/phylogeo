@@ -1,0 +1,68 @@
+---
+pagetitle: phylogeo - Introduction
+---
+
+## Introduction
+
+Analysis of data generated using sequencing of microbial genes has provided a fertile ground for exploring the large fraction of bacterial life that remains uncultured. The phylogeo package provides investigators with a way to explore the geographic components of their microbial gene data by building on the powerful phyloseq package which provides a framework for organizing data while combining it with the elegance of the ggplot plotting package.
+
+### Features
+
+* Mapping of phyloseq Datasets
+* Interactive Mapping of phyloseq Datasets using the Leaflet Library
+* Use map bounds and mouse events to drive Shiny logic
+
+### Installation
+
+To install this R package, run this command at your R prompt:
+
+```{r eval=FALSE}
+devtools::install_github("zachcp/phylogeo")
+```
+
+Once installed, you can use this package at the R console, within [R Markdown](http://rmarkdown.rstudio.com/) documents.
+
+### Datasets in Phylogeo
+phylogeo has three datasets.
+
+- **mountainsoil** is the biom data and associated sample information from the microbio.me/qiime experiment 1702
+- **batmicrobiome** is the biom data and associated sample information from yet another bat-related experiment, microbio.me/qiime experiment 1734
+- **epoxomicin_KS** is the data from the Brady Lab containing OTU and sequence data for ketosynthase domain amplicons from environmental DNA
+
+These datasets have geographic coordinates and are suitable for illustrating the features of the phylogeo package, and they can be loaded using the data() command.
+
+```{r, warning=FALSE, message=FALSE}
+library(ggplot2)
+library(gridExtra)
+library(phylogeo)
+
+data(mountainsoil)
+data(batmicrobiome)
+data(epoxomicin_KS)
+```
+
+
+### phyloseq mapping functions
+
+phylogeo provides a series of functions that allow investigators to explore the geographic dimension of their data. As such, the primary requirement for using phylogeo is the presence of Latitude and Longitude columns in your sample_data table. If these are present the following functions become available to you:
+
+- map_phyloseq() can visualize your sample locations on a map
+- map_network() will connect samples based on a specified ecological distance
+- map_tree() will draw a paired plot of a phylogenetic tree and the location of those samples
+- map_clusters() will cluster your sequences into k clusters and facet-map each cluster
+- plot_distance() will plot the pairwise distances between samples using ecological and great circle distance
+The use and utility of these functions are explained below, after a description of the datasets included in phylogeo.
+- htmlmap_phyloseq() interactive versionof map_phyloseq
+- htmlmap_network() interactive versionof map_networdk
+
+
+### Phyloseq's Data Model
+
+We highly recommend that you proceed to [The Map Widget](map_widget.html) page before exploring the rest of this site, as it describes common idioms we'll use throughout the examples on the other pages.
+
+Although we have tried to provide an R-like interface to Leaflet, you may want to check out the [API documentation](http://leafletjs.com/reference.html) of Leaflet occasionally when the meanings of certain parameters are not clear to you.
+
+### Mapping Functions
+
+
+

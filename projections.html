@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+<title>projections</title>
+
+<script src="libs/jquery/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="libs/bootstrap/css/flatly.min.css" rel="stylesheet" />
+<script src="libs/bootstrap/js/bootstrap.min.js"></script>
+<script src="libs/bootstrap/shim/html5shiv.min.js"></script>
+<script src="libs/bootstrap/shim/respond.min.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<link rel="stylesheet"
+      href="libs/highlight/default.css"
+      type="text/css" />
+<script src="libs/highlight/highlight.js"></script>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs && document.readyState && document.readyState === "complete") {
+   window.setTimeout(function() {
+      hljs.initHighlighting();
+   }, 0);
+}
+</script>
+
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img { 
+  max-width:100%; 
+  height: auto; 
+}
+</style>
+<div class="container-fluid main-container">
+
+<style type="text/css">
+  body {
+    padding-top: 20px;
+  }
+  .navbar-brand {
+    font-weight: bold;
+  }
+  footer {
+    border-top: 1px solid #CCC;
+    margin-top: 60px;
+    margin-bottom: 48px;
+    opacity: 0.75;
+  }
+  .content-body>:first-child, .content-body>:first-child>:first-child {
+    margin-top: 0 !important;
+  }
+  p code {
+    white-space: inherit;
+  }
+</style>
+
+<div class="fluid-row">
+  <div class="col-sm-12">
+    <nav class="navbar navbar-inverse">
+      <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <a class="navbar-brand" href="./">phylogeo: geographic analysis of microbiome data</a>
+        </div>
+      </div>
+    </nav>
+  </div>
+</div>
+
+<div class="fluid-row">
+  <div class="col-sm-3">
+    <div class="list-group">
+      <a class="list-group-item" href="./">Introduction</a>
+      <a class="list-group-item" href="mapping_functions.html">Mapping Functions</a>
+      <a class="list-group-item" href="plotting_functions.html">Plotting Functions</a>
+      <a class="list-group-item" href="projections.html">Projections</a>
+      <a class="list-group-item" href="datamodel.html">Data Model</a>
+      
+      <!--<a class="list-group-item" href="raster.html">Raster Images</a>-->
+      </div>
+    <script>
+      // manage active state of toc based on current page
+      var href = window.location.pathname;
+      href = href.substr(href.lastIndexOf('/') + 1);
+      if (href === "" || href === "index.html")
+        href = "./";
+      $('a.list-group-item[href="' + href + '"]').addClass('active');
+    </script>
+  </div>
+  <div class="col-sm-9 content-body">
+
+
+
+<div id="load-some-data" class="section level2">
+<h2>Load Some Data</h2>
+<p>phylogeo uses the mapproj package to draw its maps. This package supports a large number of projections and phylogeo supports nearly all of them as demonstrated below.</p>
+<pre class="r"><code>library(phylogeo)</code></pre>
+<pre><code>## Loading required package: ggplot2</code></pre>
+<pre><code>## Warning: package &#39;ggplot2&#39; was built under R version 3.1.3</code></pre>
+<pre><code>## Loading required package: methods
+## Loading required package: gridExtra
+## Loading required package: grid
+## Loading required package: phyloseq
+## Loading required package: mapproj
+## Loading required package: maps</code></pre>
+<pre><code>## Warning: replacing previous import by &#39;dplyr::%&gt;%&#39; when loading &#39;phylogeo&#39;</code></pre>
+<pre class="r"><code>data(mountainsoil)
+data(batmicrobiome)
+data(epoxomicin_KS)</code></pre>
+<div id="mercator-projection" class="section level3">
+<h3>Mercator Projection</h3>
+<pre class="r"><code>#mercator() equally spaced straight meridians, conformal, straight compass courses
+map_phyloseq(epoxomicin_KS, projection=&quot;mercator&quot;)</code></pre>
+<p><img src="projections_files/figure-html/unnamed-chunk-2-1.png" title="" alt="" width="100%" /></p>
+<pre class="r"><code>map_network(epoxomicin_KS, projection=&quot;mercator&quot;, lines=TRUE, color=&quot;Geotype&quot;, jitter=TRUE)</code></pre>
+<p><img src="projections_files/figure-html/unnamed-chunk-2-2.png" title="" alt="" width="100%" /></p>
+<pre class="r"><code>map_tree(epoxomicin_KS, projection=&quot;mercator&quot;)</code></pre>
+<pre><code>## Scale for &#39;x&#39; is already present. Adding another scale for &#39;x&#39;, which will replace the existing scale.</code></pre>
+<p><img src="projections_files/figure-html/unnamed-chunk-2-3.png" title="" alt="" width="100%" /></p>
+</div>
+<div id="sinusoidal-projection" class="section level3">
+<h3>Sinusoidal Projection</h3>
+<pre class="r"><code>#sinusoidal() equally spaced parallels, equal-area, same as bonne(0)
+map_phyloseq(epoxomicin_KS, projection=&quot;sinusoidal&quot;)</code></pre>
+<p><img src="projections_files/figure-html/unnamed-chunk-3-1.png" title="" alt="" width="100%" /></p>
+</div>
+<div id="cylequalarea-projection" class="section level3">
+<h3>Cylequalarea Projection</h3>
+<pre class="r"><code>#cylequalarea(lat0) equally spaced straight meridians, equal-area, true scale on lat0
+map_phyloseq(epoxomicin_KS, projection=&quot;cylequalarea&quot;, lat0=20)</code></pre>
+<p><img src="projections_files/figure-html/unnamed-chunk-4-1.png" title="" alt="" width="100%" /></p>
+</div>
+<div id="rectangular-projection" class="section level3">
+<h3>Rectangular Projection</h3>
+<pre class="r"><code>#rectangular(lat0) equally spaced parallels, equally spaced straight meridians, true scale on lat0
+map_phyloseq(epoxomicin_KS, projection=&quot;rectangular&quot;, lat0=30)</code></pre>
+<p><img src="projections_files/figure-html/unnamed-chunk-5-1.png" title="" alt="" width="100%" /></p>
+</div>
+<div id="mollweide-projection" class="section level3">
+<h3>Mollweide Projection</h3>
+<pre class="r"><code>#mollweide() (homalographic) equal-area, hemisphere is a circle
+map_phyloseq(epoxomicin_KS, projection=&quot;mollweide&quot;)</code></pre>
+<p><img src="projections_files/figure-html/unnamed-chunk-6-1.png" title="" alt="" width="100%" /></p>
+</div>
+<div id="gilbert-projection" class="section level3">
+<h3>Gilbert Projection</h3>
+<pre class="r"><code>#gilbert() sphere conformally mapped on hemisphere and viewed orthographically
+map_phyloseq(epoxomicin_KS, projection=&quot;gilbert&quot;)</code></pre>
+<p><img src="projections_files/figure-html/unnamed-chunk-7-1.png" title="" alt="" width="100%" /></p>
+</div>
+<div id="azimuthal-projections" class="section level3">
+<h3>Azimuthal projections</h3>
+<p>Azimuthal projections centered on the North Pole. Parallels are concentric circles. Meridians are equally spaced radial lines.centered on the North Pole. Parallels are concentric circles. Meridians are equally spaced radial lines.</p>
+</div>
+<div id="azequidistant-projection" class="section level3">
+<h3>Azequidistant Projection</h3>
+<pre class="r"><code>#azequidistant() equally spaced parallels, true distances from pole
+map_phyloseq(epoxomicin_KS, projection=&quot;azequidistant&quot;)</code></pre>
+<p><img src="projections_files/figure-html/unnamed-chunk-8-1.png" title="" alt="" width="100%" /></p>
+</div>
+<div id="azequalarea-projection" class="section level3">
+<h3>Azequalarea Projection</h3>
+<pre class="r"><code>#azequalarea() equal-area
+map_phyloseq(epoxomicin_KS, projection=&quot;azequalarea&quot;)</code></pre>
+<p><img src="projections_files/figure-html/unnamed-chunk-9-1.png" title="" alt="" width="100%" /></p>
+</div>
+<div id="gnomonic-projection" class="section level3">
+<h3>Gnomonic Projection</h3>
+<pre class="r"><code>#gnomonic() central projection on tangent plane, straight great circles
+map_phyloseq(epoxomicin_KS, projection=&quot;gnomonic&quot;)</code></pre>
+<p><img src="projections_files/figure-html/unnamed-chunk-10-1.png" title="" alt="" width="100%" /></p>
+</div>
+<div id="orthographic-projection" class="section level3">
+<h3>Orthographic Projection</h3>
+<pre class="r"><code>#orthographic() viewed from infinity
+map_phyloseq(epoxomicin_KS, projection=&quot;orthographic&quot;)</code></pre>
+<p><img src="projections_files/figure-html/unnamed-chunk-11-1.png" title="" alt="" width="100%" /></p>
+</div>
+<div id="laue-projection" class="section level3">
+<h3>Laue Projection</h3>
+<pre class="r"><code>#laue() radius = tan(2 * colatitude) used in xray crystallography
+map_phyloseq(epoxomicin_KS, projection=&quot;laue&quot;)</code></pre>
+<p><img src="projections_files/figure-html/unnamed-chunk-12-1.png" title="" alt="" width="100%" /></p>
+</div>
+<div id="fisheye-projection" class="section level3">
+<h3>Fisheye Projection</h3>
+<pre class="r"><code>#fisheye(n) stereographic seen through medium with refractive index n
+map_phyloseq(epoxomicin_KS, projection=&quot;fisheye&quot;, n=0.5)</code></pre>
+<p><img src="projections_files/figure-html/unnamed-chunk-13-1.png" title="" alt="" width="100%" /></p>
+</div>
+</div>
+<div id="polar-conic-projections" class="section level2">
+<h2>Polar conic projections</h2>
+<p>Polar conic projections are symmetric about the Prime Meridian. Parallels are segments of concentric circles. Except in the Bonne projection, meridians are equally spaced radial lines orthogonal to the parallels.</p>
+<div id="conic-projection" class="section level3">
+<h3>Conic Projection</h3>
+<pre class="r"><code>#conic(lat0) central projection on cone tangent at lat0
+map_phyloseq(epoxomicin_KS, projection=&quot;conic&quot;, lat0=20)</code></pre>
+<p><img src="projections_files/figure-html/unnamed-chunk-14-1.png" title="" alt="" width="100%" /></p>
+</div>
+<div id="simpleconic-projection" class="section level3">
+<h3>SimpleConic Projection</h3>
+<pre class="r"><code>#simpleconic(lat0,lat1) equally spaced parallels, true scale on lat0 and lat1
+map_phyloseq(epoxomicin_KS, projection=&quot;simpleconic&quot;, lat0=20, lat1=70)</code></pre>
+<p><img src="projections_files/figure-html/unnamed-chunk-15-1.png" title="" alt="" width="100%" /></p>
+</div>
+<div id="lambert-projection" class="section level3">
+<h3>Lambert Projection</h3>
+<pre class="r"><code>#lambert(lat0,lat1)conformal, true scale on lat0 and lat1
+map_phyloseq(epoxomicin_KS, projection=&quot;lambert&quot;, lat0=20, lat1=70)</code></pre>
+<p><img src="projections_files/figure-html/unnamed-chunk-16-1.png" title="" alt="" width="100%" /></p>
+</div>
+<div id="albers-projection" class="section level3">
+<h3>Albers Projection</h3>
+<pre class="r"><code>#albers(lat0,lat1)equal-area, true scale on lat0 and lat1
+map_phyloseq(epoxomicin_KS, projection=&quot;albers&quot;, lat0=20, lat1=70)</code></pre>
+<p><img src="projections_files/figure-html/unnamed-chunk-17-1.png" title="" alt="" width="100%" /></p>
+</div>
+</div>
+<div id="bilateral-projections" class="section level2">
+<h2>Bilateral Projections</h2>
+<p>Projections with bilateral symmetry about the Prime Meridian and the equator.</p>
+<div id="polyconic-projection" class="section level3">
+<h3>Polyconic Projection</h3>
+<pre class="r"><code>#polyconic() parallels developed from tangent cones, equally spaced along Prime Meridian
+map_phyloseq(epoxomicin_KS, projection=&quot;polyconic&quot;)</code></pre>
+<p><img src="projections_files/figure-html/unnamed-chunk-18-1.png" title="" alt="" width="100%" /></p>
+</div>
+<div id="aitoff-projection" class="section level3">
+<h3>Aitoff Projection</h3>
+<pre class="r"><code>#aitoff() equal-area projection of globe onto 2-to-1 ellipse, based on azequalarea
+map_phyloseq(epoxomicin_KS, projection=&quot;aitoff&quot;)</code></pre>
+<p><img src="projections_files/figure-html/unnamed-chunk-19-1.png" title="" alt="" width="100%" /></p>
+</div>
+<div id="lagrange-projection" class="section level3">
+<h3>Lagrange Projection</h3>
+<pre class="r"><code>#lagrange() conformal, maps whole sphere into a circle
+map_phyloseq(epoxomicin_KS, projection=&quot;lagrange&quot;)</code></pre>
+<p><img src="projections_files/figure-html/unnamed-chunk-20-1.png" title="" alt="" width="100%" /></p>
+</div>
+<div id="bicentric-projection" class="section level3">
+<h3>Bicentric Projection</h3>
+<pre class="r"><code>#bicentric(lon0) points plotted at true azimuth from two centers on the equator 
+#at longitudes +lon0 and -lon0, great circles are 
+#straight lines (a stretched gnomonic projection)
+map_phyloseq(epoxomicin_KS, projection=&quot;bicentric&quot;, lon0=20)</code></pre>
+<p><img src="projections_files/figure-html/unnamed-chunk-21-1.png" title="" alt="" width="100%" /></p>
+</div>
+<div id="elliptic-projection" class="section level3">
+<h3>Elliptic Projection</h3>
+<pre class="r"><code>#elliptic(lon0) points are plotted at true distance from two 
+#centers on the equator at longitudes +lon0 and -lon0
+map_phyloseq(epoxomicin_KS, projection=&quot;elliptic&quot;, lon0=20)</code></pre>
+<p><img src="projections_files/figure-html/unnamed-chunk-22-1.png" title="" alt="" width="100%" /></p>
+</div>
+<div id="globular-projection" class="section level3">
+<h3>Globular Projection</h3>
+<pre class="r"><code>#globular() hemisphere is circle, circular arc meridians equally spaced on equator, circular arc parallels equally spaced on 0- and 90-degree meridians
+map_phyloseq(epoxomicin_KS, projection=&quot;globular&quot;)</code></pre>
+<p><img src="projections_files/figure-html/unnamed-chunk-23-1.png" title="" alt="" width="100%" /></p>
+</div>
+<div id="vandergrinten-projection" class="section level3">
+<h3>Vandergrinten Projection</h3>
+<pre class="r"><code>#vandergrinten() sphere is circle, meridians as in globular, circular arc parallels resemble mercator
+map_phyloseq(epoxomicin_KS, projection=&quot;globular&quot;)</code></pre>
+<p><img src="projections_files/figure-html/unnamed-chunk-24-1.png" title="" alt="" width="100%" /></p>
+</div>
+</div>
+<div id="doubly-periodic-conformal-projections." class="section level2">
+<h2>Doubly periodic conformal projections.</h2>
+<div id="guyou-projection" class="section level3">
+<h3>Guyou Projection</h3>
+<pre class="r"><code>#guyou W and E hemispheres are square
+map_phyloseq(epoxomicin_KS, projection=&quot;guyou&quot;)</code></pre>
+<p><img src="projections_files/figure-html/unnamed-chunk-25-1.png" title="" alt="" width="100%" /></p>
+</div>
+<div id="square-projection" class="section level3">
+<h3>Square Projection</h3>
+<pre class="r"><code>#guyou W and E hemispheres are square
+map_phyloseq(epoxomicin_KS, projection=&quot;guyou&quot;)</code></pre>
+<p><img src="projections_files/figure-html/unnamed-chunk-26-1.png" title="" alt="" width="100%" /></p>
+</div>
+<div id="tetra-projection" class="section level3">
+<h3>Tetra Projection</h3>
+<pre class="r"><code>#tetra map on tetrahedron with edge tangent to Prime Meridian 
+#at S Pole, unfolded into equilateral triangle
+map_phyloseq(epoxomicin_KS, projection=&quot;tetra&quot;)</code></pre>
+<p><img src="projections_files/figure-html/unnamed-chunk-27-1.png" title="" alt="" width="100%" /></p>
+</div>
+</div>
+<div id="miscellaneous-projections." class="section level2">
+<h2>Miscellaneous projections.</h2>
+<div id="hex-projection" class="section level3">
+<h3>Hex Projection</h3>
+<pre class="r"><code>#hex world is hexagon centered on N Pole, N and S hemispheres are equilateral triangles
+map_phyloseq(epoxomicin_KS, projection=&quot;hex&quot;)</code></pre>
+<p><img src="projections_files/figure-html/unnamed-chunk-28-1.png" title="" alt="" width="100%" /></p>
+</div>
+</div>
+<div id="retroazimuthal-projections" class="section level2">
+<h2>Retroazimuthal projections</h2>
+<p>Retroazimuthal projections. At every point the angle between vertical and a straight line to “Mecca”, latitude lat0 on the prime meridian, is the true bearing of Mecca.At every point the angle between vertical and a straight line to “Mecca”, latitude lat0 on the prime meridian, is the true bearing of Mecca.</p>
+<div id="mecca-projection" class="section level3">
+<h3>Mecca Projection</h3>
+<pre class="r"><code>#mecca(lat0) equally spaced vertical meridians
+map_phyloseq(epoxomicin_KS, projection=&quot;mecca&quot;, lat0=20)</code></pre>
+<p><img src="projections_files/figure-html/unnamed-chunk-29-1.png" title="" alt="" width="100%" /></p>
+</div>
+<div id="homing-projection" class="section level3">
+<h3>Homing Projection</h3>
+<pre class="r"><code>#homing(lat0) distances to Mecca are true
+map_phyloseq(epoxomicin_KS, projection=&quot;homing&quot;, lat0=20)</code></pre>
+<p><img src="projections_files/figure-html/unnamed-chunk-30-1.png" title="" alt="" width="100%" /></p>
+</div>
+</div>
+
+<footer>
+<p><small>The "leaflet" R package is copyright &copy; 2014-2015 RStudio, Inc.<br/>
+The Leaflet JavaScript library is &copy; 2010–2014 <a href="http://agafonkin.com/en">Vladimir Agafonkin</a>, 2010–2011 <a href="http://cloudmade.com">CloudMade</a>.<br/>
+Maps &copy; <a href="http://openstreetmap.org/copyright">OpenStreetMap</a> contributors unless otherwise noted.
+</small></p>
+</footer>
+
+  </div>
+</div>
+
+<a href="https://github.com/zachcp/phylogeo"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+$(document).ready(function () {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+});
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

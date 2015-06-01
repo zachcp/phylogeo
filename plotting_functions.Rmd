@@ -1,0 +1,15 @@
+---
+pagetitle: plotting functions
+---
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+library(phylogeo)
+```
+
+### plot_distance
+
+This function creates a scatterplot of distances comparing the geographic great-circle distance to the the ecological distance (default:jaccard).
+
+```{r}
+plot_distance(mountainsoil)
+```

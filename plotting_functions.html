@@ -10,7 +10,7 @@
 
 
 
-<title>phylogeo - Introduction</title>
+<title>plotting functions</title>
 
 <script src="libs/jquery/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -118,61 +118,11 @@ img {
 
 
 
-<div id="introduction" class="section level2">
-<h2>Introduction</h2>
-<p>Analysis of data generated using sequencing of microbial genes has provided a fertile ground for exploring the large fraction of bacterial life that remains uncultured. The phylogeo package provides investigators with a way to explore the geographic components of their microbial gene data by building on the powerful phyloseq package which provides a framework for organizing data while combining it with the elegance of the ggplot plotting package.</p>
-<div id="features" class="section level3">
-<h3>Features</h3>
-<ul>
-<li>Mapping of phyloseq Datasets</li>
-<li>Interactive Mapping of phyloseq Datasets using the Leaflet Library</li>
-<li>Use map bounds and mouse events to drive Shiny logic</li>
-</ul>
-</div>
-<div id="installation" class="section level3">
-<h3>Installation</h3>
-<p>To install this R package, run this command at your R prompt:</p>
-<pre class="r"><code>devtools::install_github(&quot;zachcp/phylogeo&quot;)</code></pre>
-<p>Once installed, you can use this package at the R console, within <a href="http://rmarkdown.rstudio.com/">R Markdown</a> documents.</p>
-</div>
-<div id="datasets-in-phylogeo" class="section level3">
-<h3>Datasets in Phylogeo</h3>
-<p>phylogeo has three datasets.</p>
-<ul>
-<li><strong>mountainsoil</strong> is the biom data and associated sample information from the microbio.me/qiime experiment 1702</li>
-<li><strong>batmicrobiome</strong> is the biom data and associated sample information from yet another bat-related experiment, microbio.me/qiime experiment 1734</li>
-<li><strong>epoxomicin_KS</strong> is the data from the Brady Lab containing OTU and sequence data for ketosynthase domain amplicons from environmental DNA</li>
-</ul>
-<p>These datasets have geographic coordinates and are suitable for illustrating the features of the phylogeo package, and they can be loaded using the data() command.</p>
-<pre class="r"><code>library(ggplot2)
-library(gridExtra)
-library(phylogeo)
-
-data(mountainsoil)
-data(batmicrobiome)
-data(epoxomicin_KS)</code></pre>
-</div>
-<div id="phyloseq-mapping-functions" class="section level3">
-<h3>phyloseq mapping functions</h3>
-<p>phylogeo provides a series of functions that allow investigators to explore the geographic dimension of their data. As such, the primary requirement for using phylogeo is the presence of Latitude and Longitude columns in your sample_data table. If these are present the following functions become available to you:</p>
-<ul>
-<li>map_phyloseq() can visualize your sample locations on a map</li>
-<li>map_network() will connect samples based on a specified ecological distance</li>
-<li>map_tree() will draw a paired plot of a phylogenetic tree and the location of those samples</li>
-<li>map_clusters() will cluster your sequences into k clusters and facet-map each cluster</li>
-<li>plot_distance() will plot the pairwise distances between samples using ecological and great circle distance The use and utility of these functions are explained below, after a description of the datasets included in phylogeo.</li>
-<li>htmlmap_phyloseq() interactive versionof map_phyloseq</li>
-<li>htmlmap_network() interactive versionof map_networdk</li>
-</ul>
-</div>
-<div id="phyloseqs-data-model" class="section level3">
-<h3>Phyloseq’s Data Model</h3>
-<p>We highly recommend that you proceed to <a href="map_widget.html">The Map Widget</a> page before exploring the rest of this site, as it describes common idioms we’ll use throughout the examples on the other pages.</p>
-<p>Although we have tried to provide an R-like interface to Leaflet, you may want to check out the <a href="http://leafletjs.com/reference.html">API documentation</a> of Leaflet occasionally when the meanings of certain parameters are not clear to you.</p>
-</div>
-<div id="mapping-functions" class="section level3">
-<h3>Mapping Functions</h3>
-</div>
+<div id="plot_distance" class="section level3">
+<h3>plot_distance</h3>
+<p>This function creates a scatterplot of distances comparing the geographic great-circle distance to the the ecological distance (default:jaccard).</p>
+<pre class="r"><code>plot_distance(mountainsoil)</code></pre>
+<p><img src="plotting_functions_files/figure-html/unnamed-chunk-2-1.png" title="" alt="" width="100%" /></p>
 </div>
 
 <footer>
