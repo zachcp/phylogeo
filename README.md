@@ -17,7 +17,7 @@ To install, phyloseq must be first be installed. phylogeo can then be installed 
 ```
 install.packages("devtools")
 library("devtools")
-install_github("phylogeo", "zachcp")
+install_github("zachcp/phylogeo")
 ```
 
 Maps like this one can be made with phyloseq-geo ![ExampleMap](https://dl.dropboxusercontent.com/u/1803062/examplemap.png)
