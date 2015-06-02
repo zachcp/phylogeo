@@ -121,19 +121,6 @@ img {
 <div id="load-some-data" class="section level2">
 <h2>Load Some Data</h2>
 <p>phylogeo uses the mapproj package to draw its maps. This package supports a large number of projections and phylogeo supports nearly all of them as demonstrated below.</p>
-<pre class="r"><code>library(phylogeo)</code></pre>
-<pre><code>## Loading required package: ggplot2</code></pre>
-<pre><code>## Warning: package &#39;ggplot2&#39; was built under R version 3.1.3</code></pre>
-<pre><code>## Loading required package: methods
-## Loading required package: gridExtra
-## Loading required package: grid
-## Loading required package: phyloseq
-## Loading required package: mapproj
-## Loading required package: maps</code></pre>
-<pre><code>## Warning: replacing previous import by &#39;dplyr::%&gt;%&#39; when loading &#39;phylogeo&#39;</code></pre>
-<pre class="r"><code>data(mountainsoil)
-data(batmicrobiome)
-data(epoxomicin_KS)</code></pre>
 <div id="mercator-projection" class="section level3">
 <h3>Mercator Projection</h3>
 <pre class="r"><code>#mercator() equally spaced straight meridians, conformal, straight compass courses

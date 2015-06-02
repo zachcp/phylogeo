@@ -132,25 +132,6 @@ img {
 <h2>Generate phyloseq data and plot with phylogeo</h2>
 <p>Load phylogeo and get some sequecne data from the ape package</p>
 <p>In this vignette, sequence data from the ape package will be used, although you will probably have your own sequencing data to use. Everything except that sequence data is generated denovo using base R.</p>
-<pre class="r"><code>#load libraries
-library(phyloseq)
-library(phylogeo)</code></pre>
-<pre><code>## Loading required package: ggplot2</code></pre>
-<pre><code>## Warning: package &#39;ggplot2&#39; was built under R version 3.1.3</code></pre>
-<pre><code>## Loading required package: gridExtra
-## Loading required package: grid
-## Loading required package: mapproj
-## Loading required package: maps</code></pre>
-<pre><code>## Warning: replacing previous import by &#39;dplyr::%&gt;%&#39; when loading &#39;phylogeo&#39;</code></pre>
-<pre class="r"><code>library(ape)</code></pre>
-<pre><code>## Warning: package &#39;ape&#39; was built under R version 3.1.3</code></pre>
-<pre class="r"><code># import the woodmouse sequence data
-data(woodmouse)
-
-# set some global varialbe we will need to make our dataset
-woodmousenames &lt;- names(as.list(woodmouse))
-samplenum = 15
-samplenames =  paste0(&quot;Sample&quot;, 1:samplenum)</code></pre>
 </div>
 <div id="create-an-otu-table" class="section level2">
 <h2>Create an OTU table</h2>
@@ -199,11 +180,8 @@ otumat</code></pre>
 <p>The taxonomy table lets you assign taxonomic information for each OTU. The rownames of the taxonomy table must be the same as the OTU table. Each of the columns represent some value, typically corresponding to the classic Kindom, Phylum…. Species heirarchy. However, this table can be used to assign arbitrary data to OTUs as well. Here we will generate some random taxonomy data using classic phylogeny, but with some made-up, filler data.</p>
 <pre class="r"><code>taxmat = matrix(sample(letters, 70, replace = TRUE), 
                 nrow = nrow(otumat), 
-                ncol = 7)</code></pre>
-<pre><code>## Warning in matrix(sample(letters, 70, replace = TRUE), nrow =
-## nrow(otumat), : data length [70] is not a sub-multiple or multiple of the
-## number of rows [15]</code></pre>
-<pre class="r"><code>rownames(taxmat) &lt;- rownames(otumat)
+                ncol = 7)
+rownames(taxmat) &lt;- rownames(otumat)
 colnames(taxmat) &lt;- c(&quot;Domain&quot;, &quot;Phylum&quot;, &quot;Class&quot;, &quot;Order&quot;, 
                       &quot;Family&quot;, &quot;Genus&quot;, &quot;Species&quot;)
 taxmat</code></pre>
@@ -277,9 +255,8 @@ sampledata</code></pre>
 <p>To take advantage of the information stored in the DNA sequences we need to generate a phylogenetic tree. Once generated and loaded into the physeq object, phylogeo can use to explore whether there are geogrphic trends in the subclades. The members of the tree must be the same names as the names of the rows (OTUs) in the OTU table.</p>
 <pre class="r"><code>#muscle is an APE wrapper for the muscle program
 musc &lt;- muscle(woodmouse)
-tree &lt;- nj(musc)</code></pre>
-<pre><code>## Warning in as.dist.default(X): non-square matrix</code></pre>
-<pre class="r"><code>plot(tree)</code></pre>
+tree &lt;- nj(musc)
+plot(tree)</code></pre>
 <p><img src="datamodel_files/figure-html/unnamed-chunk-5-1.png" title="" alt="" width="100%" /></p>
 </div>
 <div id="create-the-phyloseq-object" class="section level2">
@@ -319,20 +296,16 @@ map_network(phy, color=&quot;Category2&quot;,lines=TRUE, maxdist = 0.3)</code></
 <pre class="r"><code># map the tree
 # with this random data, perhaps it is not surprisign to wind all of the woodmouse sequences in each of the smapel locations.
 map_tree(phy, color=&quot;Category1&quot;)</code></pre>
-<pre><code>## Scale for &#39;x&#39; is already present. Adding another scale for &#39;x&#39;, which will replace the existing scale.</code></pre>
 <p><img src="datamodel_files/figure-html/unnamed-chunk-7-6.png" title="" alt="" width="100%" /></p>
 <pre class="r"><code># map clusters
 # cluster analyses can let you look at the possilbity of non random distributions of subclades.
 # does, say,  a certain subclade only occur in North America?
 map_clusters(phy)</code></pre>
-<pre><code>## Scale for &#39;x&#39; is already present. Adding another scale for &#39;x&#39;, which will replace the existing scale.
-## Scale for &#39;x&#39; is already present. Adding another scale for &#39;x&#39;, which will replace the existing scale.
-## Scale for &#39;x&#39; is already present. Adding another scale for &#39;x&#39;, which will replace the existing scale.</code></pre>
-<p><img src="datamodel_files/figure-html/unnamed-chunk-7-7.png" title="" alt="" width="100%" /></p>
+<p><img src="datamodel_files/figure-html/unnamed-chunk-8-1.png" title="" alt="" width="100%" /></p>
 <pre class="r"><code># plot distance
 # pairwise sample distances ecological distance vs. geographic distance
 plot_distance(phy)</code></pre>
-<p><img src="datamodel_files/figure-html/unnamed-chunk-7-8.png" title="" alt="" width="100%" /></p>
+<p><img src="datamodel_files/figure-html/unnamed-chunk-9-1.png" title="" alt="" width="100%" /></p>
 </div>
 
 <footer>

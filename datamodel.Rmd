@@ -19,7 +19,7 @@ Load phylogeo and get some sequecne data from the ape package
 
 In this vignette, sequence data from the ape package will be used, although you will probably have your own sequencing data to use. Everything except that sequence data is generated denovo using base R.
 
-```{r}
+```{r, warning=FALSE, message=FALSE, echo=FALSE}
 #load libraries
 library(phyloseq)
 library(phylogeo)
@@ -51,7 +51,7 @@ otumat
 
 The taxonomy table lets you assign taxonomic information for each OTU. The rownames of the taxonomy table must be the same as the OTU table. Each of the columns represent some value, typically corresponding to the classic Kindom, Phylum…. Species heirarchy. However, this table can be used to assign arbitrary data to OTUs as well. Here we will generate some random taxonomy data using classic phylogeny, but with some made-up, filler data.
 
-```{r}
+```{r, warning=FALSE, message=FALSE}
 taxmat = matrix(sample(letters, 70, replace = TRUE), 
                 nrow = nrow(otumat), 
                 ncol = 7)
@@ -84,7 +84,7 @@ sampledata
 
 To take advantage of the information stored in the DNA sequences we need to generate a phylogenetic tree. Once generated and loaded into the physeq object, phylogeo can use to explore whether there are geogrphic trends in the subclades. The members of the tree must be the same names as the names of the rows (OTUs) in the OTU table.
 
-```{r}
+```{r, warning=FALSE,message=FALSE}
 #muscle is an APE wrapper for the muscle program
 musc <- muscle(woodmouse)
 tree <- nj(musc)
@@ -105,7 +105,7 @@ phy
 
 ## Phylogeo can now be used to map this phyloseq object.
 
-```{r}
+```{r, warning=FALSE, message=FALSE}
 # map the locations
 # random lat/lons yield samples all over
 map_phyloseq(phy)
@@ -127,12 +127,16 @@ map_network(phy, color="Category2",lines=TRUE, maxdist = 0.3)
 # map the tree
 # with this random data, perhaps it is not surprisign to wind all of the woodmouse sequences in each of the smapel locations.
 map_tree(phy, color="Category1")
+```
 
+```{r, warning=FALSE, message=FALSE, fig.height=6, fig.width= 6 }
 # map clusters
 # cluster analyses can let you look at the possilbity of non random distributions of subclades.
 # does, say,  a certain subclade only occur in North America?
 map_clusters(phy)
+```
 
+```{r}
 # plot distance
 # pairwise sample distances ecological distance vs. geographic distance
 plot_distance(phy)

@@ -6,7 +6,7 @@ pagetitle: projections
 
 phylogeo uses the mapproj package to draw its maps. This package supports a large number of projections and phylogeo supports nearly all of them as demonstrated below.
 
-```{r}
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
 library(phylogeo)
 data(mountainsoil)
 data(batmicrobiome)
