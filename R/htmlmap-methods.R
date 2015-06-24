@@ -24,6 +24,7 @@
 #'  \code{\link[phyloseq]{phyloseq}}
 #' 
 #' @import phyloseq
+#' @import leaflet
 #' @importFrom dplyr %>%
 #' @importFrom magrittr %<>%
 #' @export
@@ -32,15 +33,7 @@
 #' htmlmap_phyloseq(mountainsoil, size=3)
 #' data(batmicrobiome)
 #' htmlmap_phyloseq(batmicrobiome, color="blue")
-htmlmap_phyloseq <- function(physeq, size=NULL, color="blue"){
-  
-  #install leaflet using devtools
-  #replace when leaflet is on CRAN
-  if(!require("leaflet")){
-    devtools::install_github('rstudio/leaflet')
-    library("leaflet")
-  }
-  
+htmlmap_phyloseq <- function(physeq, size=NULL, color="blue"){  
   #get data
   data = sample_data(physeq)
   
@@ -122,6 +115,7 @@ htmlmap_phyloseq <- function(physeq, size=NULL, color="blue"){
 #'    \href{https://joey711.github.io/phyloseq/distance}{phyloseq's distance command}.
 #' 
 #' @import phyloseq
+#' @import leaflet
 #' @import dplyr
 #' @importFrom dplyr %>%
 #' @importFrom igraph get.data.frame
@@ -153,14 +147,7 @@ htmlmap_network <- function(physeq,
                             fillOpacity = 1,
                             fillColor = color,
                             size=1){
-  
-  # install leaflet using devtools replace when leaflet is on CRAN
-  #############################################################################
-  if(!require("leaflet")){
-    devtools::install_github('rstudio/leaflet')
-    library("leaflet")
-  }
-  
+
   #helper functions to calculate membership in clusters or lines
   #############################################################################
   get_clusters <- function(num, graph=igraph){

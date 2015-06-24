@@ -1,3 +1,7 @@
+#0.99.6.1
+leaflet is now on CRAN. remove the hacks around importing it.
+new documentation on gh-pages based on RStudio's leaflet page.
+
 #0.99.6
 Documentation fixes for BioC
 
