@@ -3,7 +3,7 @@ leaflet is now on CRAN. remove the hacks around importing it.
 new documentation on gh-pages based on RStudio's leaflet page.
 
 #0.99.6
-Documentation fixes for BioC
+Documentation fixes for BioC. Add mapdata package so that the worldHires map can be used. Leaflet hits CRAn so remove the import shims.
 
 #0.99.5
 More documentation changes and small fixes after another round of bioconductor code review.
