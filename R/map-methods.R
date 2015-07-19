@@ -514,7 +514,8 @@ map_tree <- function(physeq,  region=NULL, color = NULL,size=4, alpha=0.8,
                           alpha = alpha, jitter=jitter, jitter.x=jitter.x, 
                           jitter.y=jitter.y,projection=projection,
                           orientation=orientation, ...)  + 
-    theme(legend.position="none") 
+    theme(legend.position="none") +
+    labs(x=NULL,y=NULL)
   
   treeplot <- plot_tree(physeq2, color=color, label.tips=label.tips,
                         text.size=text.size, sizebase=sizebase, 
@@ -526,8 +527,8 @@ map_tree <- function(physeq,  region=NULL, color = NULL,size=4, alpha=0.8,
                         justify = justify, 
                         nodelabf = nodelabf) +
     theme(legend.key = element_rect(fill = "white")) +
-    scale_y_continuous(expand = c(0,0)) + 
-    scale_x_continuous(expand = c(0,0))
+    labs(x=NULL, y=NULL)
+  
   # # trim space by setting xlims
   # xvals <- treeplot$data$x
   # xvals <- xvals[!is.na(xvals)]
