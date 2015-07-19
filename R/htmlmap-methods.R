@@ -24,7 +24,8 @@
 #'  \code{\link[phyloseq]{phyloseq}}
 #' 
 #' @import phyloseq
-#' @importFrom dplyr %>%
+#' @import dplyr
+#' @import leaflet
 #' @importFrom magrittr %<>%
 #' @export
 #' @examples 
@@ -33,13 +34,6 @@
 #' data(batmicrobiome)
 #' htmlmap_phyloseq(batmicrobiome, color="blue")
 htmlmap_phyloseq <- function(physeq, size=NULL, color="blue"){
-  
-  #install leaflet using devtools
-  #replace when leaflet is on CRAN
-  if(!require("leaflet")){
-    devtools::install_github('rstudio/leaflet')
-    library("leaflet")
-  }
   
   #get data
   data = sample_data(physeq)
@@ -123,7 +117,7 @@ htmlmap_phyloseq <- function(physeq, size=NULL, color="blue"){
 #' 
 #' @import phyloseq
 #' @import dplyr
-#' @importFrom dplyr %>%
+#' @import leaflet
 #' @importFrom igraph get.data.frame
 #' @importFrom igraph get.vertex.attribute
 #' @importFrom igraph clusters  
@@ -154,12 +148,6 @@ htmlmap_network <- function(physeq,
                             fillColor = color,
                             size=1){
   
-  # install leaflet using devtools replace when leaflet is on CRAN
-  #############################################################################
-  if(!require("leaflet")){
-    devtools::install_github('rstudio/leaflet')
-    library("leaflet")
-  }
   
   #helper functions to calculate membership in clusters or lines
   #############################################################################
