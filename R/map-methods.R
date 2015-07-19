@@ -118,7 +118,7 @@ map_phyloseq <- function(physeq, mapdata="world", size=4, region=NULL, color=NUL
   
   #create map
   #############################################################################
-  worldmap <- create_basemap(region=region, df=data, 
+  worldmap <- create_basemap(mapdata=mapdata, region=region, df=data, 
                             latcol=latcol,loncol=loncol,
                             projection=projection,orientation=orientation,...)
   
@@ -358,7 +358,7 @@ map_network <- function(physeq, mapdata="world", igraph=NULL, maxdist=0.9, dista
   
   #create map
   ############################################
-  worldmap <- create_basemap(region=region, df=mdf,latcol=latcol,
+  worldmap <- create_basemap(mapdata=mapdata, region=region, df=mdf,latcol=latcol,
                             loncol=loncol, projection=projection, 
                             orientation=orientation, ...)
   
@@ -522,7 +522,7 @@ map_tree <- function(physeq,  mapdata="world", region=NULL, color = NULL,size=4,
   #trim samples that are not in the tree
   physeq2 <- prune_samples(sample_sums(physeq) > 0, physeq)
   
-  mapplot <- map_phyloseq(physeq2, region=region, color=color, size=size, 
+  mapplot <- map_phyloseq(physeq2, mapdata=mapdata,region=region, color=color, size=size, 
                           alpha = alpha, jitter=jitter, jitter.x=jitter.x, 
                           jitter.y=jitter.y,projection=projection,
                           orientation=orientation, ...)  + 
@@ -579,7 +579,7 @@ map_tree <- function(physeq,  mapdata="world", region=NULL, color = NULL,size=4,
 #' @import phyloseq
 #' @import maps
 #' @import mapproj
-#' @import gridExtra
+#' @import gridExtra 
 #' @importFrom ape ladderize
 #' @importFrom ape cophenetic.phylo
 #' @importFrom ape reorder.phylo
