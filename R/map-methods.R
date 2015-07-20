@@ -21,6 +21,10 @@
 #' @param physeq (Required). 
 #'  The name of the \code{\link[phyloseq]{phyloseq}} object. 
 #'  This must have sample data with Latitude and Longitude Columns.
+#'
+#' @param mapdata (Optional). Default \code{"world"}
+#'  The name of the \code{\link[maps]{maps}} or \code{\link[mapdata]{mapdata}}
+#'  to use for drawing.
 #'  
 #' @param size (Optional). Default \code{4}. 
 #'  The size of the vertex points."Abundance" is a special code that will scale 
@@ -90,7 +94,7 @@
 #' map_phyloseq(mountainsoil, projection="elliptic", lon0=10) 
 #' map_phyloseq(mountainsoil, projection="albers", lat0=-20 , lat1=50)
 #' map_phyloseq(batmicrobiome, jitter=TRUE, color="SCIENTIFIC_NAME")
-map_phyloseq <- function(physeq, size=4, region=NULL, color=NULL, 
+map_phyloseq <- function(physeq, mapdata="world", size=4, region=NULL, color=NULL, 
                          shape=NULL, alpha = 0.8, 
                          jitter=FALSE, jitter.x=3, jitter.y=3,
                          projection="mercator",orientation=NULL,
@@ -114,7 +118,7 @@ map_phyloseq <- function(physeq, size=4, region=NULL, color=NULL,
   
   #create map
   #############################################################################
-  worldmap <- create_basemap(region=region, df=data, 
+  worldmap <- create_basemap(mapdata=mapdata, region=region, df=data, 
                             latcol=latcol,loncol=loncol,
                             projection=projection,orientation=orientation,...)
   
@@ -164,6 +168,10 @@ map_phyloseq <- function(physeq, size=4, region=NULL, color=NULL,
 #' @param physeq (Required). 
 #'  The name of the \code{\link[phyloseq]{phyloseq}} object. 
 #'  This must have sample data with Latitude and Longitude Columns.
+#'  
+#' @param mapdata (Optional). Default \code{"world"}
+#'  The name of the \code{\link[maps]{maps}} or \code{\link[mapdata]{mapdata}}
+#'  to use for drawing.
 #'  
 #' @param igraph  (Optional). Default \code{NULL}
 #'  An optional igraph object. Will reduce plotting time to use 
@@ -268,7 +276,7 @@ map_phyloseq <- function(physeq, size=4, region=NULL, color=NULL,
 #'            jitter=TRUE)
 #' map_network(batmicrobiome, projection="mollweide", igraph= ig,
 #'             lines=TRUE, color="SCIENTIFIC_NAME", jitter=TRUE)
-map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard", 
+map_network <- function(physeq, mapdata="world", igraph=NULL, maxdist=0.9, distance="jaccard", 
                         color=NULL, region=NULL, size=4, alpha = 0.8, 
                         jitter=FALSE, jitter.x=3, jitter.y=3, shape=NULL, 
                         lines=FALSE, line_weight=1, line_color ="Black",
@@ -350,7 +358,7 @@ map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard",
   
   #create map
   ############################################
-  worldmap <- create_basemap(region=region, df=mdf,latcol=latcol,
+  worldmap <- create_basemap(mapdata=mapdata, region=region, df=mdf,latcol=latcol,
                             loncol=loncol, projection=projection, 
                             orientation=orientation, ...)
   
@@ -417,7 +425,11 @@ map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard",
 #' @param physeq (Required). 
 #'  The name of the \code{\link[phyloseq]{phyloseq}} dataset.
 #'  This must have sample data with Latitude and Longitude Columns.
-#'  
+#'
+#'  @param mapdata (Optional). Default \code{"world"}
+#'  The name of the \code{\link[maps]{maps}} or \code{\link[mapdata]{mapdata}}
+#'  to use for drawing.
+#'    
 #'  @param region (Optional). Default \code{NULL}.
 #'  The name of geographic region that can be used to zoom.The default worldmap 
 #'  cuts out Antartica. To get it back use region="world"
@@ -442,7 +454,7 @@ map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard",
 #'  Value for Y jitter
 #'  
 #'  @param method (Optional). Degault \code{"sampledodge"}
-
+#'  
 #'  @param width_ratio (Optional). Default \code{2}.
 #'  relative widths of tree and map
 #'  
@@ -494,7 +506,7 @@ map_network <- function(physeq, igraph=NULL, maxdist=0.9, distance="jaccard",
 #' map_tree(epoxomicin_KS)
 #' map_tree(epoxomicin_KS, color="Geotype", jitter=TRUE)
 #' map_tree(epoxomicin_KS, projection="gilbert", color="Geotype", jitter=TRUE)
-map_tree <- function(physeq,  region=NULL, color = NULL,size=4, alpha=0.8,
+map_tree <- function(physeq,  mapdata="world", region=NULL, color = NULL,size=4, alpha=0.8,
                      jitter= FALSE, jitter.x=3, jitter.y=3, 
                      method = "sampledodge", nodelabf = nodeplotblank, 
                      treesize = NULL, min.abundance = Inf, label.tips = NULL,
@@ -510,11 +522,12 @@ map_tree <- function(physeq,  region=NULL, color = NULL,size=4, alpha=0.8,
   #trim samples that are not in the tree
   physeq2 <- prune_samples(sample_sums(physeq) > 0, physeq)
   
-  mapplot <- map_phyloseq(physeq2, region=region, color=color, size=size, 
+  mapplot <- map_phyloseq(physeq2, mapdata=mapdata,region=region, color=color, size=size, 
                           alpha = alpha, jitter=jitter, jitter.x=jitter.x, 
                           jitter.y=jitter.y,projection=projection,
                           orientation=orientation, ...)  + 
-    theme(legend.position="none") 
+    theme(legend.position="none") +
+    labs(x=NULL,y=NULL)
   
   treeplot <- plot_tree(physeq2, color=color, label.tips=label.tips,
                         text.size=text.size, sizebase=sizebase, 
@@ -526,8 +539,8 @@ map_tree <- function(physeq,  region=NULL, color = NULL,size=4, alpha=0.8,
                         justify = justify, 
                         nodelabf = nodelabf) +
     theme(legend.key = element_rect(fill = "white")) +
-    scale_y_continuous(expand = c(0,0)) + 
-    scale_x_continuous(expand = c(0,0))
+    labs(x=NULL, y=NULL)
+  
   # # trim space by setting xlims
   # xvals <- treeplot$data$x
   # xvals <- xvals[!is.na(xvals)]
@@ -566,7 +579,7 @@ map_tree <- function(physeq,  region=NULL, color = NULL,size=4, alpha=0.8,
 #' @import phyloseq
 #' @import maps
 #' @import mapproj
-#' @import gridExtra
+#' @import gridExtra 
 #' @importFrom ape ladderize
 #' @importFrom ape cophenetic.phylo
 #' @importFrom ape reorder.phylo

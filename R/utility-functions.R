@@ -48,9 +48,15 @@ check_physeq <- function(physeq){
 #' http://www.inside-r.org/packages/cran/mapproj/docs/mapproject
 #' @import ggplot2
 #' @keywords internal
-create_basemap <-function(region, df, latcol, loncol, projection, 
+create_basemap <-function(mapdata, region, df, latcol, loncol, projection, 
                           orientation, ...){
   
+  #mapdata must be one of the data
+  mapdatalist <- c("world","usa","state","county","worldHires","china","japan","nzHires","rivers","world2Hires")
+  if(!mapdata %in% mapdatalist) {
+    stop(paste("Mapdata field incorrect. The following values are acceptable: ", mapdatalist, sep=""))
+  }
+    
   # check that the projection is null or is in the projectionlist
   # print out a warning about projections
   if(!(projection %in% projlist)){
@@ -74,11 +80,12 @@ create_basemap <-function(region, df, latcol, loncol, projection,
   }
 
   if(is.null(region)){
-    world <- ggplot2::map_data("world")
+    world <- ggplot2::map_data(mapdata)
+    
   }else if(region=="world"){
-    world <- ggplot2::map_data("world")
+    world <- ggplot2::map_data(mapdata)
   }else {
-    world <- ggplot2::map_data("world", region = region)
+    world <- ggplot2::map_data(mapdata, region = region)
   }
   
   # values passed to this function are from the data itself and are
@@ -269,15 +276,8 @@ dist_to_edge_table = function(Dist, dname = "dist"){
 }
 #' Utility Function for Converting Degrees to Radians
 #' @keywords internal
-degree_to_radian <- function(degree) {
-  ### angle in radians = angle in degrees * Pi / 180
-  radian <- degree * pi / 180
-  return( radian )
-}
+degree_to_radian <- function(degree) {degree * pi / 180}
+
 #' Utility Function for Converting Radians to Degrees
 #' @keywords internal
-radian_to_degree <- function(radian) {
-  ### angle in radians * 180 / Pi = angle in degrees
-  degree <- radian * 180 / pi
-  return(degree)
-}
+radian_to_degree <- function(radian) { radian * 180 / pi}
