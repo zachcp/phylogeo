@@ -255,19 +255,15 @@ htmlmap_network <- function(physeq,
 #' handles the color values and passes correct values to leaflet
 #' @param data 
 #' @param color 
+#' 
+#' @import leaflet
 #'
 #' @return a color string or a vector of color strings
 #' @keywords internal
 #' https://github.com/rstudio/leaflet/issues/80
 makecolors <- function(data, color){
-  #install leaflet using devtools
-  #replace when leaflet is on CRAN
-  if(!require("leaflet")){
-    devtools::install_github('rstudio/leaflet')
-    library("leaflet")
-  }
   
-  columns <- names(data)
+    columns <- names(data)
   #test if the string is a column value
   if(!color %in% columns){
     return(color)
