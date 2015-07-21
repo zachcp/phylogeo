@@ -495,12 +495,12 @@ map_network <- function(physeq, mapdata="world", igraph=NULL, maxdist=0.9, dista
 #'
 #' @import ggplot2
 #' @import phyloseq
-#' @import gridExtra
 #' @import maps
 #' @import mapproj
 #' @importFrom ape ladderize
 #' @importFrom ape cophenetic.phylo
 #' @importFrom ape reorder.phylo
+#' @importFrom cowplot plot_grid
 #' @export
 #' @examples
 #' map_tree(epoxomicin_KS)
@@ -538,7 +538,7 @@ map_tree <- function(physeq,  mapdata="world", region=NULL, color = NULL,size=4,
                         treetheme = treetheme, 
                         justify = justify, 
                         nodelabf = nodelabf) +
-    theme(legend.key = element_rect(fill = "white")) +
+    theme(legend.key = element_rect(fill = "white"), axis.line=element_blank()) +
     labs(x=NULL, y=NULL)
   
   # # trim space by setting xlims
@@ -548,11 +548,9 @@ map_tree <- function(physeq,  mapdata="world", region=NULL, color = NULL,size=4,
   # xmax <- max(xvals) * 1.5
   # treeplot <- treeplot + xlim( min(xvals), max(xvals))
   if(map_on_left){
-    combinedplot <- arrangeGrob(mapplot + theme(legend.position="none"),
-                                treeplot, ncol=2, widths=c(width_ratio,1))
+    combinedplot <- plot_grid(mapplot + theme(legend.position="none"),treeplot)
   } else{
-    combinedplot <- arrangeGrob(treeplot + theme(legend.position="none"),
-                                mapplot, ncol=2, widths=c(1,width_ratio))    
+    combinedplot <- plot_grid(treeplot,mapplot + theme(legend.position="none"))  
   }
   return(combinedplot)
 }
@@ -575,14 +573,17 @@ map_tree <- function(physeq,  mapdata="world", region=NULL, color = NULL,size=4,
 #'  Number of clusters to divide your phylogenetic tree into using 
 #'  kmeans clustering.
 #'  
+#'  @param relwidth (Optional). Default \code{2}
+#'  The relative width of the map compaed withthe tree (per cluster.)
+#'  
 #' @import ggplot2
 #' @import phyloseq
 #' @import maps
 #' @import mapproj
-#' @import gridExtra 
 #' @importFrom ape ladderize
 #' @importFrom ape cophenetic.phylo
 #' @importFrom ape reorder.phylo
+#' @importFrom cowplot plot_grid
 #' @seealso 
 #'  \href{http://zachcp.github.io/phylogeo/phylogeo_basics}{phylogeo basics}.
 #' @seealso
@@ -593,7 +594,7 @@ map_tree <- function(physeq,  mapdata="world", region=NULL, color = NULL,size=4,
 #' @examples
 #' map_clusters(epoxomicin_KS, clusternum=2)
 #' map_clusters(epoxomicin_KS, clusternum=6)
-map_clusters <- function(physeq, clusternum=3){
+map_clusters <- function(physeq, clusternum=3, relwidth=2){
   # check for the existence of a tree: lifted from phyloseq's plot_tree
   if(!"phy_tree" %in% getslots.phyloseq(physeq)){
     stop("tree missing or invalid. map-tree requires a phylogenetic tree")
@@ -604,16 +605,13 @@ map_clusters <- function(physeq, clusternum=3){
   ################################################
   
   # get a list of otus in a cluster
-  otus_in_a_cluster <- function(clusternum, clusterdf=clusters){
+  otus_in_a_cluster <- function(clusternum, clusterdf){
     df <- clusterdf[clusterdf$cluster == clusternum, ]
     return(rownames(df))
   }
   
   #add the cluster information to the taxonomy table in a "Cluster" column
-  markcluster <- function(x, otus){
-    if(is.na(x) ){ 0
-    }else{ ifelse(x %in% otus, 1, 0)}
-  }
+  markcluster <- function(x, otus){ ifelse(is.na(x),0,ifelse(x %in% otus, 1, 0))}
   
   # add cluster information to the taxonomy tree and return the modified physeq
   add_cluster_to_taxtree <- function(physeq, otus){
@@ -623,33 +621,25 @@ map_clusters <- function(physeq, clusternum=3){
     return(physeq)
   }
   
-  # creates a tree where the deignated cluster is colored red
-  make_cluster_tree <- function(physeq, clusternum){
-    otulist <- otus_in_a_cluster(clusternum)
+  # creates a tree where the designated cluster is colored red
+  make_cluster_tree <- function(clusternum, clusterdf, physeq){
+    otulist <- otus_in_a_cluster(clusternum, clusterdf=clusterdf)
     physeq2 <- add_cluster_to_taxtree(physeq, otulist)
     p <-  plot_tree(physeq2, color="Cluster", ladderize=TRUE) +
       scale_color_manual(values = c("black","red")) +
-      theme(legend.position="none") +
-      scale_y_continuous(expand = c(0,0)) + 
-      scale_x_continuous(expand = c(0,0))
+      theme(legend.position="none", axis.line=element_blank()) + 
+      labs(x=NULL,y=NULL) 
     return(p)
   }
   
-  make_map_of_cluster <- function(physeq, clusternum){
-    otulist <- otus_in_a_cluster(clusternum)
+  make_map_of_cluster <- function(clusternum,clusterdf,physeq=physeq){
+    otulist <- otus_in_a_cluster(clusternum=clusternum,clusterdf=clusterdf)
     physeq2 <- add_cluster_to_taxtree(physeq, otulist)
     physeq2 <- subset_taxa(physeq2, Cluster=="1")
     physeq2 <- prune_samples(sample_sums(physeq2)>0, physeq2)
     p <-  map_phyloseq(physeq2, size="Abundance")
     return(p)
     
-  }
-  
-  # make biplot of the tow together
-  make_diplot <- function(clusternum, physeq=physeq){
-    p1 <- make_cluster_tree(physeq, clusternum)
-    p2 <- make_map_of_cluster(physeq, clusternum)
-    combinedplot <- arrangeGrob(p1,p2, ncol=2, widths=c(1,2))
   }
   
   ################################################
@@ -663,8 +653,12 @@ map_clusters <- function(physeq, clusternum=3){
   names(clusters) <- "cluster"
   clusters$clusterOTU <- row.names(clusters)
   
-  # plot everthing out
-  plots <- lapply(1:clusternum, make_diplot, physeq=physeq)
-  combinedplot <- do.call(arrangeGrob, plots)
-  return(combinedplot)
+  #make both plots fro each cluster
+  plots <- list()
+  for (i in 1:clusternum) {
+      plots <- c(plots, 
+                 list(make_cluster_tree(clusternum=i, clusterdf=clusters,physeq=physeq)),
+                 list(make_map_of_cluster(clusternum=i,clusterdf=clusters,physeq=physeq)))
+  }
+  return(plot_grid(plotlist=plots, ncol=2, rel_widths = c(1,relwidth)))
 }

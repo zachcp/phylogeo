@@ -17,11 +17,12 @@ Imports:
     maps (>= 2.3),
     mapdata (>= 2.2),
     leaflet (>= 1.0),
-    dplyr (>= 0.4)
-Depends:
-    R (>= 3.0),
     ggplot2 (>= 1.0.0),
-    gridExtra (>= 0.9.1)
+    dplyr (>= 0.4),
+    cowplot (>= 0.5.0),
+    ggplot2 (>= 1.0.0)
+Depends:
+    R (>= 3.0)
 Suggests:
     devtools,
     testthat,

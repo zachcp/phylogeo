@@ -25,7 +25,7 @@
 #' 
 #' @import phyloseq
 #' @import leaflet
-#' @importFrom dplyr %>%
+#' @import dplyr
 #' @importFrom magrittr %<>%
 #' @export
 #' @examples 
@@ -262,8 +262,8 @@ htmlmap_network <- function(physeq,
 #' @keywords internal
 #' https://github.com/rstudio/leaflet/issues/80
 makecolors <- function(data, color){
-  
-    columns <- names(data)
+  columns <- names(data)
+
   #test if the string is a column value
   if(!color %in% columns){
     return(color)
