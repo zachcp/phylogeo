@@ -1,5 +1,5 @@
 Package: phylogeo
-Version: 0.99.6
+Version: 0.99.6.1
 Date: 2014-09-24
 Title: Mapping of Phyloseq Information
 Description: phylogeo is a convenient wrapper around phyloseq and ggplot to
