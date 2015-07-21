@@ -24,12 +24,8 @@
 #'  \code{\link[phyloseq]{phyloseq}}
 #' 
 #' @import phyloseq
-<<<<<<< HEAD
 #' @import leaflet
-#' @importFrom dplyr %>%
-=======
 #' @import dplyr
-#' @import leaflet
 #' @importFrom magrittr %<>%
 #' @export
 #' @examples 
@@ -260,6 +256,8 @@ htmlmap_network <- function(physeq,
 #' handles the color values and passes correct values to leaflet
 #' @param data 
 #' @param color 
+#' 
+#' @import leaflet
 #'
 #' @return a color string or a vector of color strings
 #' @keywords internal
