@@ -24,8 +24,12 @@
 #'  \code{\link[phyloseq]{phyloseq}}
 #' 
 #' @import phyloseq
+<<<<<<< HEAD
 #' @import leaflet
 #' @importFrom dplyr %>%
+=======
+#' @import dplyr
+#' @import leaflet
 #' @importFrom magrittr %<>%
 #' @export
 #' @examples 
@@ -33,7 +37,8 @@
 #' htmlmap_phyloseq(mountainsoil, size=3)
 #' data(batmicrobiome)
 #' htmlmap_phyloseq(batmicrobiome, color="blue")
-htmlmap_phyloseq <- function(physeq, size=NULL, color="blue"){  
+htmlmap_phyloseq <- function(physeq, size=NULL, color="blue"){
+  
   #get data
   data = sample_data(physeq)
   
@@ -117,7 +122,7 @@ htmlmap_phyloseq <- function(physeq, size=NULL, color="blue"){
 #' @import phyloseq
 #' @import leaflet
 #' @import dplyr
-#' @importFrom dplyr %>%
+#' @import leaflet
 #' @importFrom igraph get.data.frame
 #' @importFrom igraph get.vertex.attribute
 #' @importFrom igraph clusters  
@@ -147,7 +152,6 @@ htmlmap_network <- function(physeq,
                             fillOpacity = 1,
                             fillColor = color,
                             size=1){
-
   #helper functions to calculate membership in clusters or lines
   #############################################################################
   get_clusters <- function(num, graph=igraph){
@@ -261,13 +265,6 @@ htmlmap_network <- function(physeq,
 #' @keywords internal
 #' https://github.com/rstudio/leaflet/issues/80
 makecolors <- function(data, color){
-  #install leaflet using devtools
-  #replace when leaflet is on CRAN
-  if(!require("leaflet")){
-    devtools::install_github('rstudio/leaflet')
-    library("leaflet")
-  }
-  
   columns <- names(data)
   #test if the string is a column value
   if(!color %in% columns){
