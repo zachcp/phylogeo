@@ -7,28 +7,28 @@
 #'
 #' @return  \code{\link[htmlwidgets]{htmlwidgets}} Leaflet Map
 #' @seealso http://rstudio.github.io/leaflet/
-#' 
-#' @param physeq (Required). 
-#'  The name of the \code{\link[phyloseq]{phyloseq}} phyloseq object. 
+#'
+#' @param physeq (Required).
+#'  The name of the \code{\link[phyloseq]{phyloseq}} phyloseq object.
 #'  This must have sample data with Latitude and Longitude Columns.
-#'  
-#' @param size (Optional). Default \code{NULL}. 
-#'  The size of the vertex points."Abundance" is a special code that will scale 
+#'
+#' @param size (Optional). Default \code{NULL}.
+#'  The size of the vertex points."Abundance" is a special code that will scale
 #'  points by the number of reads in a sample
-#' 
-#' @param color (Optional). Default \code{"blue"}. 
+#'
+#' @param color (Optional). Default \code{"blue"}.
 #'  Color of points using color names (e.g. red, blue)
-#' 
+#'
 #' @seealso
 #'  \code{\link[leaflet]{leaflet}}
 #'  \code{\link[phyloseq]{phyloseq}}
-#' 
+#'
 #' @import phyloseq
 #' @import leaflet
 #' @import dplyr
 #' @importFrom magrittr %<>%
 #' @export
-#' @examples 
+#' @examples
 #' data(mountainsoil)
 #' htmlmap_phyloseq(mountainsoil, size=3)
 #' data(batmicrobiome)
@@ -36,19 +36,19 @@
 htmlmap_phyloseq <- function(physeq, size=NULL, color="blue"){
   #get data
   data = sample_data(physeq)
-  
+
   #customize circle size
-  if(!is.null(size)){
-    if(size == "Abundance") data$circlesize <- phyloseq::sample_sums(physeq) else
+  if (!is.null(size)) {
+    if (size == "Abundance") data$circlesize <- phyloseq::sample_sums(physeq) else
                             data$circlesize <- size
   }
   #basemap
   map = leaflet(data) %>% addTiles()
-  
+
   #add custom circles
-  if(!is.null(size)) map %<>% addCircleMarkers(radius=~circlesize, color = makecolors(data,color)) else
+  if (!is.null(size)) map %<>% addCircleMarkers(radius = ~circlesize, color = makecolors(data,color)) else
                      map %<>% addCircles(color = makecolors(data,color))
-  
+
   return(map)
 }
 
@@ -58,90 +58,90 @@ htmlmap_phyloseq <- function(physeq, size=NULL, color="blue"){
 #' In this case, edges in the network are created if the distance between
 #' nodes is below a potentially arbitrary threshold,
 #' and special care should be given to considering the choice of this threshold.
-#'   
+#'
 #' @return an  \code{\link[htmlwidgets]{htmlwidgets}} plot
 #' @seealso http://rstudio.github.io/leaflet/
-#' 
-#' @param physeq (Required). 
+#'
+#' @param physeq (Required).
 #'  The name of the \code{\link[phyloseq]{phyloseq}} phyloseq object. This must
 #'  have sample data with Latitude and Longitude Columns.
-#'  
+#'
 #' @param igraph  (Optional). Default \code{NULL}
 #'  An optional \code{\link[igraph]{igraph}} igraph object. Will reduce plotting
-#'  time to use a precalculated network 
-#'  
-#' @param distance (Optional). Default \code{"jaccard"}. 
+#'  time to use a precalculated network
+#'
+#' @param distance (Optional). Default \code{"jaccard"}.
 #'  Distance metric used to calculate between-sample distances.
-#'  
-#' @param maxdist (Optional). Default \code{0.9}. 
-#'  Cutoff of the \code{distance} used to detmine whether a sample is 
+#'
+#' @param maxdist (Optional). Default \code{0.9}.
+#'  Cutoff of the \code{distance} used to detmine whether a sample is
 #'  included in the network.
-#'   
+#'
 #' @param line_color (Optional). Default \code{black}.
 #'  The name of the sample variable in \code{physeq} to use for color mapping
 #'  of lines (graph edges).
-#' 
+#'
 #' @param line_alpha (Optional). Default \code{0.4}.
 #'  The transparency level for graph-edge lines.
-#'  
+#'
 #' @param line_weight (Optional). Default \code{1}.
 #'  The line thickness to use to label graph edges.
-#'  
+#'
 #' @param color (Optional). Default \code{black}.
 #'   Color of the points
-#'   
-#' @param circle_alpha (Optional). Default \code{1}. 
+#'
+#' @param circle_alpha (Optional). Default \code{1}.
 #'  The opacity of the points.
-#'  
+#'
 #' @param fill (Optional). Default \code{TRUE}.
 #'  Boolean. Whether to fill in the points or not.
-#'  
+#'
 #' @param fillOpacity (Optional). Default \code{1}.
 #'  opacity of circle fills
-#'  
+#'
 #' @param fillColor (Optional). Default \code{color}.
 #'  Color to be used for filling in the circle
-#'  
-#' @param size (Optional). Default \code{1}. 
+#'
+#' @param size (Optional). Default \code{1}.
 #'  The size of the vertex points. If "Abundance" is supplied as the argument
 #'  the size will be scaled to the abundance of the OTUs in the sample.
-#'  
+#'
 #'
 #'  @seealso
 #'    \code{\link[leaflet]{leaflet}}
 #'    \code{\link[phyloseq]{phyloseq}}
-#'  
-#'  @seealso  
+#'
+#'  @seealso
 #'    \href{https://joey711.github.io/phyloseq/distance}{phyloseq's distance command}.
-#' 
+#'
 #' @import phyloseq
 #' @import leaflet
 #' @import dplyr
 #' @import leaflet
 #' @importFrom igraph get.data.frame
 #' @importFrom igraph get.vertex.attribute
-#' @importFrom igraph clusters  
+#' @importFrom igraph clusters
 #' @export
 #' @examples
 #' htmlmap_network(mountainsoil)
 #' htmlmap_network(mountainsoil, maxdist=0.9)
-#' 
+#'
 #' htmlmap_network(batmicrobiome, maxdist=0.5)
 #' ig <- make_network(batmicrobiome)
 #' htmlmap_network(batmicrobiome, igraph= ig)
-#' htmlmap_network(epoxamicin_KS, maxdist=0.99, line_color = "red", 
+#' htmlmap_network(epoxamicin_KS, maxdist=0.99, line_color = "red",
 #'                 line_weight = 4, line_alpha=0.5)
-htmlmap_network <- function(physeq, 
-                            #distance related 
-                            igraph=NULL, 
-                            maxdist=0.9, 
+htmlmap_network <- function(physeq,
+                            #distance related
+                            igraph=NULL,
+                            maxdist=0.9,
                             distance="jaccard",
                             #linerelated
                             line_color ="black",
-                            line_alpha=0.4 , 
+                            line_alpha=0.4 ,
                             line_weight=1,
                             #point related
-                            color="blue", 
+                            color="blue",
                             circle_alpha = 0.8,
                             fill = FALSE,
                             fillOpacity = 1,
@@ -150,7 +150,7 @@ htmlmap_network <- function(physeq,
   #helper functions to calculate membership in clusters or lines
   #############################################################################
   get_clusters <- function(num, graph=igraph){
-    #get cluster membership info from igraph object 
+    #get cluster membership info from igraph object
     #from cluster with clusterid of 'num'
     clusts  <- igraph::clusters(graph)
     members <- which(clusts$membership == num) #get membership
@@ -160,9 +160,9 @@ htmlmap_network <- function(physeq,
     rownames(df) <- df$names
     df    #return a df with name/cluster columns
   }
-  
+
   get_lines <- function(graph=igraph, df=data){
-    #get each edge of the network and return a list of 
+    #get each edge of the network and return a list of
     #dataframes with the node info
     getline_df <- function(i, l=links, df1=df){
       #subset data frame using node info
@@ -172,18 +172,18 @@ htmlmap_network <- function(physeq,
       smalldf['link'] <- i
       smalldf
     }
-    
+
     links <- get.data.frame(graph)
     links_range <- seq( 1:dim(links)[1])
     lines_dfs <- Map(getline_df, links_range)
     lines_df <- Reduce(rbind, lines_dfs)
     lines_df
   }
-  
+
   addlines <- function(map, df, latcol, loncol){
     #df must have link column dennoting belonging to the same line
     lines = unique(df$link)
-    for (line in lines){
+    for (line in lines) {
       #currently I add extra columns here so I can quote them below.
       # it would be cleaner to call directly.
       # I also have to make sure the columns are numeric
@@ -192,7 +192,7 @@ htmlmap_network <- function(physeq,
       line_df['LON'] <- line_df[loncol]
       line_df$LON <- as.numeric(as.character(line_df$LON))
       line_df$LAT <- as.numeric(as.character(line_df$LAT))
-      
+
       map %<>% addPolylines(data = line_df,
                             lng  = ~LON,
                             lat  = ~LAT,
@@ -200,62 +200,61 @@ htmlmap_network <- function(physeq,
                             weight = line_weight,
                             opacity = line_alpha,
                             fill = fill,
-                            fillOpacity =fillOpacity,
+                            fillOpacity = fillOpacity,
                             fillColor = fillColor)
     }
     return(map)
   }
-  
+
   ############################################################################
 
-  #make network, get cluster information, and add to the  original dataframe. 
-  if(is.null(igraph)){
-    igraph <- make_network(physeq, max.dist = maxdist, distance=distance)
+  #make network, get cluster information, and add to the  original dataframe.
+  if (is.null(igraph)) {
+    igraph <- make_network(physeq, max.dist = maxdist, distance = distance)
   }else{
-    if( !"igraph" %in% class(igraph) ){
-      stop("igraph must be an igraph network object")} 
+    if (!"igraph" %in% class(igraph)) {
+      stop("igraph must be an igraph network object")}
   }
-  
+
   #check basic physeq and lat/lon and make clusters
-  latlon <- check_physeq(physeq)
-  latcol <- as.character( latlon[1] )
-  loncol <- as.character( latlon[2] )
+  physeqdata <- check_phyloseq(physeq)
+
   #get clusters and make a dataframe from them
   clusts <- seq( igraph::clusters(igraph)$no )
   clustdf <- Reduce( rbind, Map(get_clusters, clusts))
   #get sample data
   data <- data.frame(sample_data(physeq))
-  
+
   #customize circle size prior to using the cluster
-  if(size == "Abundance") data$circlesize <- phyloseq::sample_sums(physeq) else
+  if (size == "Abundance") data$circlesize <- phyloseq::sample_sums(physeq) else
                           data$circlesize <- size
-  
+
   #merge sample data with cluster data
-  mdf <- merge(clustdf, data, by="row.names", all.x=TRUE)
+  mdf <- merge(clustdf, data, by = "row.names", all.x = TRUE)
   rownames(mdf) <- mdf$Row.names
-  
+
   #create map
   ############################################
   map = leaflet(mdf) %>% addTiles()
-  
+
   #addlines
-  linedf <- get_lines(df=mdf)
-  map <- addlines(map, linedf, latcol, loncol)
-  
+  linedf <- get_lines(df = mdf)
+  map <- addlines(map, linedf, physeqdata$lat, physeqdata$lon)
+
   #add points
-  map %<>% addCircleMarkers(radius=~circlesize, 
-                            color=makecolors(mdf,color), 
-                            opacity = circle_alpha, 
+  map %<>% addCircleMarkers(radius = ~circlesize,
+                            color = makecolors(mdf,color),
+                            opacity = circle_alpha,
                             fillOpacity = fillOpacity)
-  
+
   return(map)
 }
 #' makecolors
 #'
 #' handles the color values and passes correct values to leaflet
-#' @param data 
-#' @param color 
-#' 
+#' @param data
+#' @param color
+#'
 #' @import leaflet
 #'
 #' @return a color string or a vector of color strings
@@ -265,16 +264,16 @@ makecolors <- function(data, color){
   columns <- names(data)
 
   #test if the string is a column value
-  if(!color %in% columns){
+  if (!color %in% columns) {
     return(color)
   } else {
     testdata <- data[[color]]
     #get colors depending on the columntypes
-    if(is.factor(testdata)){
+    if (is.factor(testdata)) {
       return(leaflet::colorFactor("RdYlBu", NULL)(data[[color]]))
-    }else if(is.numeric(testdata)) {
+    } else if (is.numeric(testdata)) {
       return(leaflet::colorNumeric("Blues", NULL)(data[[color]]))
-    }else if(is.character(testdata)) {
+    } else if (is.character(testdata)) {
        fac = as.factor(testdata)
        return(leaflet::colorFactor("RdYlBu", NULL)(fac))
     } else {
