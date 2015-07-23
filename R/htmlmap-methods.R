@@ -249,8 +249,6 @@ htmlmap_network <- function(physeq,
   rownames(mdf) <- mdf$Row.names
   linedf <- get_lines(df = mdf)
 
-  print(linedf)
-
   #create map
   ############################################
   map = leaflet(mdf) %>%
