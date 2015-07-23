@@ -12,30 +12,37 @@ context("Utility Functions")
 # check_NA <- function(df, col){
 # coerce_numeric <- function(df, col)
 # dist_to_edge_table = function(Dist, dname = "dist")
-# degree_to_radian <- function(degree) 
-# radian_to_degree <- function(radian) 
+# degree_to_radian <- function(degree)
+# radian_to_degree <- function(radian)
 
 
 test_that("phyloseq objects have latitude and longitude columns", {
   data(mountainsoil)
   data(batmicrobiome)
   data(epoxomicin_KS)
-  latlist  <- list( c("LATITUDE"),c("LONGITUDE"))
-  latlist2 <- list( c("Latitude"),c("Longitude"))
-  expect_equal(check_physeq(mountainsoil), latlist)
-  expect_equal(check_physeq(batmicrobiome), latlist)
-  expect_equal(check_physeq(epoxomicin_KS), latlist2)
-  
+
+  phy1 <- check_phyloseq(mountainsoil)
+  phy2 <- check_phyloseq(batmicrobiome)
+  phy3 <- check_phyloseq(epoxomicin_KS)
+
+  expect_equal(phy1$lat, "LATITUDE")
+  expect_equal(phy1$lng, "LONGITUDE")
+  expect_equal(phy2$lat, "LATITUDE")
+  expect_equal(phy2$lng, "LONGITUDE")
+  expect_equal(phy3$lat, "Latitude")
+  expect_equal(phy3$lng, "Longitude")
+
+
   # remove lat.long column and be sure it trips an error
   df <- data.frame(sample_data(mountainsoil))
   dflat <- df %>% dplyr::select(-LATITUDE)
   dflon <- df %>% dplyr::select(-LONGITUDE)
   bat_lat <- mountainsoil
   sample_data(bat_lat) <- dflat
-  expect_error(check_physeq(bat_lat))
+  expect_error(check_phyloseq(bat_lat))
   bat_lon <- mountainsoil
   sample_data(bat_lon) <- dflon
-  expect_error(check_physeq(bat_lon))
+  expect_error(check_phyloseq(bat_lon))
 })
 
 test_that("jittering works and uses the seed correctly", {
@@ -51,7 +58,7 @@ test_that("jittering works and uses the seed correctly", {
 test_that("checknames trips an error when its supposed to",{
   df <- data.frame(col1=c(1,2,3),
                    col2=c(1,2,3))
-  
+
   expect_output(check_names("col1", df),"")
   expect_output(check_names("col2", df),"")
   expect_error(check_names("col3", df))
@@ -71,7 +78,7 @@ test_that(".check_NA can handle columns that are factors", {
   expect_true(is.data.frame(val))
   expect_warning(val <- check_NA(df2, "col2"))
   expect_true(is.data.frame(val))
-  
+
   #check that the none is removed  values
   testdf <- check_NA(df1, "col2")
   expect_equal(testdf$col2, c("1","2","3","1","2","3"))

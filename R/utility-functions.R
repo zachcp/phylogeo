@@ -1,142 +1,170 @@
+#' check phyloseq
+#'
+#' function to check phyloseq data for lat non columns and NA values
+#' return a list contiang the lat and lon columnnames and the sampledata
+#'
+#' @keywords internal
+#' @import dplyr
+check_phyloseq <- function(physeq){
+
+    #check phyloseq objects for Lat/Lon
+    if (!"sam_data" %in% phyloseq::getslots.phyloseq(physeq)) {
+        stop("Mapping requires that phyloseq objects have Sample_Data with Latitude
+             and Longitude")
+    }
+
+    #get lat/long
+    #' From Rstudio/leaflet/R/normalize.R
+    #' https://github.com/rstudio/leaflet/blob/4ef0023c9fefa00a64e382ccd77d34d1413c47dc/R/normalize.R
+    sampledata <- data.frame(sample_data(physeq))
+    sdfnames <- names(sampledata)
+    lats = sdfnames[grep("^(lat|latitude)$", sdfnames, ignore.case = TRUE)]
+    lngs = sdfnames[grep("^(lon|lng|long|longitude)$", sdfnames, ignore.case = TRUE)]
+
+    if (!(length(lats) == 1 && length(lngs) == 1)) stop("Couldn't infer longitude/latitude columns")
+
+    #get sample data info
+    sampledata <- sampledata %>%
+        check_NA(lats) %>%
+        check_NA(lngs) %>%
+        coerce_numeric(lats) %>%
+        coerce_numeric(lngs)
+
+    return(list(lat = lats,
+                lng = lngs,
+                sampledata = sampledata))
+}
+
 #
 # A set of functions used by map and plot functions to test for validity of data
 #
 #' Data: Projectionlist
 projlist <- c("aitoff", "albers", "azequalarea", "azequidistant",
               "bicentric", "bonne", "conic", "cylequalarea", "cylindrical",
-              "eisenlohr", "elliptic", "fisheye", "gall", "gilbert", 
+              "eisenlohr", "elliptic", "fisheye", "gall", "gilbert",
               "globular","gnomonic","guyou","harrison", "hex", "homing",
               "lagrange", "lambert", "laue", "lune","mercator", "mecca",
-              "mollweide", "orthographic", "perspective","polyconic", 
+              "mollweide", "orthographic", "perspective","polyconic",
               "rectangular", "simpleconic", "sinusoidal", "square",
               "stereographic","tetra","trapezoidal")
 
-#' Helper Functions
-#' @keywords internal
-check_physeq <- function(physeq){
-  #check phyloseq objects for Lat/Lon
-  if (!"sam_data" %in% phyloseq::getslots.phyloseq(physeq)){
-    stop("Mapping requires that phyloseq objects have Sample_Data with Latitude 
-         and Longitude")
-  }
-  
-  #check that sampledata has latitude and longitude columns
-  lat <- c('latitude', 'lat', 'lattitude')
-  lon <- c('longitude', 'lon', 'long')
-  lat_present = FALSE
-  lon_present = FALSE
-  sampledata <- sample_data(physeq)
-  names <- names(sampledata)
-  
-  for (name in names){
-    if( tolower(name) %in% lat){
-      latcol <- name
-      lat_present <- TRUE
-    }
-    if( tolower(name) %in% lon){
-      loncol <- name
-      lon_present <- TRUE
-    }
-  }
-  if (lat_present == FALSE) { stop("sampledata must have a valid latitude column") }
-  if (lon_present == FALSE) { stop("sampledata must have a valid longitude column")  }
-  list(latcol, loncol)
-}
-
 #' Create a basemap from the maps() worldmap focusing on a region
-#' projection defaults to mercator, but others can be selected 
+#' projection defaults to mercator, but others can be selected
 #' http://www.inside-r.org/packages/cran/mapproj/docs/mapproject
 #' @import ggplot2
 #' @keywords internal
-create_basemap <-function(mapdata, region, df, latcol, loncol, projection, 
-                          orientation, ...){
-  
+create_basemap <- function(mapdata,
+                           region,
+                           df,
+                           latcol,
+                           loncol,
+                           projection,
+                           orientation,
+                           ...){
+
   #mapdata must be one of the data
   mapdatalist <- c("world","usa","state","county","worldHires","china","japan","nzHires","rivers","world2Hires")
-  if(!mapdata %in% mapdatalist) {
-    stop(paste("Mapdata field incorrect. The following values are acceptable: ", mapdatalist, sep=""))
+  if (!mapdata %in% mapdatalist) {
+    stop(paste0("Mapdata field incorrect. The following values are acceptable: ", mapdatalist))
   }
-    
+
   # check that the projection is null or is in the projectionlist
   # print out a warning about projections
-  if(!(projection %in% projlist)){
-    stop(paste0(projection," is not a valid projection. Please use one of 
+  if (!(projection %in% projlist)) {
+    stop(paste0(projection," is not a valid projection. Please use one of
                 the following: aitoff, albers, azequalarea, azequidistant,
                 bicentric, bonne, conic, cylequalarea, eisenlohr, elliptic,
                 fisheye, gall, gilbert, globular, gnomonic, guyou, harrison,
                 hex, homing, lagrange, lambert, laue,  lune, mercator, mecca,
-                mollweide, orthographic, perspective, polyconic, 
+                mollweide, orthographic, perspective, polyconic,
                 rectangular,simpleconic, square, sinusoidal, stereographic,
                 tetra, trapezoidal"))
-  }else if(projection %in% c("bonne","cylindrical","eisenlohr",
+  } else if (projection %in% c("bonne","cylindrical","eisenlohr",
                              "gall","harrison","lune","perspective",
-                             "stereographic")){
-  #temporary check for projections that are currently not working and 
+                             "stereographic")) {
+  #temporary check for projections that are currently not working and
   #will require work to include
   stop("You are using a projection that is not yet supported by phylogeo")
-  
+
   }else{
   #print("you are using a non-standard projection that may require additional parameters")
   }
 
-  if(is.null(region)){
+  if (is.null(region)) {
     world <- ggplot2::map_data(mapdata)
-    
-  }else if(region=="world"){
+
+  } else if (region == "world") {
     world <- ggplot2::map_data(mapdata)
-  }else {
+  } else {
     world <- ggplot2::map_data(mapdata, region = region)
   }
-  
+
   # values passed to this function are from the data itself and are
   # not specified in the parent function.
-  worldmap <- ggplot(world, aes(x=long, y=lat, group=group)) +
-    geom_polygon( fill="grey",alpha=0.6) +
-    scale_y_continuous(breaks=(-2:2) * 30) +
-    scale_x_continuous(breaks=(-4:4) * 45) +
+  worldmap <- ggplot(world, aes(x = long,
+                                y = lat,
+                                group = group)) +
+    geom_polygon(fill = "grey", alpha = 0.6) +
+    scale_y_continuous(breaks = (-2:2) * 30) +
+    scale_x_continuous(breaks = (-4:4) * 45) +
     theme_classic() +
-    theme( axis.text = element_blank(), 
-           axis.ticks = element_blank(), 
-           axis.line = element_blank(), 
-           axis.title=element_blank())
-  
+    theme( axis.text = element_blank(),
+           axis.ticks = element_blank(),
+           axis.line = element_blank(),
+           axis.title = element_blank())
+
   #check all of the projections and return the projected ggplot
-  if(projection=="mercator") { 
+  if (projection == "mercator") {
     return(worldmap)
-  } else if(projection %in% c("aitoff", "azequidistant","azequalarea","bonne","
-                            cylindrical","gilbert",
-                            "eisenlohr","globular","gnomonic","guyou","hex","laue",
-                            "lagrange","mollweide","orthographic",
-                            "polyconic","sinusoidal","square","tetra",
-                            "vandergrinten")){
-    return(worldmap + coord_map(projection=projection, xlim=c(-180,180), 
-                                ylim=c(-90,90), orientation=c(90,0,0), ...))
-  } else if(projection %in% c("cylequalarea","rectangular","conic","mecca","homing")){
-    if(!"lat0" %in% names(list(...))){
-      stop("The bonne,conic,cylequalarea, homing, mecca, and 
+  } else if (projection %in% c("aitoff", "azequidistant","azequalarea","bonne",
+                               "cylindrical","gilbert","eisenlohr","globular","gnomonic",
+                               "guyou","hex","laue","lagrange","mollweide","orthographic",
+                               "polyconic","sinusoidal","square","tetra",
+                               "vandergrinten")) {
+    return(worldmap + coord_map(projection = projection,
+                                xlim = c(-180,180),
+                                ylim = c(-90,90),
+                                orientation = c(90,0,0),
+                                ...))
+  } else if (projection %in% c("cylequalarea","rectangular","conic","mecca","homing")) {
+    if (!"lat0" %in% names(list(...))) {
+      stop("The bonne,conic,cylequalarea, homing, mecca, and
             rectangular projections require the lat0 argument")
     }
-    return(worldmap + coord_map(projection=projection, orientation=orientation, 
-                                ..., xlim=c(-180,180),ylim=c(-90,90)))
-  } else if(projection == "fisheye"){
-    if(!"n" %in% names(list(...))){
+    return(worldmap + coord_map(projection = projection,
+                                orientation = orientation,
+                                ...,
+                                xlim = c(-180,180),
+                                ylim = c(-90,90)))
+  } else if (projection == "fisheye") {
+    if (!"n" %in% names(list(...))) {
       stop("The fisheye projection requires a refractive index, n")
     }
-    return(worldmap + coord_map(projection=projection, orientation=orientation, 
-                                ..., xlim=c(-180,180),ylim=c(-90,90)))
-  }else if(projection %in% c("simpleconic","lambert","albers","trapezoidal")){
-    if( !"lat0" %in% names(list(...)) || !"lat1" %in% names(list(...))){
-      stop("The albers,lambert, ,and simpleconic projections require 
+    return(worldmap + coord_map(projection = projection,
+                                orientation = orientation,
+                                ...,
+                                xlim = c(-180,180),
+                                ylim = c(-90,90)))
+  }else if (projection %in% c("simpleconic","lambert","albers","trapezoidal")) {
+    if (!"lat0" %in% names(list(...)) || !"lat1" %in% names(list(...))) {
+      stop("The albers,lambert, ,and simpleconic projections require
            a lat0 and lat1 value")
     }
-    return(worldmap + coord_map( projection=projection, orientation=orientation,
-                                 ... , xlim=c(-180,180),ylim=c(-90,90)))
-  }else if(projection %in% c("bicentric","elliptic")){
-    if(!"lon0" %in% names(list(...))){
+    return(worldmap + coord_map(projection = projection,
+                                orientation = orientation,
+                                 ... ,
+                                xlim = c(-180,180),
+                                ylim = c(-90,90)))
+  } else if (projection %in% c("bicentric","elliptic")) {
+    if (!"lon0" %in% names(list(...))) {
       stop("The bicentric and elliptic projection require a lon0 value")
     }
-    return(worldmap + coord_map(projection=projection, orientation=orientation, 
-                                ..., xlim=c(-180,180),ylim=c(-90,90)))
+    return(worldmap +
+               coord_map(projection = projection,
+                         orientation = orientation,
+                         ...,
+                         xlim = c(-180,180),
+                         ylim = c(-90,90)))
     #need to fix the harrison and lune projections
     #   }else if(projection %in% c("harrison")){
     #           if(is.null(dist) || is.null(angle) ){
@@ -210,16 +238,16 @@ create_basemap <-function(mapdata, region, df, latcol, loncol, projection,
 #' utility function to check the validity of arguments
 #' @keywords internal
 check_names <- function(member, df, allownumeric=FALSE){
-  message <- paste(member, " variable must be a valid column name of a Phyloseq table",sep="")
+  message <- paste(member, " variable must be a valid column name of a Phyloseq table",sep = "")
   names   <- names(df)
-  if(!is.null(member)){
-    if(!allownumeric){
-      if(!member %in% names){
+  if (!is.null(member)) {
+    if (!allownumeric) {
+      if (!member %in% names) {
         stop(message)
       }
     } else {
-      if(!is.numeric(member)){
-        if(!member %in% names){
+      if (!is.numeric(member)) {
+        if (!member %in% names) {
           stop(message)
         }
       }
@@ -232,8 +260,8 @@ jitter_df <- function(df, xcol, ycol, jitter.x, jitter.y, seed){
   set.seed(seed) # setting the seed allows you to repeat your randomness
   df <- data.frame(df)
   dflength <- length(df[,1])
-  distx    <- runif(dflength, min= -jitter.x, max=jitter.x)
-  disty    <- runif(dflength, min= -jitter.y, max=jitter.y)
+  distx    <- runif(dflength, min = -jitter.x, max = jitter.x)
+  disty    <- runif(dflength, min = -jitter.y, max = jitter.y)
   df[xcol] <- df[,xcol] + distx
   df[ycol] <- df[,ycol] + disty
   df
@@ -245,22 +273,23 @@ check_NA <- function(df, col){
   if (is.factor(colvals)) colvals <- as.vector(colvals) #convert to vector
   colvals[ colvals == "None"] <- NA  #some data has "None" so be sure to replace with NA
   truth    <- lapply(colvals, is.na)
-  if( any(as.character(truth) == TRUE)){
-    warning(paste("Null Values in ",col, ", these rows will be removed.", sep=""))
-    df[[col]] <- colvals 
+  if (any(as.character(truth) == TRUE)) {
+    warning(paste("Null Values in ",col, ", these rows will be removed.", sep = ""))
+    df[[col]] <- colvals
     df <- df[ !is.na(df[col]), ]
   }
   df
 }
-#' make a columnnumeric
+#' make a column numeric
 #' @keywords internal
 coerce_numeric <- function(df, col){
-  df[col] <- lapply( lapply(df[col], as.character), as.numeric)
+  #df[[col]] <- lapply( lapply(df[[col]], as.character), as.numeric)
+  df[[col]] <- as.numeric(as.character(df[[col]]))
   df
 }
-#' Utility Function for Converting Distance Matrices to 
+#' Utility Function for Converting Distance Matrices to
 #' three column distances while removing all of the duplicates
-#' lifted/modified from here: 
+#' lifted/modified from here:
 #' https://github.com/joey711/phyloseq/blob/master/R/plot-methods.R
 #' @keywords internal
 dist_to_edge_table = function(Dist, dname = "dist"){
