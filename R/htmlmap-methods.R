@@ -131,20 +131,16 @@ htmlmap_phyloseq <- function(physeq, size = 5, color = "blue"){
 #' @examples
 #' htmlmap_network(mountainsoil)
 #' htmlmap_network(mountainsoil, maxdist=0.9)
-#'
 #' htmlmap_network(batmicrobiome, maxdist=0.5)
-#' ig <- make_network(batmicrobiome)
-#' htmlmap_network(batmicrobiome, igraph= ig)
 #' htmlmap_network(epoxamicin_KS, maxdist=0.99, line_color = "red",
 #'                 line_weight = 4, line_alpha=0.5)
 htmlmap_network <- function(physeq,
                             #distance related
-                            igraph=NULL,
                             maxdist=0.9,
                             distance="jaccard",
                             #linerelated
                             line_color ="black",
-                            line_alpha=0.4 ,
+                            line_alpha=0.4,
                             line_weight=1,
                             #point related
                             color="blue",
@@ -155,27 +151,17 @@ htmlmap_network <- function(physeq,
                             size=5,
                             rescale=TRUE){
     # Calculate Distance
-    if (inherits(distance, "dist")) {
-        # If distance a distance object, use it rather than re-calculate
-        Distance <- distance
-        # Check that it at least has (a subset of) the correct labels
-        if (!all(attributes(distance)$Labels %in% sample_names(physeq))) {
-            stop("Some or all `distance` index labels do not match sample names in `physeq`")
-            }
-    } else {
-        # Coerce to character and attempt distance calculation
-        scaled_distance = function(physeq, method, type, rescale){
-            Dist = distance(physeq, method, type)
-            if (rescale) {
-                # rescale the distance matrix to be [0, 1]
-                Dist <- Dist / max(Dist, na.rm = TRUE)
-                Dist <- Dist - min(Dist, na.rm = TRUE)
-            }
-            return(Dist)
-        }
-        distance <- as(distance[1], "character")
-        Distance = scaled_distance(physeq, distance, type="samples", rescale=rescale)
-    }
+#     scaled_distance = function(physeq, method, rescale=rescale){
+#         Dist = phyloseq::distance(physeq, method, type = "samples")
+#         if (rescale) {
+#             # rescale the distance matrix to be [0, 1]
+#             Dist <- Dist / max(Dist, na.rm = TRUE)
+#             Dist <- Dist - min(Dist, na.rm = TRUE)
+#         }
+#         return(Dist)
+#     }
+    #Distance = scaled_distance(physeq, distance)
+    Distance = phyloseq::distance(physeq, distance)
 
     #check basic physeq and lat/lon and make clusters
     physeqdata <- check_phyloseq(physeq)
@@ -206,7 +192,9 @@ htmlmap_network <- function(physeq,
             addPolylines(data = sdf,
                          lng = ~lng,
                          lat = ~lat,
-                         weight = ~distance)
+                         weight = ~distance*10,
+                         color = line_color,
+                         opacity = line_alpha)
       }
 
     #add points to map
@@ -215,6 +203,8 @@ htmlmap_network <- function(physeq,
                                     opacity = circle_alpha,
                                     fillOpacity = fillOpacity,
                                     popup = ~samplename)
+    #add legeng
+    #map <- map %>% addLegend()
     return(map)
 }
 
