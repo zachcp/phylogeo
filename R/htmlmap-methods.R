@@ -110,7 +110,7 @@ htmlmap_phyloseq <- function(physeq,
 #' @param fillColor (Optional). Default \code{color}.
 #'  Color to be used for filling in the circle
 #'
-#' @param size (Optional). Default \code{1}.
+#' @param size (Optional). Default \code{5}.
 #'  The size of the vertex points. If "Abundance" is supplied as the argument
 #'  the size will be scaled to the abundance of the OTUs in the sample.
 #'
@@ -154,7 +154,7 @@ htmlmap_network <- function(physeq,
                             fill = FALSE,
                             fillOpacity = 1,
                             fillColor = color,
-                            size=1){
+                            size=5){
   #helper functions to calculate membership in clusters or lines
   #############################################################################
   get_clusters <- function(num, graph=igraph){
@@ -245,11 +245,9 @@ htmlmap_network <- function(physeq,
   }
 
   #merge sample data with cluster data and get the line info
-  mdf <- merge(clustdf, data, by="row.names", all.x = TRUE)
+  mdf <- merge(clustdf, data, by = "row.names", all.x = TRUE)
   rownames(mdf) <- mdf$Row.names
   linedf <- get_lines(df = mdf)
-
-  print(linedf)
 
   #create map
   ############################################
