@@ -292,16 +292,19 @@ coerce_numeric <- function(df, col){
 #' lifted/modified from here:
 #' https://github.com/joey711/phyloseq/blob/master/R/plot-methods.R
 #' @keywords internal
-dist_to_edge_table = function(Dist, dname = "dist"){
+dist_to_edge_table = function(Dist, MaxDistance=NULL){
   dmat <- as.matrix(Dist)
   # Set duplicate entries and self-links to Inf
   dmat[upper.tri(dmat, diag = TRUE)] <- Inf
-  df_3col = reshape2::melt(dmat, as.is = TRUE)
+  distdf = reshape2::melt(dmat, as.is = TRUE)
   # Eliminate Inf Values (melt's third column is "value")
-  df_3col <- df_3col[is.finite(df_3col$value), ]
-  #change names
-  names(df_3col) <- c("Var1","Var2", dname)
-  return(df_3col)
+  distdf <- distdf[is.finite(distdf$value), ]
+  names(distdf) <- c("Var1","Var2", "distance")
+  # Remove entries above the threshold, MaxDistance
+  if (!is.null(MaxDistance)) {
+      distdf <- distdf[distdf$distance < MaxDistance, ]
+  }
+  return(distdf)
 }
 #' Utility Function for Converting Degrees to Radians
 #' @keywords internal

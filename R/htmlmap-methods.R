@@ -33,9 +33,7 @@
 #' htmlmap_phyloseq(mountainsoil, size=3)
 #' data(batmicrobiome)
 #' htmlmap_phyloseq(batmicrobiome, color="blue")
-htmlmap_phyloseq <- function(physeq,
-                             size = 5,
-                             color = "blue"){
+htmlmap_phyloseq <- function(physeq, size = 5, color = "blue"){
   #get data
   data = sample_data(physeq) %>%
       data.frame() %>%
@@ -154,84 +152,40 @@ htmlmap_network <- function(physeq,
                             fill = FALSE,
                             fillOpacity = 1,
                             fillColor = color,
-                            size=5){
-  #helper functions to calculate membership in clusters or lines
-  #############################################################################
-  get_clusters <- function(num, graph=igraph){
-    #get cluster membership info from igraph object
-    #from cluster with clusterid of 'num'
-    clusts  <- igraph::clusters(graph)
-    members <- which(clusts$membership == num) #get membership
-    names   <- get.vertex.attribute(graph, 'name', members)
-    df = data.frame(names)
-    df['cluster'] <- as.character(num)
-    rownames(df) <- df$names
-    df    #return a df with name/cluster columns
-  }
+                            size=5,
+                            rescale=TRUE){
 
-  get_lines <- function(graph=igraph, df=data){
-    #get each edge of the network and return a list of
-    #dataframes with the node info
-    getline_df <- function(i, l=links, df1=df){
-      #subset data frame using node info
-      temprow   <- l[i,]
-      tempnames <- c(temprow$from,temprow$to)
-      smalldf   <- df1[rownames(df1) %in% tempnames, ]
-      smalldf['link'] <- i
-      smalldf
+    #helper functions to calculate membership in clusters or lines
+    # from plot_net() https://github.com/joey711/phyloseq/blob/master/R/plot-methods.R
+    #############################################################################
+
+    # Calculate Distance
+    if (inherits(distance, "dist")) {
+        # If distance a distance object, use it rather than re-calculate
+        Distance <- distance
+        # Check that it at least has (a subset of) the correct labels
+        if (!all(attributes(distance)$Labels %in% sample_names(physeq))) {
+            stop("Some or all `distance` index labels do not match sample names in `physeq`")
+            }
+    } else {
+        # Coerce to character and attempt distance calculation
+        scaled_distance = function(physeq, method, type, rescale){
+            Dist = distance(physeq, method, type)
+            if (rescale) {
+                # rescale the distance matrix to be [0, 1]
+                Dist <- Dist / max(Dist, na.rm = TRUE)
+                Dist <- Dist - min(Dist, na.rm = TRUE)
+            }
+            return(Dist)
+        }
+        distance <- as(distance[1], "character")
+        Distance = scaled_distance(physeq, distance, type="samples", rescale=rescale)
     }
-
-    links <- get.data.frame(graph)
-    links_range <- seq( 1:dim(links)[1])
-    lines_dfs <- Map(getline_df, links_range)
-    lines_df <- Reduce(rbind, lines_dfs)
-    lines_df
-  }
-
-  addlines <- function(map, df, latcol, loncol){
-    #df must have link column dennoting belonging to the same line
-    lines = unique(df$link)
-    for (line in lines) {
-      #currently I add extra columns here so I can quote them below.
-      # it would be cleaner to call directly.
-      # I also have to make sure the columns are numeric
-      line_df <- df[df$link == line,]
-      line_df['LAT'] <- line_df[latcol]
-      line_df['LON'] <- line_df[loncol]
-      line_df$LON <- as.numeric(as.character(line_df$LON))
-      line_df$LAT <- as.numeric(as.character(line_df$LAT))
-
-      map %<>% addPolylines(data = line_df,
-                            lng  = ~LON,
-                            lat  = ~LAT,
-                            color = line_color,
-                            weight = line_weight,
-                            opacity = line_alpha,
-                            fill = fill,
-                            fillOpacity = fillOpacity,
-                            fillColor = fillColor)
-    }
-    return(map)
-  }
 
   ############################################################################
 
   #check basic physeq and lat/lon and make clusters
   physeqdata <- check_phyloseq(physeq)
-
-  #make network, get cluster information, and add to the  original dataframe.
-  if (is.null(igraph)) {
-    igraph <- make_network(physeq, max.dist = maxdist, distance = distance)
-  }else{
-    if (!"igraph" %in% class(igraph)) {
-      stop("igraph must be an igraph network object")}
-  }
-
-  #get clusters and make a dataframe from them
-  clusts <- seq(igraph::clusters(igraph)$no)
-  clustdf <- Reduce(rbind, Map(get_clusters, clusts))
-
-  #get sample data
   data <- physeqdata$sampledata %>% add_rownames(var = "samplename")
   rownames(data) <- data$samplename
 
@@ -244,27 +198,34 @@ htmlmap_network <- function(physeq,
       stop("Size can be a numeric value or the word 'Abundance' ")
   }
 
-  #merge sample data with cluster data and get the line info
-  mdf <- merge(clustdf, data, by = "row.names", all.x = TRUE)
-  rownames(mdf) <- mdf$Row.names
-  linedf <- get_lines(df = mdf)
+  # convert distances to lines
+  distdf = dist_to_edge_table(Distance, maxdist) %>%
+      edgetable_to_linedf(physeqdata = physeqdata)
 
-  #create map
+  #create base map
   ############################################
-  map = leaflet(mdf) %>%
-      addTiles() %>%
-      addlines(
-          df = linedf,
-          latcol = physeqdata$lat,
-          loncol = physeqdata$lng) %>%
-      addCircleMarkers(
+  map <- leaflet(data) %>% addTiles()
+
+  # add lines to map
+  for (g in unique(distdf$rowname)) {
+      sdf <- distdf[distdf$rowname == g, ]
+      map <- map %>%
+          addPolylines(data = sdf,
+                       lng = ~lng,
+                       lat = ~lat,
+                       weight = ~distance)
+  }
+
+  #add points
+  map <- map %>% addCircleMarkers(
           radius = ~circlesize,
-          color = makecolors(mdf, color),
+          color = makecolors(data, color),
           opacity = circle_alpha,
           fillOpacity = fillOpacity,
           popup = ~samplename)
   return(map)
 }
+
 #' makecolors
 #'
 #' handles the color values and passes correct values to leaflet
@@ -297,3 +258,64 @@ makecolors <- function(data, color){
     }
   }
 }
+
+#' Transform a three column distance matrix into a five column df for drawing lines.
+#'
+#' @keywords internal
+#'
+#' @import dplyr
+#' @importFrom assertthat assert_that
+edgetable_to_linedf <- function(distdf, physeqdata) {
+    #assertthat::assert_that(names(distdf) == c("Var1","Var2", "distance"))
+
+    # get sample/lat/lon data
+    sampledata <- physeqdata$sampledata %>%
+        select_( as.name(physeqdata$lat),
+                 as.name(physeqdata$lng)) %>%
+        add_rownames(var = "samplename")
+    names(sampledata) <- c("samplename","lat","lng")
+
+
+    # merge start and ends with lat/lon data
+    distdf <- distdf %>% add_rownames()
+
+    #join the starts and ends (Var1/Var2) from the distdf
+    start <- distdf %>% select(rowname, Var1, distance)
+    start <- merge(start, sampledata, by.x = "Var1", by.y="samplename") %>%
+        rename(samplename = Var1)
+    end <- distdf %>% select(rowname, Var2, distance)
+    end <- merge(end, sampledata, by.x = "Var2", by.y="samplename") %>%
+        rename(samplename = Var2)
+    distdf2 <- rbind(start, end)
+    return(distdf2)
+}
+
+
+
+# #'
+# #'
+# addlines <- function(map, df, latcol, loncol){
+#     #df must have link column dennoting belonging to the same line
+#     lines = unique(df$link)
+#     for (line in lines) {
+#         #currently I add extra columns here so I can quote them below.
+#         # it would be cleaner to call directly.
+#         # I also have to make sure the columns are numeric
+#         line_df <- df[df$link == line,]
+#         line_df['LAT'] <- line_df[latcol]
+#         line_df['LON'] <- line_df[loncol]
+#         line_df$LON <- as.numeric(as.character(line_df$LON))
+#         line_df$LAT <- as.numeric(as.character(line_df$LAT))
+#
+#         map %<>% addPolylines(data = line_df,
+#                               lng  = ~LON,
+#                               lat  = ~LAT,
+#                               color = line_color,
+#                               weight = line_weight,
+#                               opacity = line_alpha,
+#                               fill = fill,
+#                               fillOpacity = fillOpacity,
+#                               fillColor = fillColor)
+#     }
+#     return(map)
+# }
