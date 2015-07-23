@@ -154,11 +154,6 @@ htmlmap_network <- function(physeq,
                             fillColor = color,
                             size=5,
                             rescale=TRUE){
-
-    #helper functions to calculate membership in clusters or lines
-    # from plot_net() https://github.com/joey711/phyloseq/blob/master/R/plot-methods.R
-    #############################################################################
-
     # Calculate Distance
     if (inherits(distance, "dist")) {
         # If distance a distance object, use it rather than re-calculate
@@ -182,48 +177,45 @@ htmlmap_network <- function(physeq,
         Distance = scaled_distance(physeq, distance, type="samples", rescale=rescale)
     }
 
-  ############################################################################
+    #check basic physeq and lat/lon and make clusters
+    physeqdata <- check_phyloseq(physeq)
+    data <- physeqdata$sampledata %>% add_rownames(var = "samplename")
+    rownames(data) <- data$samplename
 
-  #check basic physeq and lat/lon and make clusters
-  physeqdata <- check_phyloseq(physeq)
-  data <- physeqdata$sampledata %>% add_rownames(var = "samplename")
-  rownames(data) <- data$samplename
+    #customize circle size
+    if (is.numeric(size)) {
+        data$circlesize <- size
+    } else if (size == "Abundance") {
+            data$circlesize <- phyloseq::sample_sums(physeq)
+    } else {
+          stop("Size can be a numeric value or the word 'Abundance' ")
+    }
 
-  #customize circle size
-  if (is.numeric(size)) {
-      data$circlesize <- size
-  } else if (size == "Abundance") {
-      data$circlesize <- phyloseq::sample_sums(physeq)
-  } else {
-      stop("Size can be a numeric value or the word 'Abundance' ")
-  }
+    # convert distances to lines
+    distdf = dist_to_edge_table(Distance, maxdist) %>%
+        edgetable_to_linedf(physeqdata = physeqdata)
 
-  # convert distances to lines
-  distdf = dist_to_edge_table(Distance, maxdist) %>%
-      edgetable_to_linedf(physeqdata = physeqdata)
+    #create base map
+    ############################################
+    map <- leaflet(data) %>% addTiles()
 
-  #create base map
-  ############################################
-  map <- leaflet(data) %>% addTiles()
+    # add lines to map
+    for (g in unique(distdf$rowname)) {
+        sdf <- distdf[distdf$rowname == g, ]
+        map <- map %>%
+            addPolylines(data = sdf,
+                         lng = ~lng,
+                         lat = ~lat,
+                         weight = ~distance)
+      }
 
-  # add lines to map
-  for (g in unique(distdf$rowname)) {
-      sdf <- distdf[distdf$rowname == g, ]
-      map <- map %>%
-          addPolylines(data = sdf,
-                       lng = ~lng,
-                       lat = ~lat,
-                       weight = ~distance)
-  }
-
-  #add points
-  map <- map %>% addCircleMarkers(
-          radius = ~circlesize,
-          color = makecolors(data, color),
-          opacity = circle_alpha,
-          fillOpacity = fillOpacity,
-          popup = ~samplename)
-  return(map)
+    #add points to map
+    map <- map %>% addCircleMarkers(radius = ~circlesize,
+                                    color = makecolors(data, color),
+                                    opacity = circle_alpha,
+                                    fillOpacity = fillOpacity,
+                                    popup = ~samplename)
+    return(map)
 }
 
 #' makecolors
@@ -258,64 +250,3 @@ makecolors <- function(data, color){
     }
   }
 }
-
-#' Transform a three column distance matrix into a five column df for drawing lines.
-#'
-#' @keywords internal
-#'
-#' @import dplyr
-#' @importFrom assertthat assert_that
-edgetable_to_linedf <- function(distdf, physeqdata) {
-    #assertthat::assert_that(names(distdf) == c("Var1","Var2", "distance"))
-
-    # get sample/lat/lon data
-    sampledata <- physeqdata$sampledata %>%
-        select_( as.name(physeqdata$lat),
-                 as.name(physeqdata$lng)) %>%
-        add_rownames(var = "samplename")
-    names(sampledata) <- c("samplename","lat","lng")
-
-
-    # merge start and ends with lat/lon data
-    distdf <- distdf %>% add_rownames()
-
-    #join the starts and ends (Var1/Var2) from the distdf
-    start <- distdf %>% select(rowname, Var1, distance)
-    start <- merge(start, sampledata, by.x = "Var1", by.y="samplename") %>%
-        rename(samplename = Var1)
-    end <- distdf %>% select(rowname, Var2, distance)
-    end <- merge(end, sampledata, by.x = "Var2", by.y="samplename") %>%
-        rename(samplename = Var2)
-    distdf2 <- rbind(start, end)
-    return(distdf2)
-}
-
-
-
-# #'
-# #'
-# addlines <- function(map, df, latcol, loncol){
-#     #df must have link column dennoting belonging to the same line
-#     lines = unique(df$link)
-#     for (line in lines) {
-#         #currently I add extra columns here so I can quote them below.
-#         # it would be cleaner to call directly.
-#         # I also have to make sure the columns are numeric
-#         line_df <- df[df$link == line,]
-#         line_df['LAT'] <- line_df[latcol]
-#         line_df['LON'] <- line_df[loncol]
-#         line_df$LON <- as.numeric(as.character(line_df$LON))
-#         line_df$LAT <- as.numeric(as.character(line_df$LAT))
-#
-#         map %<>% addPolylines(data = line_df,
-#                               lng  = ~LON,
-#                               lat  = ~LAT,
-#                               color = line_color,
-#                               weight = line_weight,
-#                               opacity = line_alpha,
-#                               fill = fill,
-#                               fillOpacity = fillOpacity,
-#                               fillColor = fillColor)
-#     }
-#     return(map)
-# }
