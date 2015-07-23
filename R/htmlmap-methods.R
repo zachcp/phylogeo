@@ -12,7 +12,7 @@
 #'  The name of the \code{\link[phyloseq]{phyloseq}} phyloseq object.
 #'  This must have sample data with Latitude and Longitude Columns.
 #'
-#' @param size (Optional). Default \code{NULL}.
+#' @param size (Optional). Default \code{5}.
 #'  The size of the vertex points."Abundance" is a special code that will scale
 #'  points by the number of reads in a sample
 #'
@@ -33,21 +33,29 @@
 #' htmlmap_phyloseq(mountainsoil, size=3)
 #' data(batmicrobiome)
 #' htmlmap_phyloseq(batmicrobiome, color="blue")
-htmlmap_phyloseq <- function(physeq, size=NULL, color="blue"){
+htmlmap_phyloseq <- function(physeq,
+                             size = 5,
+                             color = "blue"){
   #get data
-  data = sample_data(physeq)
+  data = sample_data(physeq) %>%
+      data.frame() %>%
+      add_rownames(var = "samplename")
 
   #customize circle size
-  if (!is.null(size)) {
-    if (size == "Abundance") data$circlesize <- phyloseq::sample_sums(physeq) else
-                             data$circlesize <- size
+  if (is.numeric(size)) {
+      data$circlesize <- size
+  } else if (size == "Abundance") {
+      data$circlesize <- phyloseq::sample_sums(physeq)
+  } else {
+      stop("Size can be a numeric value or the word 'Abundance' ")
   }
-  #basemap
-  map = leaflet(data) %>% addTiles()
 
-  #add custom circles
-  if (!is.null(size)) map %<>% addCircleMarkers(radius = ~circlesize, color = makecolors(data,color)) else
-                      map %<>% addCircles(color = makecolors(data,color))
+  #basemap
+  map = leaflet(data) %>%
+      addTiles() %>%
+      addCircleMarkers(radius = ~circlesize,
+                       color = makecolors(data,color),
+                       popup = ~samplename)
 
   return(map)
 }
@@ -208,6 +216,9 @@ htmlmap_network <- function(physeq,
 
   ############################################################################
 
+  #check basic physeq and lat/lon and make clusters
+  physeqdata <- check_phyloseq(physeq)
+
   #make network, get cluster information, and add to the  original dataframe.
   if (is.null(igraph)) {
     igraph <- make_network(physeq, max.dist = maxdist, distance = distance)
@@ -216,39 +227,44 @@ htmlmap_network <- function(physeq,
       stop("igraph must be an igraph network object")}
   }
 
-  #check basic physeq and lat/lon and make clusters
-  physeqdata <- check_phyloseq(physeq)
-
   #get clusters and make a dataframe from them
-  clusts <- seq( igraph::clusters(igraph)$no )
-  clustdf <- Reduce( rbind, Map(get_clusters, clusts))
+  clusts <- seq(igraph::clusters(igraph)$no)
+  clustdf <- Reduce(rbind, Map(get_clusters, clusts))
+
   #get sample data
-  data <- data.frame(sample_data(physeq))
+  data <- physeqdata$sampledata %>% add_rownames(var = "samplename")
+  rownames(data) <- data$samplename
 
-  #customize circle size prior to using the cluster
-  if (size == "Abundance") data$circlesize <- phyloseq::sample_sums(physeq) else
-                           data$circlesize <- size
+  #customize circle size
+  if (is.numeric(size)) {
+      data$circlesize <- size
+  } else if (size == "Abundance") {
+      data$circlesize <- phyloseq::sample_sums(physeq)
+  } else {
+      stop("Size can be a numeric value or the word 'Abundance' ")
+  }
 
-  #merge sample data with cluster data
-  mdf <- merge(clustdf, data, by = "row.names", all.x = TRUE)
+  #merge sample data with cluster data and get the line info
+  mdf <- merge(clustdf, data, by="row.names", all.x = TRUE)
   rownames(mdf) <- mdf$Row.names
+  linedf <- get_lines(df = mdf)
+
+  print(linedf)
 
   #create map
   ############################################
-  map = leaflet(mdf) %>% addTiles()
-
-
-  #addlines
-  linedf <- get_lines(df = mdf)
-
-  map <- addlines(map, linedf, physeqdata$lat, physeqdata$lng)
-
-  #add points
-  map %<>% addCircleMarkers(radius = ~circlesize,
-                            color = makecolors(mdf,color),
-                            opacity = circle_alpha,
-                            fillOpacity = fillOpacity)
-
+  map = leaflet(mdf) %>%
+      addTiles() %>%
+      addlines(
+          df = linedf,
+          latcol = physeqdata$lat,
+          loncol = physeqdata$lng) %>%
+      addCircleMarkers(
+          radius = ~circlesize,
+          color = makecolors(mdf, color),
+          opacity = circle_alpha,
+          fillOpacity = fillOpacity,
+          popup = ~samplename)
   return(map)
 }
 #' makecolors
