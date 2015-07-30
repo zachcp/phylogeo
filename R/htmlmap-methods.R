@@ -192,7 +192,7 @@ htmlmap_network <- function(physeq,
             addPolylines(data = sdf,
                          lng = ~lng,
                          lat = ~lat,
-                         weight = ~distance*10,
+                         weight = ~distance*5,
                          color = line_color,
                          opacity = line_alpha)
       }
@@ -203,9 +203,54 @@ htmlmap_network <- function(physeq,
                                     opacity = circle_alpha,
                                     fillOpacity = fillOpacity,
                                     popup = ~samplename)
-    #add legeng
-    #map <- map %>% addLegend()
+
+    pal <- colorBin(palette = "YlGnBu",
+                    domain = distdf$distance,
+                    bins = 5)
+
+    map <- map %>% addLegend("bottomright",
+                             pal = pal,
+                             values = ~distdf$distance,
+                             labels = c("Test Labels"),
+                             title = "Ecological Distance",
+                             opacity = 1)
     return(map)
+}
+
+#' add a geojson worldmap layer
+#'
+#' @import dplyr
+#' @import leaflet
+#'
+#' @param m  a Leaflet Map
+#' @param ... paramters to pass to \code{[leaflet] addGeoJSON}
+#'
+#' @return a Leaflet Map
+#'
+#' @export
+addWorld <- function(m, ...){
+    if (!require("phylogeo")) library("phylogeo")
+    worldjson <- paste0(path.package("phylogeo"),"/data/world-110m.json")
+    world <-  readLines(worldjson) %>% paste(collapse = "\n")
+    m %>% addGeoJSON(world, options = ...)
+}
+#' add a geojson NYC layer
+#'
+#' @import dplyr
+#' @import leaflet
+#'
+#' @param m  a Leaflet Map
+#' @param ... paramters to pass to \code{[leaflet] addGeoJSON} fro path sylting
+#'
+#' @return a Leaflet Map
+#'
+#' @export
+addNYC <- function(m, ... ){
+    if (!require("phylogeo")) library("phylogeo")
+    nycjson <- paste0(path.package("phylogeo"),"/data/nycboroughs.json")
+    nyc <-  readLines(nycjson) %>% paste(collapse = "\n")
+    m <- leaflet()
+    m %>% addGeoJSON(nyc, options = ...) %>% setView(lng = -73.97, lat = 40.72, zoom = 10)
 }
 
 #' makecolors
