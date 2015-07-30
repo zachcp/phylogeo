@@ -287,21 +287,55 @@ coerce_numeric <- function(df, col){
   df[[col]] <- as.numeric(as.character(df[[col]]))
   df
 }
+
+#' Transform a three column distance matrix into a five column df for drawing lines.
+#'
+#' @param distdf outputs from the degree_to_radian function
+#' @keywords internal
+#'
+#' @import dplyr
+edgetable_to_linedf <- function(distdf, physeqdata) {
+    #assertthat::assert_that(names(distdf) == c("Var1","Var2", "distance"))
+
+    # get sample/lat/lon data
+    sampledata <- physeqdata$sampledata %>%
+        select_( as.name(physeqdata$lat),
+                 as.name(physeqdata$lng)) %>%
+        add_rownames(var = "samplename")
+    names(sampledata) <- c("samplename","lat","lng")
+
+
+    # merge start and ends with lat/lon data
+    distdf <- distdf %>% add_rownames()
+
+    #join the starts and ends (Var1/Var2) from the distdf
+    start <- distdf %>% select(rowname, Var1, distance)
+    start <- merge(start, sampledata, by.x = "Var1", by.y="samplename") %>%
+        rename(samplename = Var1)
+    end <- distdf %>% select(rowname, Var2, distance)
+    end <- merge(end, sampledata, by.x = "Var2", by.y="samplename") %>%
+        rename(samplename = Var2)
+    distdf2 <- rbind(start, end)
+    return(distdf2)
+}
 #' Utility Function for Converting Distance Matrices to
 #' three column distances while removing all of the duplicates
 #' lifted/modified from here:
 #' https://github.com/joey711/phyloseq/blob/master/R/plot-methods.R
 #' @keywords internal
-dist_to_edge_table = function(Dist, dname = "dist"){
+dist_to_edge_table = function(Dist, MaxDistance=NULL){
   dmat <- as.matrix(Dist)
   # Set duplicate entries and self-links to Inf
   dmat[upper.tri(dmat, diag = TRUE)] <- Inf
-  df_3col = reshape2::melt(dmat, as.is = TRUE)
+  distdf = reshape2::melt(dmat, as.is = TRUE)
   # Eliminate Inf Values (melt's third column is "value")
-  df_3col <- df_3col[is.finite(df_3col$value), ]
-  #change names
-  names(df_3col) <- c("Var1","Var2", dname)
-  return(df_3col)
+  distdf <- distdf[is.finite(distdf$value), ]
+  names(distdf) <- c("Var1","Var2", "distance")
+  # Remove entries above the threshold, MaxDistance
+  if (!is.null(MaxDistance)) {
+      distdf <- distdf[distdf$distance < MaxDistance, ]
+  }
+  return(distdf)
 }
 #' Utility Function for Converting Degrees to Radians
 #' @keywords internal
