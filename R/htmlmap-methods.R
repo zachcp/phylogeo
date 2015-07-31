@@ -33,7 +33,7 @@
 #' htmlmap_phyloseq(mountainsoil, size=3)
 #' data(batmicrobiome)
 #' htmlmap_phyloseq(batmicrobiome, color="blue")
-htmlmap_phyloseq <- function(physeq, size = 5, color = "blue"){
+htmlmap_phyloseq <- function(physeq, size = 5, color = "blue", map = NULL) {
   #get data
   data = sample_data(physeq) %>%
       data.frame() %>%
@@ -49,14 +49,16 @@ htmlmap_phyloseq <- function(physeq, size = 5, color = "blue"){
   }
 
   #basemap
+  if (is.null(map)) map <- leaflet() %>% addTiles()
+
   map = leaflet(data) %>%
-      addTiles() %>%
       addCircleMarkers(radius = ~circlesize,
                        color = makecolors(data,color),
                        popup = ~samplename)
 
   return(map)
 }
+
 
 ################################################################################
 #' Create a Distance Network from Phyloseq Data and Draw An HTML Map of it.
@@ -135,6 +137,7 @@ htmlmap_phyloseq <- function(physeq, size = 5, color = "blue"){
 #' htmlmap_network(epoxamicin_KS, maxdist=0.99, line_color = "red",
 #'                 line_weight = 4, line_alpha=0.5)
 htmlmap_network <- function(physeq,
+                            map = NULL,
                             #distance related
                             maxdist=0.9,
                             distance="jaccard",
@@ -183,7 +186,9 @@ htmlmap_network <- function(physeq,
 
     #create base map
     ############################################
-    map <- leaflet(data) %>% addTiles()
+    if (is.null(map)) map <- leaflet() %>% addTiles()
+
+    map <- leaflet(data)
 
     # add lines to map
     for (g in unique(distdf$rowname)) {
