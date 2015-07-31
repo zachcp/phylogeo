@@ -49,10 +49,12 @@ htmlmap_phyloseq <- function(physeq, size = 5, color = "blue", map = NULL) {
   }
 
   #basemap
-  if (is.null(map)) map <- leaflet() %>% addTiles()
+  if (is.null(map))  map <- leaflet() %>% addTiles()
 
-  map = leaflet(data) %>%
-      addCircleMarkers(radius = ~circlesize,
+
+  map <- map %>%
+      addCircleMarkers(data = data,
+                       radius = ~circlesize,
                        color = makecolors(data,color),
                        popup = ~samplename)
 
@@ -186,9 +188,9 @@ htmlmap_network <- function(physeq,
 
     #create base map
     ############################################
-    if (is.null(map)) map <- leaflet() %>% addTiles()
+    if (is.null(map)) map <- leaflet(data) %>% addTiles()
 
-    map <- leaflet(data)
+    map <- leaflet()
 
     # add lines to map
     for (g in unique(distdf$rowname)) {
@@ -203,7 +205,8 @@ htmlmap_network <- function(physeq,
       }
 
     #add points to map
-    map <- map %>% addCircleMarkers(radius = ~circlesize,
+    map <- map %>% addCircleMarkers(data = data,
+                                    radius = ~circlesize,
                                     color = makecolors(data, color),
                                     opacity = circle_alpha,
                                     fillOpacity = fillOpacity,
