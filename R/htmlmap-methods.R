@@ -190,8 +190,6 @@ htmlmap_network <- function(physeq,
     ############################################
     if (is.null(map)) map <- leaflet(data) %>% addTiles()
 
-    map <- leaflet()
-
     # add lines to map
     for (g in unique(distdf$rowname)) {
         sdf <- distdf[distdf$rowname == g, ]
