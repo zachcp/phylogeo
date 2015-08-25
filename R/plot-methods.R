@@ -45,11 +45,13 @@ plot_distance <- function(physeq, distancemethod="jaccard"){
     geodistances <- spDists(df2, longlat = TRUE)
     colnames(geodistances)  <- row.names(df2)
     row.names(geodistances) <- row.names(df2)
-    geodistances <- dist_to_edge_table(geodistances, dname = "geodist")
+    geodistances <- dist_to_edge_table(geodistances)
+    names(geodistances) <- c("Var1","Var2","geodist")
 
     #get ecologicaldistances
     ecodistance <- distance(physeq, method = distancemethod)
-    ecodistance <- dist_to_edge_table(ecodistance, dname = "ecodist" )
+    ecodistance <- dist_to_edge_table(ecodistance)
+    names(ecodistance) <- c("Var1","Var2","ecodist")
 
     #make mergeable names for the two distance functions and merge
     concatvals <- function(x,y){ return(paste(x,"_",y,sep = ""))}
@@ -58,7 +60,7 @@ plot_distance <- function(physeq, distancemethod="jaccard"){
     df <- merge(geodistances, ecodistance, by = "pairs")
 
     #make the plot
-    p <- ggplot(df, aes(y = ecodist,x = geodist)) +
+    p <- ggplot(df, aes(y = ecodist, x = geodist)) +
          geom_point() +
          xlab("Km") +
          ylab(distancemethod) +
