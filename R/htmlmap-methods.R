@@ -136,8 +136,7 @@ htmlmap_phyloseq <- function(physeq, size = 5, color = "blue", map = NULL) {
 #' htmlmap_network(mountainsoil)
 #' htmlmap_network(mountainsoil, maxdist=0.9)
 #' htmlmap_network(batmicrobiome, maxdist=0.5)
-#' htmlmap_network(epoxamicin_KS, maxdist=0.99, line_color = "red",
-#'                 line_weight = 4, line_alpha=0.5)
+#' htmlmap_network(epoxomicin_KS, maxdist=0.99, line_color = "red",line_alpha=0.5)
 htmlmap_network <- function(physeq,
                             map = NULL,
                             #distance related
@@ -190,6 +189,10 @@ htmlmap_network <- function(physeq,
     ############################################
     if (is.null(map)) map <- leaflet(data) %>% addTiles()
 
+    # calculate the bins for the labels
+    distdf$lineweight <- cut(distdf$distance, breaks = 5, labels = rev(seq(5)))
+    distdf$lineweight <- as.numeric(as.character(distdf$lineweight))
+
     # add lines to map
     for (g in unique(distdf$rowname)) {
         sdf <- distdf[distdf$rowname == g, ]
@@ -197,7 +200,7 @@ htmlmap_network <- function(physeq,
             addPolylines(data = sdf,
                          lng = ~lng,
                          lat = ~lat,
-                         weight = ~distance*5,
+                         weight = ~lineweight*2,
                          color = line_color,
                          opacity = line_alpha)
       }
