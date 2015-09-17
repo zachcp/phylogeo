@@ -1,40 +1,3 @@
-#' check phyloseq
-#'
-#' function to check phyloseq data for lat non columns and NA values
-#' return a list contiang the lat and lon columnnames and the sampledata
-#'
-#' @keywords internal
-#' @import dplyr
-check_phyloseq <- function(physeq){
-
-    #check phyloseq objects for Lat/Lon
-    if (!"sam_data" %in% phyloseq::getslots.phyloseq(physeq)) {
-        stop("Mapping requires that phyloseq objects have Sample_Data with Latitude
-             and Longitude")
-    }
-
-    #get lat/long
-    #' From Rstudio/leaflet/R/normalize.R
-    #' https://github.com/rstudio/leaflet/blob/4ef0023c9fefa00a64e382ccd77d34d1413c47dc/R/normalize.R
-    sampledata <- data.frame(sample_data(physeq))
-    sdfnames <- names(sampledata)
-    lats = sdfnames[grep("^(lat|latitude)$", sdfnames, ignore.case = TRUE)]
-    lngs = sdfnames[grep("^(lon|lng|long|longitude)$", sdfnames, ignore.case = TRUE)]
-
-    if (!(length(lats) == 1 && length(lngs) == 1)) stop("Couldn't infer longitude/latitude columns")
-
-    #get sample data info
-    sampledata <- sampledata %>%
-        check_NA(lats) %>%
-        check_NA(lngs) %>%
-        coerce_numeric(lats) %>%
-        coerce_numeric(lngs)
-
-    return(list(lat = lats,
-                lng = lngs,
-                sampledata = sampledata))
-}
-
 #
 # A set of functions used by map and plot functions to test for validity of data
 #
@@ -264,27 +227,6 @@ jitter_df <- function(df, xcol, ycol, jitter.x, jitter.y, seed){
   disty    <- runif(dflength, min = -jitter.y, max = jitter.y)
   df[xcol] <- df[,xcol] + distx
   df[ycol] <- df[,ycol] + disty
-  df
-}
-#' check for NAs.
-#' @keywords internal
-check_NA <- function(df, col){
-  colvals <- df[[col]]
-  if (is.factor(colvals)) colvals <- as.vector(colvals) #convert to vector
-  colvals[ colvals == "None"] <- NA  #some data has "None" so be sure to replace with NA
-  truth    <- lapply(colvals, is.na)
-  if (any(as.character(truth) == TRUE)) {
-    warning(paste("Null Values in ",col, ", these rows will be removed.", sep = ""))
-    df[[col]] <- colvals
-    df <- df[ !is.na(df[col]), ]
-  }
-  df
-}
-#' make a column numeric
-#' @keywords internal
-coerce_numeric <- function(df, col){
-  #df[[col]] <- lapply( lapply(df[[col]], as.character), as.numeric)
-  df[[col]] <- as.numeric(as.character(df[[col]]))
   df
 }
 

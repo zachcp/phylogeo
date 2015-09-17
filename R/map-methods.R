@@ -108,12 +108,11 @@ map_phyloseq <- function(physeq,
                          orientation=NULL,
                          seed=1234,
                          ...) {
-  #check basic physeq and lat/lon
-  physeqdata <- check_phyloseq(physeq)
-  #print(physeqdata$sampledata)
+  #convert to phylogeo
+  phygeo <- phylogeo(physeq)
 
   #check plot options. "Abundance" is a special method for plotting by size
-  check_names(color, physeqdata$sampledata)
+  check_names(color, sample_data(phygeo))
 
   if (!size == "Abundance") check_names(size,data, allownumeric = TRUE)
 
@@ -121,17 +120,17 @@ map_phyloseq <- function(physeq,
   #############################################################################
   worldmap <- create_basemap(mapdata = mapdata,
                              region = region,
-                             df = physeqdata$sampledata,
-                             latcol = physeqdata$lat,
-                             loncol = physeqdata$lng,
+                             df = sample_data(phygeo),
+                             latcol = phygeo@latitude,
+                             loncol = phygeo@longitude,
                              projection = projection,
                              orientation = orientation,...)
 
   if (jitter) {
     set.seed(seed)
-    data <- jitter_df(df = physeqdata$sampledata,
-                      xcol = physeqdata$lng,
-                      ycol = physeqdata$lat,
+    data <- jitter_df(df = sample_data(phygeo),
+                      xcol = phygeo@longitude,
+                      ycol = phygeo@latitude,
                       jitter.x = jitter.x,
                       jitter.y = jitter.y,
                       seed = seed)
@@ -141,9 +140,9 @@ map_phyloseq <- function(physeq,
   # per-sample (inside of aes)
   if (is.numeric(size)) {
     worldmap <- worldmap +
-        geom_point(data = physeqdata$sampledata,
-                   aes_string(x = physeqdata$lng,
-                       y = physeqdata$lat,
+        geom_point(data = sample_data(phygeo),
+                   aes_string(x = phygeo@longitude,
+                       y = phygeo@latitude,
                        group = NULL,
                        color = color),
                    size = size,
@@ -151,20 +150,20 @@ map_phyloseq <- function(physeq,
   } else if (size == "Abundance") {
     reads <- data.frame(sample_sums(physeq))
     names(reads) <- "Abundance"
-    data2 <- merge(physeqdata$sampledata, reads, by = "row.names")
+    data2 <- merge(sample_data(phygeo), reads, by = "row.names")
     worldmap <- worldmap +
         geom_point(data = data2,
-                   aes_string(x = physeqdata$lng,
-                              y = physeqdata$lat,
+                   aes_string(x = phygeo@longitude,
+                              y = phygeo@latitude,
                               group = NULL,
                               color = color,
                               size = "Abundance"),
                    alpha = alpha)
   }else{
     worldmap <- worldmap +
-        geom_point(data = physeqdata$sampledata,
-                   aes_string(x = physeqdata$lng,
-                              y = physeqdata$lat,
+        geom_point(data = sample_data(phygeo),
+                   aes_string(x = phygeo@longitude,
+                              y = phygeo@latitude,
                               group = NULL,
                               color = color,
                               size = size),
@@ -358,8 +357,8 @@ map_network <- function(physeq,
 
     #####################################
 
-  #check basic physeq and lat/lon
-  physeqdata <- check_phyloseq(physeq)
+  #convert to phylogeo
+  phygeo <- phylogeo(physeq)
 
   # make network, get cluster information, and add thamesat to the
   # original dataframe.
@@ -371,7 +370,7 @@ map_network <- function(physeq,
   }
   clusts <- seq(igraph::clusters(igraph)$no)
   clustdf <- Reduce( rbind, Map(get_clusters, clusts))
-  mdf <- merge(clustdf, physeqdata$sampledata, by = "row.names", all.x = TRUE)
+  mdf <- merge(clustdf, sample_data(phygeo), by = "row.names", all.x = TRUE)
   rownames(mdf) <- mdf$Row.names
 
   #check plot options
@@ -383,8 +382,8 @@ map_network <- function(physeq,
   worldmap <- create_basemap(mapdata = mapdata,
                              region = region,
                              df = mdf,
-                             latcol = physeqdata$lat,
-                             loncol = physeqdata$lng,
+                             latcol = phygeo@latitude,
+                             loncol = phygeo@longitude,
                              projection = projection,
                              orientation = orientation,
                              ...)
@@ -392,8 +391,8 @@ map_network <- function(physeq,
   #modify points if using jitter
   if (jitter) {
     mdf <- jitter_df(df = mdf,
-                     xcol = physeqdata$lng,
-                     ycol = physeqdata$lat,
+                     xcol = phygeo@longitude,
+                     ycol = phygeo@latitude,
                      jitter.x = jitter.x,
                      jitter.y = jitter.y,
                      seed = seed)
@@ -405,8 +404,8 @@ map_network <- function(physeq,
     nonetworkdf <- data[!rownames(data) %in% network_points, ]
     worldmap <- worldmap +
         geom_point(data = nonetworkdf,
-                   aes_string(x = physeqdata$lng,
-                              y = physeqdata$lat,
+                   aes_string(x = phygeo@longitude,
+                              y = phygeo@latitude,
                               group = NULL),
                    color = base_data_color,
                    size = size)
@@ -417,8 +416,8 @@ map_network <- function(physeq,
     linedf <- get_lines(df = mdf)
     worldmap <- worldmap +
       geom_line(data = linedf,
-                aes_string(x = physeqdata$lng,
-                           y = physeqdata$lat,
+                aes_string(x = phygeo@longitude,
+                           y = phygeo@latitude,
                            group = "link"),
                 size = line_weight,
                 alpha = line_alpha,
@@ -432,16 +431,16 @@ map_network <- function(physeq,
     points <- geom_point(data = mdf,
                          size = size,
                          alpha = alpha,
-                         aes_string(x = physeqdata$lng,
-                                    y = physeqdata$lat,
+                         aes_string(x = phygeo@longitude,
+                                    y = phygeo@latitude,
                                     group = NULL,
                                     color = color,
                                     shape = shape))
   } else {
     points <- geom_point(data = mdf,
                          alpha = alpha,
-                         aes_string(x = physeqdata$lng,
-                                    y = physeqdata$lat,
+                         aes_string(x = phygeo@longitude,
+                                    y = phygeo@latitude,
                                     group = NULL,
                                     color = color,
                                     size = size,

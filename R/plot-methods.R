@@ -35,11 +35,13 @@
 #' data(mountainsoil)
 #' plot_distance(mountainsoil)
 plot_distance <- function(physeq, distancemethod="jaccard"){
-    physeqdata <- check_phyloseq(physeq)
+    #convert to phylogeo
+    phygeo <- phylogeo(physeq)
 
     #get bigcircle distances using spDists
     #spDists expects the first column to be longitude
-    df2 <- physeqdata$sampledata[ c(physeqdata$lng, physeqdata$lat) ]
+    df <- data.frame(sample_data(phygeo))
+    df2 <- df[ c(phygeo@longitude, phygeo@latitude) ]
     names(df2) <- c("lon", "lat")
     df2 <- as.matrix(df2)
     geodistances <- spDists(df2, longlat = TRUE)
