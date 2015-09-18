@@ -17,8 +17,7 @@ Imports:
     maps (>= 2.3),
     mapdata (>= 2.2),
     leaflet (>= 1.0),
-    ggplot2 (>= 1.0.0),
-    dplyr (>= 0.4),
+    dplyr (>= 0.4.3),
     cowplot (>= 0.5.0),
     ggplot2 (>= 1.0.0)
 Depends:
