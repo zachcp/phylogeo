@@ -1,3 +1,6 @@
+#0.99.6.2
+refactor. create a phylogeo class that handles data conversion/verification. No change to API.
+
 #0.99.6.1
 leaflet is now on CRAN. remove the hacks around importing it.
 new documentation on gh-pages based on RStudio's leaflet page.
