@@ -14,7 +14,7 @@ Imports:
     ape (>= 3.2),
     phyloseq (>= 1.9.13),
     mapproj (>= 1.2),
-    maps (>= 2.3),
+    maps (>= 3.0),
     mapdata (>= 2.2),
     leaflet (>= 1.0),
     dplyr (>= 0.4.3),
