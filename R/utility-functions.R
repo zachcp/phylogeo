@@ -233,16 +233,19 @@ jitter_df <- function(df, xcol, ycol, jitter.x, jitter.y, seed){
 #' Transform a three column distance matrix into a five column df for drawing lines.
 #'
 #' @param distdf outputs from the degree_to_radian function
+#' @param phyge a phylogeo object
+#'
 #' @keywords internal
 #'
 #' @import dplyr
-edgetable_to_linedf <- function(distdf, physeqdata) {
+edgetable_to_linedf <- function(distdf, phygeo) {
     #assertthat::assert_that(names(distdf) == c("Var1","Var2", "distance"))
 
     # get sample/lat/lon data
-    sampledata <- physeqdata$sampledata %>%
-        select_( as.name(physeqdata$lat),
-                 as.name(physeqdata$lng)) %>%
+    sampledata <- phygeo@sam_data %>%
+        data.frame() %>%
+        select_( as.name(phygeo@latitude),
+                 as.name(phygeo@longitude)) %>%
         add_rownames(var = "samplename")
     names(sampledata) <- c("samplename","lat","lng")
 

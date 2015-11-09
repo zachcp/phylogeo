@@ -168,8 +168,10 @@ htmlmap_network <- function(physeq,
     Distance = phyloseq::distance(physeq, distance)
 
     #check basic physeq and lat/lon and make clusters
-    physeqdata <- check_phyloseq(physeq)
-    data <- physeqdata$sampledata %>% add_rownames(var = "samplename")
+
+    #convert to phylogeo
+    phygeo <- phylogeo(physeq)
+    data <- phygeo@sam_data %>% add_rownames(var = "samplename")
     rownames(data) <- data$samplename
 
     #customize circle size
@@ -183,7 +185,7 @@ htmlmap_network <- function(physeq,
 
     # convert distances to lines
     distdf = dist_to_edge_table(Distance, maxdist) %>%
-        edgetable_to_linedf(physeqdata = physeqdata)
+        edgetable_to_linedf(phyge = phygeo)
 
     #create base map
     ############################################
