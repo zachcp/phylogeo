@@ -208,6 +208,7 @@ htmlmap_phyloseq(epoxomicin_KS)</code></pre>
   "evals": []
 }</script></p>
 <pre class="r"><code>htmlmap_phyloseq(epoxomicin_KS, size=&quot;Abundance&quot;)</code></pre>
+<pre><code>## Assuming &#39;Longitude&#39; and &#39;Latitude&#39; are longitude and latitude, respectively</code></pre>
 <p><div id="htmlwidget-5020" style="width:100%;height:240px;" class="leaflet"></div>
 <script type="application/json" data-for="htmlwidget-5020">{
   "x": {
@@ -278,8 +279,9 @@ htmlmap_phyloseq(epoxomicin_KS)</code></pre>
 }</script></p>
 <pre class="r"><code># customize maps with leaflet
 library(leaflet)
-m &lt;- htmlmap_phyloseq(epoxomicin_KS)
-m %&gt;% addProviderTiles(&quot;Acetate.terrain&quot;)</code></pre>
+m &lt;- htmlmap_phyloseq(epoxomicin_KS)</code></pre>
+<pre><code>## Assuming &#39;Longitude&#39; and &#39;Latitude&#39; are longitude and latitude, respectively</code></pre>
+<pre class="r"><code>m %&gt;% addProviderTiles(&quot;Acetate.terrain&quot;)</code></pre>
 <p><div id="htmlwidget-6771" style="width:100%;height:240px;" class="leaflet"></div>
 <script type="application/json" data-for="htmlwidget-6771">{
   "x": {
@@ -371,7 +373,7 @@ m %&gt;% addProviderTiles(&quot;Acetate.terrain&quot;)</code></pre>
 <p>The goal of the map_network function is to visualize the relatedness of ecological samples. It does this using the same technique in phyloseq’s plot_net and plot_network functions, namely, it will calculate an ecological distance between samples. Instead of using a network layout algorithm, however, phylogeo will place points by their geographic location. If the points are crowded, they can be jittered to space them apart. A number of configuration options are available to control the appearance of the points and lines.</p>
 <pre class="r"><code>#simple network map without lines 
 map_network(batmicrobiome)</code></pre>
-<p><img src="mapping_functions_files/figure-html/unnamed-chunk-4-1.png" title="" alt="" width="100%" /></p>
+<p><img src="mapping_functions_files/figure-html/unnamed-chunk-6-1.png" title="" alt="" width="100%" /></p>
 <pre class="r"><code>#connect samples and visualize connections</code></pre>
 <p>One current downside to the current mapping setup is that the region keyword only works on country names and cannot zoom to, say “the western hemisphere”. In this example the result is a lot of dead space. For figures you would want to ggsave a PDF/SVG and zoom to your region of interest. Down the line a more nuanced mapping system might be considered.</p>
 </div>
@@ -21129,10 +21131,10 @@ htmlmap_network(batmicrobiome)</code></pre>
 <p>The goal of map_tree is to provide access to both phylogenetic and geographic information in one place. To be useful, the data may need to be pared back to relatively small number of OTUs/samples.</p>
 <pre class="r"><code>#simple map + tree
 map_tree(epoxomicin_KS)</code></pre>
-<p><img src="mapping_functions_files/figure-html/unnamed-chunk-6-1.png" title="" alt="" width="100%" /></p>
+<p><img src="mapping_functions_files/figure-html/unnamed-chunk-8-1.png" title="" alt="" width="100%" /></p>
 <pre class="r"><code>#color the map to see locations
 map_tree(epoxomicin_KS, color=&quot;Geotype&quot;, jitter=TRUE, size=2, ladderize=TRUE)</code></pre>
-<p><img src="mapping_functions_files/figure-html/unnamed-chunk-6-2.png" title="" alt="" width="100%" /></p>
+<p><img src="mapping_functions_files/figure-html/unnamed-chunk-8-2.png" title="" alt="" width="100%" /></p>
 <pre class="r"><code>#trim samples and locations</code></pre>
 </div>
 <div id="map_clusters" class="section level3">
@@ -21140,7 +21142,7 @@ map_tree(epoxomicin_KS, color=&quot;Geotype&quot;, jitter=TRUE, size=2, ladderiz
 <p>map_clusters provides a way to explore the spatial distribution of subsets of your data. From your phylogentic tree (required), a distance matrix is used to make a kmeans calculation which will cluster your tree into k number of clusters. The members of these clusters will then be displayed on the map.</p>
 <pre class="r"><code>#clustered trees plus maps
 map_clusters(epoxomicin_KS, clusternum=4)</code></pre>
-<p><img src="mapping_functions_files/figure-html/unnamed-chunk-7-1.png" title="" alt="" width="100%" /></p>
+<p><img src="mapping_functions_files/figure-html/unnamed-chunk-9-1.png" title="" alt="" width="100%" /></p>
 </div>
 
 <footer>

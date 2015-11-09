@@ -21,7 +21,13 @@ map_phyloseq(mountainsoil, region="china", jitter=TRUE, jitter.x=2,jitter.y=2, c
 ```{r, message=FALSE, warning=FALSE}
 #interactive map
 htmlmap_phyloseq(epoxomicin_KS)
+```
+
+```{r}
 htmlmap_phyloseq(epoxomicin_KS, size="Abundance")
+```
+
+```{r}
 # customize maps with leaflet
 library(leaflet)
 m <- htmlmap_phyloseq(epoxomicin_KS)
