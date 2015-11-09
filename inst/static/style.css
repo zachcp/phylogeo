@@ -1,0 +1,55 @@
+.state-boundary {
+  fill: none;
+  stroke: #fff;
+}
+
+.stroke {
+  fill: none;
+  stroke: #000;
+  stroke-width: 3px;
+}
+
+.fill {
+  fill: #fff;
+}
+
+.bubble {
+  fill: brown;
+  fill-opacity: .5;
+  stroke: #fff;
+  stroke-width: .5px;
+}
+.bubble :hover {
+  stroke: #000;
+}
+
+.graticule {
+  fill: none;
+  stroke: #777;
+  stroke-width: .5px;
+  stroke-opacity: .5;
+}
+
+.legend circle {
+  fill: none;
+  stroke: #ccc;
+}
+
+.legend text {
+  fill: #777;
+  font: 10px sans-serif;
+  text-anchor: middle;
+}
+
+
+.land {
+  fill: LightGray;
+  fill-opacity:1;
+}
+
+.boundary {
+  fill: none;
+  stroke: #fff;
+  stroke-width: .1px;
+}
+

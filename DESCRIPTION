@@ -19,7 +19,9 @@ Imports:
     leaflet (>= 1.0),
     dplyr (>= 0.4.3),
     cowplot (>= 0.5.0),
-    ggplot2 (>= 1.0.0)
+    ggplot2 (>= 1.0.0),
+    httpuv,
+    htmltools
 Depends:
     R (>= 3.0)
 Suggests:
@@ -32,3 +34,4 @@ VignetteBuilder: knitr
 BugReports: https://github.com/zachcp/phylogeo/issues
 biocViews: Sequencing, Microbiome, Metagenomics
 LazyData: true
+RoxygenNote: 5.0.1
