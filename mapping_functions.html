@@ -23,6 +23,8 @@
 <script src="libs/leaflet/leaflet.js"></script>
 <link href="libs/leafletfix/leafletfix.css" rel="stylesheet" />
 <script src="libs/leaflet-binding/leaflet.js"></script>
+<script src="libs/leaflet-providers/leaflet-providers.js"></script>
+<script src="libs/leaflet-providers-plugin/leaflet-providers-plugin.js"></script>
 
 <style type="text/css">code{white-space: pre;}</style>
 <link rel="stylesheet"
@@ -274,6 +276,95 @@ htmlmap_phyloseq(epoxomicin_KS)</code></pre>
   },
   "evals": []
 }</script></p>
+<pre class="r"><code># customize maps with leaflet
+library(leaflet)
+m &lt;- htmlmap_phyloseq(epoxomicin_KS)
+m %&gt;% addProviderTiles(&quot;Acetate.terrain&quot;)</code></pre>
+<p><div id="htmlwidget-6771" style="width:100%;height:240px;" class="leaflet"></div>
+<script type="application/json" data-for="htmlwidget-6771">{
+  "x": {
+    "calls": [
+      {
+        "method": "addTiles",
+        "args": [
+          "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+          null,
+          null,
+          {
+            "minZoom": 0,
+            "maxZoom": 18,
+            "maxNativeZoom": null,
+            "tileSize": 256,
+            "subdomains": "abc",
+            "errorTileUrl": "",
+            "tms": false,
+            "continuousWorld": false,
+            "noWrap": false,
+            "zoomOffset": 0,
+            "zoomReverse": false,
+            "opacity": 1,
+            "zIndex": null,
+            "unloadInvisibleTiles": null,
+            "updateWhenIdle": null,
+            "detectRetina": false,
+            "reuseTiles": false,
+            "attribution": "&copy; <a href=\"http://openstreetmap.org\">OpenStreetMap</a> contributors, <a href=\"http://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>"
+          }
+        ]
+      },
+      {
+        "method": "addCircleMarkers",
+        "args": [
+          [0, 0, 34.21755, 35.04198, 34.39214, 34.33726, 34.16685, 33.28233, 33.20114, 33.11647, 33.40036, 31.96724, 31.95468, 32.22389, 32.22389, 33.36074, 32.229806, 0, -21.692417, -21.72755, -21.726917, -21.7225, 10.6798, 30.305, 19.831667, 19.8185, 0, 0, 21.294983, 21.39065, 21.682717, 21.3609, 34.51897, 35.849327, 29.056074, 43.71785, 44.22283, 44.60818, 0, 31.78799, 32.550983, 32.897472, 34.351912, 34.849193, 35.20139, 35.515806, 35.843316, 36.208213, 36.266537, 36.330232, 34.494071, 36.683192, 36.995935, 36.356589, 41.79189, 41.75281, -29.830012, -29.5434, 0],
+          [0, 0, -109.22896, -110.38687, -111.45026, -111.54618, -112.06871, -111.28156, -111.40992, -111.51023, -111.41787, -111.09028, -110.91076, -111.01674, -111.10163, -112.18619, -108.083212, 0, -47.60855, -47.649933, -47.611, -47.596717, -83.79978, 120.085167, -70.725167, -70.723167, 0, 0, -157.660633, -157.748233, -157.953017, -157.805817, -105.87574, -106.699868, 77.354816, -70.0026, -69.04369, -67.39812, 0, -106.681299, -106.920216, -107.311575, -106.881421, -106.726914, -106.54953, -106.22414, -105.989859, -105.960028, -105.794279, -105.673837, -105.635306, -105.510598, -105.522159, -105.607623, -74.30701, -74.09241, 31.022862, 30.5535, 0],
+          [5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5],
+          null,
+          null,
+          {
+            "lineCap": null,
+            "lineJoin": null,
+            "clickable": true,
+            "pointerEvents": null,
+            "className": "",
+            "stroke": true,
+            "color": "blue",
+            "weight": 5,
+            "opacity": 0.5,
+            "fill": true,
+            "fillColor": "blue",
+            "fillOpacity": 0.2,
+            "dashArray": null
+          },
+          null,
+          null,
+          ["AB", "AR", "AZ03", "AZ06", "AZ10", "AZ13", "AZ15", "AZ16", "AZ18", "AZ20", "AZ23", "AZ24", "AZ25", "AZ26", "AZ27", "AZ32", "AZ52", "BCW", "BR05", "BR08", "BR10", "BR11", "BR13617", "CH03", "DR05", "DR07", "EPX", "Epn", "HI01", "HI02", "HI03", "HI05", "HS02", "HS06", "IN03", "NE11", "NE12", "NE17", "NM", "NM01", "NM03", "NM04", "NM07", "NM08", "NM09", "NM10", "NM11", "NM12", "NM13", "NM14", "NM17", "NM19", "NM20", "NM21", "NY02", "NY07", "SA05", "SA07", "SAL"]
+        ]
+      },
+      {
+        "method": "addProviderTiles",
+        "args": [
+          "Acetate.terrain",
+          null,
+          null,
+          {
+            "errorTileUrl": "",
+            "noWrap": false,
+            "zIndex": null,
+            "unloadInvisibleTiles": null,
+            "updateWhenIdle": null,
+            "detectRetina": false,
+            "reuseTiles": false
+          }
+        ]
+      }
+    ],
+    "limits": {
+      "lat": [-29.830012, 44.60818],
+      "lng": [-157.953017, 120.085167]
+    }
+  },
+  "evals": []
+}</script></p>
 </div>
 <div id="map_network" class="section level3">
 <h3>map_network</h3>
@@ -288,8 +379,8 @@ map_network(batmicrobiome)</code></pre>
 <h3>map_network</h3>
 <pre class="r"><code>#simple network map without lines 
 htmlmap_network(batmicrobiome)</code></pre>
-<p><div id="htmlwidget-6771" style="width:100%;height:240px;" class="leaflet"></div>
-<script type="application/json" data-for="htmlwidget-6771">{
+<p><div id="htmlwidget-4850" style="width:100%;height:240px;" class="leaflet"></div>
+<script type="application/json" data-for="htmlwidget-4850">{
   "x": {
     "calls": [
       {

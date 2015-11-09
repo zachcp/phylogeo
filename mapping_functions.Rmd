@@ -22,6 +22,10 @@ map_phyloseq(mountainsoil, region="china", jitter=TRUE, jitter.x=2,jitter.y=2, c
 #interactive map
 htmlmap_phyloseq(epoxomicin_KS)
 htmlmap_phyloseq(epoxomicin_KS, size="Abundance")
+# customize maps with leaflet
+library(leaflet)
+m <- htmlmap_phyloseq(epoxomicin_KS)
+m %>% addProviderTiles("Acetate.terrain")
 ```
 
 ### map_network
