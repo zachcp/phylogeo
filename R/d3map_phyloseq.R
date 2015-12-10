@@ -173,7 +173,6 @@ d3map_network <- function(physeq,
                  includeScript(mapJS),
                  includeCSS(basecss),
                  paste0("<body onload=drawMap()>"),
-                 paste0("<select></select>"),
                  paste0("</body>"),
                  collapse="\n")
 
