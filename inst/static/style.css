@@ -53,3 +53,15 @@
   stroke-width: .1px;
 }
 
+.borough {
+    fill-opacity: 0.2;
+    stroke: white;
+    stroke-width: 0.5px;
+
+}
+
+.staten {}
+.bronx {}
+.queens {}
+.brooklyn {}
+.manhattan {}

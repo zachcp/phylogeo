@@ -1,3 +1,7 @@
+#0.99.6.3
+add the d3map_phyloseq() funciton which will create and load an interactive d3 map displaying
+abundance by a variable in the tax table
+
 #0.99.6.2
 refactor. create a phylogeo class that handles data conversion/verification. No change to API.
 
