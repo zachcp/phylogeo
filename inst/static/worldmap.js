@@ -63,7 +63,7 @@ onchange = function() {
     d3.selectAll("circle")
     .data(pointdatafiltered
           .sort(function(a, b) { return b.countdata[value] - a.countdata[value]; }))
-    .attr("r", function(d){return radius(+d.countdata[value])})
+    .attr("r", function(d){return radius(+d.countdata[value] / +d.totalreads )})
 
     makelegend(maxvalue)
 };

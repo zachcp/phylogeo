@@ -35,11 +35,15 @@ d3map_phyloseq <- function(physeq, tax_column, mapdata="USA", omitNA=TRUE){
     # add explicit Latitude and Longitude (needed/used by D3.js)
     colnames(samdata)[colnames(samdata)==phygeo@latitude] <- "Latitude"
     colnames(samdata)[colnames(samdata)==phygeo@longitude] <- "Longitude"
+    samdata['samplename'] <- rownames(samdata)
+
+    #add samplesumdata
+    sampleSumData = data.frame(totalreads = sample_sums(phygeo))
+    sampleSumData['samplename'] <- rownames(sampleSumData)
+    samdata <- merge(samdata, sampleSumData, by = "samplename")
 
     if (omitNA) {samdata <- na.omit(samdata)}
-
     #samplename and countdata will be used in d3.js. they should not be changed.
-    samdata['samplename'] <- rownames(samdata)
     samdata['countdata'] <- lapply(samdata['samplename'],
                                    function(x){ data.frame(t(gendf[x]))})
 
