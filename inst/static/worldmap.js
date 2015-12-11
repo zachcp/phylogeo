@@ -31,7 +31,7 @@ makelegend = function(maxval){
     d3.selectAll(".legend").remove();
 
     var radius = d3.scale.sqrt()
-    .domain([0, maxval])
+    .domain([0, 1])
     .range([0, 20]);
 
     var legend =d3.select("svg").append("g")
