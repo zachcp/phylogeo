@@ -56,7 +56,7 @@ onchange = function() {
     maxvalue = d3.max(pointdatafiltered, function(d){return d.countdata[value]})
 
     var radius = d3.scale.sqrt()
-        .domain([0, 1])
+        .domain([0, 0.1])
         .range([0, 20]);
 
     d3.selectAll("circle")
