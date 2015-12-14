@@ -30,14 +30,14 @@ makelegend = function(maxval){
     d3.selectAll(".legend").remove();
 
     var radius = d3.scale.sqrt()
-    .domain([0, maxval])
+    .domain([0, 0.1])
     .range([0, 20]);
 
-    var legend =d3.select("svg").append("g")
+    var legend = d3.select("svg").append("g")
         .attr("class", "legend")
         .attr("transform", "translate(" + (width - 50) + "," + (height - 20) + ")")
       .selectAll("g")
-        .data([maxval/10, maxval/2, maxval])
+        .data([0.01, 0.1, 0.1])
       .enter().append("g");
 
     legend.append("circle")

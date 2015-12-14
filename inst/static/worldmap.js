@@ -38,7 +38,7 @@ makelegend = function(maxval){
     .attr("class", "legend")
     .attr("transform", "translate(" + (width - 50) + "," + (height - 20) + ")")
     .selectAll("g")
-    .data([maxval/10, maxval/2, maxval])
+    .data([0.01, 0.1, 0.5])
     .enter().append("g");
 
     legend.append("circle")

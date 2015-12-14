@@ -31,14 +31,14 @@ makelegend = function(maxval){
     d3.selectAll(".legend").remove();
 
     var radius = d3.scale.sqrt()
-    .domain([0, maxval])
+    .domain([0, 0.1])
     .range([0, 20]);
 
     var legend =d3.select("svg").append("g")
         .attr("class", "legend")
         .attr("transform", "translate(" + (width - 50) + "," + (height - 20) + ")")
       .selectAll("g")
-        .data([maxval/10, maxval/2, maxval])
+        .data([0.01,.01,.1])
       .enter().append("g");
 
     legend.append("circle")
@@ -57,7 +57,7 @@ onchange = function() {
     maxvalue = d3.max(pointdatafiltered, function(d){return d.countdata[value]})
 
     var radius = d3.scale.sqrt()
-        .domain([0, 1])
+        .domain([0, 0.1])
         .range([0, 20]);
 
     d3.selectAll("circle")
