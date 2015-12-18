@@ -13,9 +13,9 @@ d3map_phyloseq <- function(physeq, tax_column, mapdata="USA", omitNA=TRUE){
     if (!tax_column %in% colnames(tax_table(physeq))) {
         stop("you must split on a column inthe taxtable")
     }
-    possible_maps = c("USA","World50m", "World110m", "NYC")
+    possible_maps = c("USA","World50m", "World110m", "NYC", "SouthAfrica")
     if (!mapdata %in% possible_maps) {
-        stop(paste0("mapdata must be one of ", possible_maps))
+        stop(paste0("mapdata must be one of ", paste0(possible_maps, collapse = " ")))
     }
 
     #create phygeo object
@@ -49,6 +49,7 @@ d3map_phyloseq <- function(physeq, tax_column, mapdata="USA", omitNA=TRUE){
 
     #mapdata
     nyc = system.file("static/maps/nyc.js", package="phylogeo");
+    SA = system.file("static/maps/southafrica.js", package="phylogeo");
     usa_10m = system.file("static/maps/us-10m.js", package="phylogeo");
     world_50m = system.file("static/maps/world-50m.js", package="phylogeo");
     world_100m = system.file("static/maps/world-110m.js", package="phylogeo");
@@ -59,12 +60,13 @@ d3map_phyloseq <- function(physeq, tax_column, mapdata="USA", omitNA=TRUE){
 
     # specific data
     nyc_basicmap_js = system.file("static/nycmap.js", package="phylogeo");
+    SA_basicmap_js = system.file("static/southafricamap.js", package="phylogeo");
     usa_basicmap_js = system.file("static/usamap.js", package="phylogeo");
     world_basicmap_js = system.file("static/worldmap.js", package="phylogeo");
 
 
     #choose the map
-    #"USA","World50m", "World110m"
+    #"USA","World50m", "World110m, SouthAfrica"
     if (mapdata == "USA") {
         mapfile <- usa_10m
         mapJS <- usa_basicmap_js
@@ -77,6 +79,9 @@ d3map_phyloseq <- function(physeq, tax_column, mapdata="USA", omitNA=TRUE){
     } else if (mapdata == "NYC") {
         mapfile <- nyc
         mapJS <- nyc_basicmap_js
+    } else if (mapdata == "SouthAfrica") {
+        mapfile <- SA
+        mapJS <- SA_basicmap_js
     }
 
     body = paste(includeHTML(deps),
@@ -140,6 +145,7 @@ d3map_network <- function(physeq,
 
     #mapdata
     nyc = system.file("static/maps/nyc.js", package="phylogeo");
+    SA = system.file("static/maps/southafrica.js", package="phylogeo");
     usa_10m = system.file("static/maps/us-10m.js", package="phylogeo");
     world_50m = system.file("static/maps/world-50m.js", package="phylogeo");
     world_100m = system.file("static/maps/world-110m.js", package="phylogeo");
