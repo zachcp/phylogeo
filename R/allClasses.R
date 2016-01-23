@@ -14,10 +14,10 @@ setClass("phylogeo",
          contains = "phyloseq",
          prototype = prototype(otu_table = NULL,
                                tax_table = NULL,
-                               sam_data = NULL,
-                               phy_tree = NULL,
-                               refseq = NULL,
-                               latitude = NULL,
+                               sam_data  = NULL,
+                               phy_tree  = NULL,
+                               refseq    = NULL,
+                               latitude  = NULL,
                                longitude = NULL)
 )
 
