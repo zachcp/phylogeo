@@ -42,13 +42,13 @@ setMethod("phylogeo", "data.frame", function(object){
 #' @aliases phylogeo,phyloseq-method
 setMethod("phylogeo", "phyloseq", function(object){
  # check for sample_data slot
-  if (!"sam_data" %in% phyloseq::getslots.phyloseq(physeq)) {
+  if (!"sam_data" %in% phyloseq::getslots.phyloseq(object)) {
     stop("Mapping requires that phyloseq objects have sample_data 
           with Latitude and Longitude")
   }
   
   # get lat/long columns. (based on https://github.com/rstudio/leaflet/blob/4ef0023c9fefa00a64e382ccd77d34d1413c47dc/R/normalize.R)
-  sampledata <- data.frame(sample_data(physeq))
+  sampledata <- data.frame(sample_data(object))
   sdfnames   <- names(sampledata)
   lats       <- sdfnames[grep("^(lat|latitude)$", sdfnames, ignore.case = TRUE)]
   lngs       <- sdfnames[grep("^(lon|lng|long|longitude)$", sdfnames, ignore.case = TRUE)]
@@ -58,7 +58,7 @@ setMethod("phylogeo", "phyloseq", function(object){
   sampledata <- sampledata %>%
     coerce_latlon_columns(lats) %>%
     coerce_latlon_columns(lngs)
-  sample_data(physeq) <- sampledata
+  sample_data(object) <- sampledata
   
   # get samples without NA values in Lat/Lng columns
   samples_to_keep <- row.names(sampledata[ !is.na(sampledata[[lats]]) & !is.na(sampledata[[lngs]]), ])
@@ -66,11 +66,11 @@ setMethod("phylogeo", "phyloseq", function(object){
   # if samples have been dropped prune OTUs belonging to them
   if (length(row.names) > 0 ) {
     #update sample data
-    prune_samples(samples_to_keep, physeq)
+    prune_samples(samples_to_keep, object)
     
     #update otu/sequence data
-    if (.hasSlot(physeq, "otu_table")) {
-      prune_taxa(taxa_sums(physeq) > 0, physeq)
+    if (.hasSlot(object, "otu_table")) {
+      prune_taxa(taxa_sums(object) > 0, object)
     }
   }
   
@@ -78,11 +78,11 @@ setMethod("phylogeo", "phyloseq", function(object){
   new('phylogeo',
       latitude  = lats,
       longitude = lngs,
-      otu_table = physeq@otu_table,
-      tax_table = physeq@tax_table,
-      sam_data  = physeq@sam_data,
-      phy_tree  = physeq@phy_tree,
-      refseq    = physeq@refseq)
+      otu_table = object@otu_table,
+      tax_table = object@tax_table,
+      sam_data  = object@sam_data,
+      phy_tree  = object@phy_tree,
+      refseq    = object@refseq)
 })
 
 
